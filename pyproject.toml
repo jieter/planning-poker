@@ -1,0 +1,21 @@
+[tool.black]
+line-length = 120
+target-version = ["py311"]
+
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+include_trailing_comma = true
+force_grid_wrap = 0
+combine_as_imports = true
+line_length = 120
+skip_glob = "*/migrations/*.py"
+known_first_party = ["app"]
+known_third_party = ["django", "model_bakery"]
+
+[tool.djlint]
+# Reference: https://djlint.com/djlint/rules.html
+profile = "django"
+ignore = "H006,H008,H013,H014,H017,H019,H021,H023,T001,T002,T003"
+blank_line_after_tag = "load,extends,endblock,has_perm"
+max_line_length = 120
