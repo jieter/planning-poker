@@ -5,11 +5,11 @@ import Join from './Join.svelte';
 import fetchStore from './stores.js';
 import { jsonScriptContents } from './utils.js';
 
-const [{ participants, isRevealed, choices }, update] = fetchStore(jsonScriptContents('websocket_url'));
+const [{ participants, isRevealed, isAdmin, choices }, update] = fetchStore(jsonScriptContents('websocket_url'));
 
-const vote = (estimate) => () => {
+const vote = (value) => () => {
     if (!$isRevealed) {
-        update('vote', { estimate: estimate });
+        update('vote', { value: value });
     }
 };
 const reveal = () => update('reveal');
@@ -28,9 +28,7 @@ const clear = () => update('clear');
 
 <div class="choices">
     {#each $choices as choice}
-        <button class="btn btn-default" on:click={vote(choice)} on:keypress={vote(choice)} disabled={$isRevealed}
-            >{choice}</button
-        >
+        <button class="btn btn-secondary" on:click={vote(choice)} disabled={$isRevealed}>{choice}</button>
         &nbsp;
     {/each}
 </div>
@@ -38,7 +36,7 @@ const clear = () => update('clear');
 <Join {update} {$participants} />
 
 <br />
-<!-- {#if $states.is_admin}
+{#if $isAdmin}
     <div class="btn btn-primary" on:click={reveal} on:keypress={reveal}>Reveal</div>
     <div class="btn btn-danger" on:click={clear} on:keypress={clear}>Clear</div>
-{/if} -->
+{/if}

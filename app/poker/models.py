@@ -25,8 +25,8 @@ class Session(models.Model):
 
 class Participant(models.Model):
     name = models.CharField(max_length=30)
-    is_spectator = models.BooleanField(default=True, help_text="Spectators cannot vote themselves")
-    is_admin = models.BooleanField(default=True, help_text="Admins can reveal and reset the votes.")
+    is_spectator = models.BooleanField(default=False, help_text="Spectators cannot vote themselves")
+    is_admin = models.BooleanField(default=False, help_text="Admins can reveal and reset the votes.")
 
     created = models.DateTimeField(auto_now_add=True)
     session = models.ForeignKey(Session, on_delete=models.CASCADE)

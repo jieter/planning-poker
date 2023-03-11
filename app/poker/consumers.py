@@ -11,6 +11,7 @@ class PokerConsumer(JsonWebsocketConsumer):
         super().__init__(args, kwargs)
         self.session_id = None
         self.session = None
+        self.name = None
 
     def connect(self):
         self.session_id = self.scope["url_route"]["kwargs"]["session_id"]
@@ -18,7 +19,6 @@ class PokerConsumer(JsonWebsocketConsumer):
 
         self.accept()
 
-        # join the room group
         async_to_sync(self.channel_layer.group_add)(self.session_id, self.channel_name)
 
         self.send_json(
@@ -31,7 +31,12 @@ class PokerConsumer(JsonWebsocketConsumer):
 
     def disconnect(self, close_code):
         async_to_sync(self.channel_layer.group_discard)(self.session_id, self.channel_name)
-        # self.session.participants.remove(...)
+        if self.name:
+            self.session.participant_set.filter(name=self.name).delete()
+            message = {"type": "leave", "name": self.name}
+            async_to_sync(self.channel_layer.group_send)(self.session_id, message)
+
+            self.name = None
 
     def receive_json(self, content):
         print(content)
@@ -39,11 +44,40 @@ class PokerConsumer(JsonWebsocketConsumer):
         match (content["action"]):
             case "join":
                 name = content["name"]
+                self.name = name
                 participant, created = self.session.participant_set.get_or_create(name=name)
-                self.send_json({"type": "join", "participant": participant.as_dict()})
+                message = {"type": "join", "participant": participant.as_dict()}
+                async_to_sync(self.channel_layer.group_send)(self.session_id, message)
+
             case "vote":
-                pass
+                if self.name:
+                    participant = self.session.participant_set.get(name=self.name)
+                    participant.vote = content["value"]
+                    participant.save()
+
+                    message = {"type": "vote", "name": self.name, "value": content["value"]}
+                    async_to_sync(self.channel_layer.group_send)(self.session_id, message)
+
             case "reveal":
-                pass
+                message = {"type": "reveal"}
+                async_to_sync(self.channel_layer.group_send)(self.session_id, message)
+
             case "clear":
-                pass
+                message = {"type": "clear"}
+                self.session.participant_set.all().update(vote=None)
+                async_to_sync(self.channel_layer.group_send)(self.session_id, message)
+
+    def join(self, event):
+        self.send_json(event)
+
+    def leave(self, event):
+        self.send_json(event)
+
+    def vote(self, event):
+        self.send_json(event)
+
+    def reveal(self, event):
+        self.send_json(event)
+
+    def clear(self, event):
+        self.send_json(event)

@@ -11,9 +11,6 @@
 <body>
     <div class="container mt-3 p-5">
         <div id="poker"></div>
-
-        <h5>Debug</h5>
-        <code>{{ websocket_url }}</code>
     </div>
 
     {{ websocket_url|json_script:"websocket_url" }}
