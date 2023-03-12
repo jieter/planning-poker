@@ -8,7 +8,7 @@ services:
     name: poker
     env: python
     buildCommand: "./build.sh"
-    startCommand: "daphne poker.asgi:application"
+    startCommand: "daphne -b 0.0.0.0 poker.asgi:application"
     envVars:
       - key: DATABASE_URL
         fromDatabase:
@@ -16,7 +16,5 @@ services:
           property: connectionString
       - key: SECRET_KEY
         generateValue: true
-      - key: WEB_CONCURRENCY
-        value: 4
       - key: PYTHON_VERSION
         value: 3.11.2
