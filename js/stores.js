@@ -4,14 +4,14 @@ export default function (websocketUrl) {
     const participants = writable([]);
     const choices = writable([]);
     const isRevealed = writable(false);
-    const isAdmin = writable(false);
+    const user = writable({});
 
     let socket;
     const connect = () => {
         socket = new WebSocket(websocketUrl);
-        socket.onclose = function (e) {
+        socket.onclose = () => {
             console.log('WebSocket connection closed unexpectedly. Trying to reconnect in 2s...');
-            setTimeout(function () {
+            setTimeout(() => {
                 console.log('Reconnecting...');
                 connect();
             }, 2000);
@@ -23,12 +23,13 @@ export default function (websocketUrl) {
 
             switch (data.type) {
                 case 'init':
-                    participants.set(data.participants);
+                    participants.set(data.users);
                     choices.set(data.choices);
+                    user.set(data.user);
                     break;
                 case 'join':
                     participants.update((current) => {
-                        return [...current, data.participant];
+                        return [...current, data.user];
                     });
                     break;
                 case 'leave':
@@ -42,6 +43,7 @@ export default function (websocketUrl) {
                         current.splice(index, 1);
                         return current;
                     });
+                    break;
                 case 'reveal':
                     isRevealed.set(true);
                     break;
@@ -71,7 +73,7 @@ export default function (websocketUrl) {
     };
     connect();
 
-    participants.subscribe((p) => console.log(p));
+    // participants.subscribe((p) => console.log(p));
 
     async function update(action, params = undefined) {
         params = params || {};
@@ -79,5 +81,5 @@ export default function (websocketUrl) {
         console.log('update', params);
         socket.send(JSON.stringify(params));
     }
-    return [{ participants, isRevealed, isAdmin, choices }, update];
+    return { participants, isRevealed, user, choices, update };
 }

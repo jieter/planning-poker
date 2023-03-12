@@ -1,40 +1,41 @@
-import json
-
 from asgiref.sync import async_to_sync
 from channels.generic.websocket import JsonWebsocketConsumer
 
-from .models import Session
+from .models import PokerSession
 
 
 class PokerConsumer(JsonWebsocketConsumer):
     def __init__(self, *args, **kwargs):
         super().__init__(args, kwargs)
-        self.session_id = None
-        self.session = None
+        self.poker_id = None
+        self.poker = None
         self.name = None
 
     def connect(self):
-        self.session_id = self.scope["url_route"]["kwargs"]["session_id"]
-        self.session = Session.objects.get(id=self.session_id)
+        self.name = self.scope["session"].get("name")
+        self.poker_id = self.scope["url_route"]["kwargs"]["poker_id"]
+        self.poker = PokerSession.objects.get(id=self.poker_id)
 
         self.accept()
 
-        async_to_sync(self.channel_layer.group_add)(self.session_id, self.channel_name)
-
+        async_to_sync(self.channel_layer.group_add)(self.poker_id, self.channel_name)
+        user = self.poker.users.filter(name=self.name).first()
+        print("user", user)
         self.send_json(
             {
                 "type": "init",
-                "participants": self.session.participants(),
+                "user": user.as_dict() if user else None,
+                "users": self.poker.users_as_dict(),
                 "choices": ["XXS", "XS", "S", "M", "L", "XL", "☕️"],
             }
         )
 
     def disconnect(self, close_code):
-        async_to_sync(self.channel_layer.group_discard)(self.session_id, self.channel_name)
+        async_to_sync(self.channel_layer.group_discard)(self.poker_id, self.channel_name)
         if self.name:
-            self.session.participant_set.filter(name=self.name).delete()
+            self.poker.deactivate_user(self.name)
             message = {"type": "leave", "name": self.name}
-            async_to_sync(self.channel_layer.group_send)(self.session_id, message)
+            async_to_sync(self.channel_layer.group_send)(self.poker_id, message)
 
             self.name = None
 
@@ -45,27 +46,30 @@ class PokerConsumer(JsonWebsocketConsumer):
             case "join":
                 name = content["name"]
                 self.name = name
-                participant, created = self.session.participant_set.get_or_create(name=name)
-                message = {"type": "join", "participant": participant.as_dict()}
-                async_to_sync(self.channel_layer.group_send)(self.session_id, message)
+
+                new_user = self.poker.add_user(name, is_spectator=content["is_spectator"]).as_dict()
+                self.send_json({"type": "joined", "user": new_user})
+
+                message = {"type": "join", "user": new_user}
+                async_to_sync(self.channel_layer.group_send)(self.poker_id, message)
 
             case "vote":
                 if self.name:
-                    participant = self.session.participant_set.get(name=self.name)
-                    participant.vote = content["value"]
-                    participant.save()
+                    user = self.poker.users.get(name=self.name)
+                    user.vote = content["value"]
+                    user.save()
 
                     message = {"type": "vote", "name": self.name, "value": content["value"]}
-                    async_to_sync(self.channel_layer.group_send)(self.session_id, message)
+                    async_to_sync(self.channel_layer.group_send)(self.poker_id, message)
 
             case "reveal":
                 message = {"type": "reveal"}
-                async_to_sync(self.channel_layer.group_send)(self.session_id, message)
+                async_to_sync(self.channel_layer.group_send)(self.poker_id, message)
 
             case "clear":
                 message = {"type": "clear"}
-                self.session.participant_set.all().update(vote=None)
-                async_to_sync(self.channel_layer.group_send)(self.session_id, message)
+                self.poker.users.all().update(vote=None)
+                async_to_sync(self.channel_layer.group_send)(self.poker_id, message)
 
     def join(self, event):
         self.send_json(event)

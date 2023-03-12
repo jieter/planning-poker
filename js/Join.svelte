@@ -1,13 +1,14 @@
 <script>
-export let update;
-export let participants;
+import { onMount } from 'svelte';
 
-const decks = ['tshirt', 'fibonacci'];
+import { csrfToken } from './utils.js';
+
+let error;
 
 // Screen name in the poker session
 let name = '';
 
-onmouseenter(() => {
+onMount(() => {
     const params = new Proxy(new URLSearchParams(window.location.search), {
         get: (searchParams, prop) => searchParams.get(prop),
     });
@@ -15,22 +16,33 @@ onmouseenter(() => {
         name = params.name;
     }
 });
-// Current selected deck.
-let deck = 'tshirt';
 
-const join = () => update('join', { name: name, deck: deck });
+const update = () => {
+    if (name) {
+        error = undefined;
+    } else {
+        error = 'Name cannot be empty';
+    }
+};
 </script>
 
-<form class="form-inline">
-    <input type="text" name="name" class="form-control" bind:value={name} on:update />
-    {#if !participants || participants.length == 0}
-        <div class="btn-group">
-            {#each decks as option}
-                <div class="btn {option == deck ? 'btn-info' : 'btn-default'}" on:click={() => (deck = option)}>
-                    {option}
-                </div>
-            {/each}
-        </div>
-    {/if}
-    <div class="btn btn-primary" on:click={join} on:keypress={join}>Join</div>
+<form class="row row-cols-lg-auto" method="post">
+    <input type="hidden" name="csrfmiddlewaretoken" value={csrfToken()} />
+    <div class="col">
+        <input
+            type="text"
+            name="name"
+            class="form-control"
+            on:change={update}
+            bind:value={name}
+            class:is-invalid={error}
+        />
+        {#if error}
+            <div class="invalid-feedback">{error}</div>
+        {/if}
+    </div>
+    <div class="col">
+        <input type="submit" class="btn btn-primary" value="Join" />
+    </div>
+    <label><input type="checkbox" name="is_spectator" /> Join as 👁️ spectator</label>
 </form>

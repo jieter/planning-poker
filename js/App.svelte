@@ -1,42 +1,19 @@
 <script>
-import Participant from './Participant.svelte';
 import Join from './Join.svelte';
-
-import fetchStore from './stores.js';
 import { jsonScriptContents } from './utils.js';
+import Voting from './Voting.svelte';
 
-const [{ participants, isRevealed, isAdmin, choices }, update] = fetchStore(jsonScriptContents('websocket_url'));
-
-const vote = (value) => () => {
-    if (!$isRevealed) {
-        update('vote', { value: value });
-    }
-};
-const reveal = () => update('reveal');
-const clear = () => update('clear');
+const url = jsonScriptContents('websocket_url');
 </script>
 
 <h1>Planning poker</h1>
 
-<div class="participants">
-    {#each $participants as { name, vote, id } (id)}
-        <Participant isRevealed={$isRevealed} {name} {vote} />
-    {:else}
-        Nobody here yet.
-    {/each}
-</div>
-
-<div class="choices">
-    {#each $choices as choice}
-        <button class="btn btn-secondary" on:click={vote(choice)} disabled={$isRevealed}>{choice}</button>
-        &nbsp;
-    {/each}
-</div>
-
-<Join {update} {$participants} />
+{#if url}
+    <Voting />
+{:else}
+    <Join />
+{/if}
 
 <br />
-{#if $isAdmin}
-    <div class="btn btn-primary" on:click={reveal} on:keypress={reveal}>Reveal</div>
-    <div class="btn btn-danger" on:click={clear} on:keypress={clear}>Clear</div>
-{/if}
+
+<a href="/">New poker session</a>
