@@ -20,13 +20,14 @@ class PokerConsumer(JsonWebsocketConsumer):
 
         async_to_sync(self.channel_layer.group_add)(self.poker_id, self.channel_name)
         user = self.poker.users.filter(name=self.name).first()
-        print("user", user)
+        user.activate()
+
         self.send_json(
             {
                 "type": "init",
                 "user": user.as_dict() if user else None,
                 "users": self.poker.users_as_dict(),
-                "choices": ["XXS", "XS", "S", "M", "L", "XL", "☕️"],
+                "choices": self.poker.deck_as_list(),
             }
         )
 

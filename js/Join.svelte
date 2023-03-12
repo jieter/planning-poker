@@ -27,7 +27,7 @@ const update = () => {
 </script>
 
 <form class="row row-cols-lg-auto" method="post">
-    <input type="hidden" name="csrfmiddlewaretoken" value={csrfToken()} />
+    <input type="text" name="csrfmiddlewaretoken" value={csrfToken()} />
     <div class="col">
         <input
             type="text"

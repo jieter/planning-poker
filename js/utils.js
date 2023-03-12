@@ -8,5 +8,6 @@ export function jsonScriptContents(id) {
     return undefined;
 }
 export function csrfToken() {
+    console.log(Cookies.get());
     return Cookies.get('csrftoken');
 }

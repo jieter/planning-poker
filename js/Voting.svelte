@@ -21,39 +21,41 @@ const clear = () => update('clear');
     {:else}
         Nobody here yet.
     {/each}
+    <div class="controls">
+        {#if $user.is_spectator}
+            You joined as spectator
+        {/if}
+        {#if $user.is_admin}
+            <div class="btn-group">
+                <button class="btn btn-primary" on:click={reveal} disabled={$isRevealed}>Reveal</button>
+                <button class="btn btn-danger" on:click={clear}>Clear</button>
+            </div>
+        {/if}
+    </div>
 </div>
-{#if $user.is_spectator}
-    You joined as spectator
-{:else}
-    <div class="choices">
-        {#each $choices as choice}
-            <button class="btn btn-secondary" on:click={vote(choice)} disabled={$isRevealed}>{choice}</button>
-            &nbsp;
-        {/each}
+{#if !$user.is_spectator}
+    <div class="text-center">
+        <div class="btn-group">
+            {#each $choices as choice}
+                <button class="btn btn-secondary" on:click={vote(choice)} disabled={$isRevealed}>{choice}</button>
+            {/each}
+        </div>
     </div>
 {/if}
-<br />
-{#if $user.is_admin}
-    <button class="btn btn-primary" on:click={reveal} on:keypress={reveal}>Reveal</button>
-    <button class="btn btn-danger" on:click={clear} on:keypress={clear}>Clear</button>
-{/if}
-<br />
-
-user: <code>{JSON.stringify($user, null, 2)}</code><br />
-participants: <code>{JSON.stringify($participants, null, 2)}</code>
-
-<br />
 
 <style>
 .participants {
-    width: 550px;
-    height: 275px;
-    border-radius: 275px 275px 0 0;
+    width: 70vw;
+    height: 35vw;
+    border-radius: 35vw 35vw 0 0;
     position: relative;
     background-color: #eee;
     margin: 20px auto;
 }
-.choices {
-    text-align: center;
+.controls {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%) translateY(-25%);
 }
 </style>

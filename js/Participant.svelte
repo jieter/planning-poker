@@ -6,7 +6,7 @@ export let i;
 export let count;
 </script>
 
-<div class="participant" style="transform: rotate({i * (200 / count) - 180}deg) translate(270px) rotate(90deg)">
+<div class="participant" style="transform: rotate({i * (176 / (count - 1)) - 178}deg) translate(33vw) rotate(90deg)">
     {user.name}
     <div class="card" class:isAdmin={user.is_admin} in:fly={{ duration: 800, x: 250, y: 250 }}>
         {#if user.is_spectator}
@@ -15,10 +15,8 @@ export let count;
             {#if isRevealed}
                 {user.vote}
             {:else}
-                ?
+                ⌛
             {/if}
-        {:else}
-            ...
         {/if}
     </div>
 </div>
@@ -28,10 +26,10 @@ export let count;
     display: block;
     position: absolute;
     text-align: center;
+
     top: 95%;
     left: 50%;
-    width: 4em;
-    height: 4em;
+
     margin: -2em;
     border-radius: 100%;
     border: 1px dotted yellow;
@@ -48,6 +46,6 @@ export let count;
     margin: 4px auto;
 }
 .isAdmin {
-    border: 1px solid purple;
+    border: 3px solid blue;
 }
 </style>

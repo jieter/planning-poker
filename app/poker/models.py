@@ -22,6 +22,9 @@ class PokerSession(models.Model):
     def users_as_dict(self):
         return list(self.users.values(*USER_FIELDS))
 
+    def deck_as_list(self):
+        return "XXS,XS,S,M,L,XL,?,☕️".split(",") if self.deck == "tshirt" else "0,½,1,2,3,5,8,13,20,?,∞,☕️".split(",")
+
     def add_user(self, name, is_spectator=False):
         is_first = not self.users.exists()
 
@@ -48,3 +51,11 @@ class User(models.Model):
 
     def as_dict(self):
         return {field: getattr(self, field) for field in USER_FIELDS}
+
+    def activate(self):
+        self.is_active = True
+        self.save()
+
+    def deactivate(self):
+        self.is_active = False
+        self.save()

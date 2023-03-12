@@ -16,8 +16,5 @@
     {{ websocket_url|json_script:"websocket_url" }}
     <script defer src="{% static 'index.js' %}"></script>
 
-    {% for k, v in request.session.items %}
-        {{ k }}: {{ v }}
-    {% endfor %}
 </body>
 </html>

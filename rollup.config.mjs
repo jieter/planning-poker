@@ -10,7 +10,7 @@ import css from 'rollup-plugin-css-only';
 import analyze from 'rollup-plugin-analyzer';
 
 const production = !process.env.ROLLUP_WATCH;
-
+const target = 'assets/';
 
 export default {
     input: 'js/index.js',
@@ -18,7 +18,7 @@ export default {
         sourcemap: !production,
         format: 'iife',
         name: 'app',
-        dir: 'assets/',
+        dir: target,
         indent: false,
     },
     plugins: [
@@ -47,7 +47,7 @@ export default {
 
         // Watch the `public` directory and refresh the
         // browser on changes when not in production
-        !production && livereload('static/'),
+        !production && livereload(target),
 
         // If we're building for production (npm run build
         // instead of npm run dev), minify
