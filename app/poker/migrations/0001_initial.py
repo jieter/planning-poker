@@ -38,7 +38,12 @@ class Migration(migrations.Migration):
                 ),
                 ("created", models.DateTimeField(auto_now_add=True)),
                 ("vote", models.CharField(max_length=10, null=True)),
-                ("session", models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to="poker.pokersession")),
+                (
+                    "session",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, related_name="users", to="poker.pokersession"
+                    ),
+                ),
             ],
         ),
     ]
