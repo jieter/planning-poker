@@ -10,9 +10,11 @@
 
 # Running on render.com (free tier)
 
-1. Configure a database, wait until it is ready and copy the "Internal Database URL"
+1. Configure a database, wait until it is ready and use "Internal Database URL"
+1. Configure a redis instance, use the hostname part of "Internal Redis URL"
 1. Create a web service from this repository
  - Build command: `./build.sh`
  - Start command: `daphne -b 0.0.0.0 app.asgi:application`
  - Environment variable: `DATABASE_URL` (value from "Internal Database URL")
  - Environment variable: `PYTHON_VERSION` `3.11.2`
+ - Environment variable: `REDIS_HOST` (hostname part from "Internal Redis URL")
