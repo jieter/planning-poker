@@ -60,7 +60,7 @@ export default function (websocketUrl) {
                 case 'vote':
                     participants.update((current) => {
                         current.forEach((p) => {
-                            if (p.name == data.name) {
+                            if (p.id == data.user_id) {
                                 p.vote = data.value;
                             }
                         });

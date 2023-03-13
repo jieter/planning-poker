@@ -12,33 +12,35 @@ class PokerConsumer(JsonWebsocketConsumer):
         self.name = None
 
     def connect(self):
-        self.name = self.scope["session"].get("name")
+        self.user_id = self.scope["session"].get("user_id")
         self.poker_id = self.scope["url_route"]["kwargs"]["poker_id"]
         self.poker = PokerSession.objects.get(id=self.poker_id)
 
         self.accept()
 
-        async_to_sync(self.channel_layer.group_add)(self.poker_id, self.channel_name)
-        user = self.poker.users.filter(name=self.name).first()
-        user.activate()
+        if user := self.poker.users.filter(id=self.user_id).first():
+            async_to_sync(self.channel_layer.group_add)(self.poker_id, self.channel_name)
+            user.activate()
 
-        self.send_json(
-            {
-                "type": "init",
-                "user": user.as_dict() if user else None,
-                "users": self.poker.users_as_dict(),
-                "choices": self.poker.deck_as_list(),
-            }
-        )
+            self.send_json(
+                {
+                    "type": "init",
+                    "user": user.as_dict() if user else None,
+                    "users": self.poker.users_as_dict(),
+                    "choices": self.poker.deck_as_list(),
+                }
+            )
+        else:
+            print("user not found", dict(self.scope["session"]))
 
     def disconnect(self, close_code):
         async_to_sync(self.channel_layer.group_discard)(self.poker_id, self.channel_name)
-        if self.name:
-            self.poker.deactivate_user(self.name)
-            message = {"type": "leave", "name": self.name}
+        if self.user_id:
+            self.poker.deactivate_user(self.user_id)
+            message = {"type": "leave", "id": self.user_id}
             async_to_sync(self.channel_layer.group_send)(self.poker_id, message)
 
-            self.name = None
+            self.user_id = None
 
     def receive_json(self, content):
         print(content)
@@ -46,21 +48,21 @@ class PokerConsumer(JsonWebsocketConsumer):
         match (content["action"]):
             case "join":
                 name = content["name"]
-                self.name = name
 
                 new_user = self.poker.add_user(name, is_spectator=content["is_spectator"]).as_dict()
+                self.user_id = new_user.id
                 self.send_json({"type": "joined", "user": new_user})
 
                 message = {"type": "join", "user": new_user}
                 async_to_sync(self.channel_layer.group_send)(self.poker_id, message)
 
             case "vote":
-                if self.name:
-                    user = self.poker.users.get(name=self.name)
+                if self.user_id:
+                    user = self.poker.users.get(id=self.user_id)
                     user.vote = content["value"]
                     user.save()
 
-                    message = {"type": "vote", "name": self.name, "value": content["value"]}
+                    message = {"type": "vote", "user_id": self.user_id, "value": content["value"]}
                     async_to_sync(self.channel_layer.group_send)(self.poker_id, message)
 
             case "reveal":

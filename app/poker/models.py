@@ -29,12 +29,12 @@ class PokerSession(models.Model):
         is_first = not self.users.exists()
 
         user, created = self.users.get_or_create(name=name, is_admin=is_first, is_spectator=is_spectator)
-        for name in ["Anouk", "Sjaak", "Daniel", "Alex Kerkum", "Alex Kwak", "Arnout", "Lonnie", "Jonathan"]:
+        for name in ["Anouk", "Daniel", "Alex Kerkum", "Alex Kwak", "Arnout"]:
             self.users.get_or_create(name=name, vote="S")
         return user
 
-    def deactivate_user(self, name):
-        self.users.filter(name=name).update(is_active=False)
+    def deactivate_user(self, user_id):
+        self.users.filter(id=user_id).first().deactivate()
 
 
 class User(models.Model):

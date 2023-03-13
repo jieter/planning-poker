@@ -26,23 +26,26 @@ const update = () => {
 };
 </script>
 
-<form class="row row-cols-lg-auto" method="post">
-    <input type="text" name="csrfmiddlewaretoken" value={csrfToken()} />
-    <div class="col">
-        <input
-            type="text"
-            name="name"
-            class="form-control"
-            on:change={update}
-            bind:value={name}
-            class:is-invalid={error}
-        />
-        {#if error}
-            <div class="invalid-feedback">{error}</div>
-        {/if}
+<form method="post">
+    <div class="row row-cols-lg-auto">
+        <input type="hidden" name="csrfmiddlewaretoken" value={csrfToken()} />
+        <div class="col">
+            <input
+                type="text"
+                name="name"
+                class="form-control"
+                on:change={update}
+                bind:value={name}
+                class:is-invalid={error} />
+            {#if error}
+                <div class="invalid-feedback">{error}</div>
+            {/if}
+        </div>
+        <div class="col">
+            <input type="submit" class="btn btn-primary" value="Join" />
+        </div>
     </div>
-    <div class="col">
-        <input type="submit" class="btn btn-primary" value="Join" />
+    <div class="row">
+        <label class="col"><input type="checkbox" name="is_spectator" /> Join as a spectator 👁️</label>
     </div>
-    <label><input type="checkbox" name="is_spectator" /> Join as 👁️ spectator</label>
 </form>
