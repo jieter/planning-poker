@@ -11,9 +11,11 @@ $: {
         angle = -90;
     } else {
         const maxAngle = 176;
+        const minSpread = 90;
         const maxSpread = maxAngle - 4;
+        spread = Math.min(maxSpread, minSpread + (maxSpread - minSpread) * (count / 8));
+
         startAngle = Math.min(maxAngle, 135 + (maxAngle - 135) * (count / 8));
-        spread = Math.min(maxSpread, 90 + (maxSpread - 90) * (count / 8));
 
         angle = i * (spread / (count - 1)) - startAngle;
     }

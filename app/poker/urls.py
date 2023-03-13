@@ -1,5 +1,6 @@
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
+from django.conf import settings
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import path
 from django.views.decorators.csrf import csrf_exempt
@@ -31,7 +32,7 @@ def index_view(request, session_id=None):
     context = {}
     if user_id := request.session.get("user_id"):
         if user := poker.users.filter(id=user_id).first():
-            protocol = "wss" if request.scheme == "https" else "ws"
+            protocol = "wss" if settings.IS_RENDER else "ws"
             context["websocket_url"] = f"{protocol}://{request.get_host()}/ws/poker/{poker.id}/"
 
     return render(request, "index.html", context)
