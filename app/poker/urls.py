@@ -1,9 +1,9 @@
 from asgiref.sync import async_to_sync
+from channels.layers import get_channel_layer
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import path
 from django.views.decorators.csrf import csrf_exempt
 
-from .consumers import PokerConsumer
 from .models import PokerSession
 
 
@@ -22,7 +22,8 @@ def index_view(request, session_id=None):
         request.session["user_id"] = user.id
 
         # Notify current users of the new user
-        async_to_sync(PokerConsumer().channel_layer.group_send)(session_id, {"type": "join", "user": user})
+        channel_layer = get_channel_layer()
+        async_to_sync(channel_layer.group_send)(session_id, {"type": "join", "user": user})
 
         return redirect("poker", session_id=session_id)
 
