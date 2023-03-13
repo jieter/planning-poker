@@ -61,6 +61,8 @@ $: votes = voteSummary($isRevealed);
                             <span class="text-muted">{count}x</span>
                         </Card>
                     </div>
+                {:else}
+                    <div class="col text-center">No votes</div>
                 {/each}
             </div>
         {/if}
@@ -88,6 +90,7 @@ $: votes = voteSummary($isRevealed);
 {#if $user.name == 'Jieter'}
     <button on:click={add} class="btn btn-light">Add fake users</button>
 {/if}
+
 <style>
 .participants {
     width: 70vw;
@@ -101,6 +104,6 @@ $: votes = voteSummary($isRevealed);
     position: absolute;
     bottom: 0;
     left: 50%;
-    transform: translateX(-50%) translateY(-25%);
+    transform: translateX(-50%) translateY(-10px);
 }
 </style>
