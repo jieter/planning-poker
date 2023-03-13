@@ -23,7 +23,7 @@ def index_view(request, session_id=None):
 
         # Notify current users of the new user
         channel_layer = get_channel_layer()
-        async_to_sync(channel_layer.group_send)(session_id, {"type": "join", "user": user})
+        async_to_sync(channel_layer.group_send)(session_id, {"type": "join", "user": user.as_dict()})
 
         return redirect("poker", session_id=session_id)
 

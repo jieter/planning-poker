@@ -4,9 +4,22 @@ export let user;
 export let isRevealed;
 export let i;
 export let count;
+
+let startAngle, spread;
+$: {
+    if (count > 3) {
+        startAngle = 170;
+        spread = startAngle - 2;
+    } else {
+        startAngle = 135;
+        spread = 90;
+    }
+}
 </script>
 
-<div class="participant" style="transform: rotate({i * (176 / (count - 1)) - 178}deg) translate(33vw) rotate(90deg)">
+<div
+    class="participant"
+    style="transform: rotate({i * (spread / (count - 1)) - startAngle}deg) translate(33vw) rotate(90deg)">
     {user.name}
     <div class="card" class:isAdmin={user.is_admin} in:fly={{ duration: 800, x: 250, y: 250 }}>
         {#if user.is_spectator}
