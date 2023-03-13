@@ -1,4 +1,5 @@
 <script>
+import Card from './Card.svelte';
 import Participant from './Participant.svelte';
 import pokerStore from './stores.js';
 import { jsonScriptContents } from './utils.js';
@@ -20,20 +21,50 @@ function add() {
         const randomElement = (array) => array[Math.floor(Math.random() * array.length)];
         const fakeNames = ['Bob', 'Charlie', 'Erin', 'Felix', 'Gude', 'Henri', 'Irma', 'June', 'Kevin'];
 
-        const fake = { id: randInt(10000, 20000), name: randomElement(fakeNames), vote: randomElement($choices) };
+        const fake = { id: randInt(10000, 20000), name: randomElement(fakeNames), vote: randomElement(['1', '2']) };
 
         return [...current, fake];
     });
 }
+
+let votes;
+function voteSummary() {
+    const _votes = new Proxy(
+        {},
+        {
+            get: (target, name) => (name in target ? target[name] : 0),
+        }
+    );
+    $participants.forEach((user) => {
+        if (user.vote != null) {
+            _votes[user.vote] += 1;
+        }
+    });
+
+    return Object.entries(_votes).sort((a, b) => b[1] - a[1]);
+}
+
+$: votes = voteSummary($isRevealed);
 </script>
 
 <div class="participants">
     {#each $participants as user, i (user.id)}
         <Participant isRevealed={$isRevealed} {user} {i} count={$participants.length} />
-    {:else}
-        Nobody here yet.
     {/each}
     <div class="controls">
+        {#if $isRevealed}
+            <div class="row">
+                {#each votes as [vote, count] (vote)}
+                    <div class="col">
+                        <Card>
+                            {vote}
+                            <br />
+                            <span class="text-muted">{count}x</span>
+                        </Card>
+                    </div>
+                {/each}
+            </div>
+        {/if}
         {#if $user.is_spectator}
             You joined as spectator
         {/if}
