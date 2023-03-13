@@ -18,3 +18,5 @@
  - Environment variable: `PYTHON_VERSION` `3.11.2`
  - Environment variable: `DATABASE_URL` (value from "Internal Database URL")
  - Environment variable: `REDIS_HOST` (hostname part from "Internal Redis URL")
+
+![Screenshot of the application in this repo](screenshot.png)
