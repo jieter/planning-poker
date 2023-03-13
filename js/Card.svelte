@@ -1,24 +1,25 @@
 <script>
-export let isAdmin;
+export let disabled = true;
+export let selected = '';
 </script>
 
-<div class="card" class:isAdmin>
+<div class="card btn btn-light" class:selected {disabled} on:click on:keypress>
     <slot />
 </div>
 
 <style>
 .card {
+    display: flex;
+
     width: 45px;
     height: 70px;
 
-    border-radius: 6px;
-    border: 1px solid blue;
-    background-color: rgb(214, 245, 255);
     padding: 6px 2px;
-    text-align: center;
-    margin: 4px auto;
+    justify-content: center;
+    align-content: center;
+    margin: 4px 2px;
 }
-.isAdmin {
-    border: 2px solid blue;
+.selected {
+    font-weight: bold;
 }
 </style>

@@ -10,10 +10,14 @@ const { user, participants, isRevealed, choices, update } = pokerStore(url);
 const vote = (value) => () => {
     if (!$isRevealed) {
         update('vote', { value: value });
+        $user.vote = value;
     }
 };
 const reveal = () => update('reveal');
-const clear = () => update('clear');
+const clear = () => {
+    $user.vote = null;
+    update('clear');
+}
 
 function add() {
     participants.update((current) => {
@@ -55,11 +59,9 @@ $: votes = voteSummary($isRevealed);
         {#if $isRevealed}
             <div class="row">
                 {#each votes as [vote, count] (vote)}
-                    <div class="col">
-                        <Card>
-                            <strong>{vote}</strong>
-                            <span class="text-muted">{count}x</span>
-                        </Card>
+                    <div class="col text-center">
+                        <Card>{vote}</Card>
+                        <span class="text-muted">{count}x</span>
                     </div>
                 {:else}
                     <div class="col text-center">No votes</div>
@@ -69,21 +71,26 @@ $: votes = voteSummary($isRevealed);
         {#if $user.is_spectator}
             You joined as spectator
         {/if}
-        {#if $user.is_admin}
-            <div class="btn-group">
-                <button class="btn btn-primary" on:click={reveal} disabled={$isRevealed}>Reveal</button>
-                <button class="btn btn-danger" on:click={clear}>Clear</button>
-            </div>
-        {/if}
+        <div class="d-flex justify-content-center mb-3">
+            {#if $isRevealed}
+                <button class="btn btn-warning" on:click={clear}>Clear</button>
+            {:else}
+                <button class="btn btn-primary" on:click={reveal}>Reveal</button>
+            {/if}
+        </div>
     </div>
 </div>
 {#if !$user.is_spectator}
-    <div class="text-center">
-        <div class="btn-group">
-            {#each $choices as choice}
-                <button class="btn btn-secondary" on:click={vote(choice)} disabled={$isRevealed}>{choice}</button>
-            {/each}
-        </div>
+    <div class="d-flex justify-content-center mb-3">
+        {#each $choices as choice}
+            <Card
+                on:click={vote(choice)}
+                on:keypress={vote(choice)}
+                disabled={$isRevealed}
+                selected={choice == $user.vote}>
+                {choice}
+            </Card>
+        {/each}
     </div>
 {/if}
 
@@ -104,6 +111,6 @@ $: votes = voteSummary($isRevealed);
     position: absolute;
     bottom: 0;
     left: 50%;
-    transform: translateX(-50%) translateY(-10px);
+    transform: translateX(-50%);
 }
 </style>

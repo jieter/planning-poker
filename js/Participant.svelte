@@ -25,7 +25,7 @@ $: {
 
 <div class="participant" style="transform: rotate({angle}deg) translate(33vw) rotate(90deg)">
     {user.name}
-    <Card isAdmin={user.is_admin}>
+    <Card>
         {#if user.is_spectator}
             👁️
         {:else if user.vote}

@@ -73,8 +73,6 @@ export default function (websocketUrl) {
     };
     connect();
 
-    // participants.subscribe((p) => console.log(p));
-
     async function update(action, params = undefined) {
         params = params || {};
         params.action = action;

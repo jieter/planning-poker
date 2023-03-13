@@ -2,7 +2,7 @@ import uuid
 
 from django.db import models
 
-USER_FIELDS = ("id", "name", "is_admin", "is_spectator", "is_active", "vote")
+USER_FIELDS = ("id", "name", "is_spectator", "is_active", "vote")
 
 
 class PokerSession(models.Model):
@@ -26,9 +26,7 @@ class PokerSession(models.Model):
         return "XXS,XS,S,M,L,XL,?,☕️".split(",") if self.deck == "tshirt" else "0,½,1,2,3,5,8,13,20,?,∞,☕️".split(",")
 
     def add_user(self, name, is_spectator=False):
-        is_first = not self.users.exists()
-
-        user, created = self.users.get_or_create(name=name, is_admin=is_first, is_spectator=is_spectator)
+        user, created = self.users.get_or_create(name=name, is_spectator=is_spectator)
         return user
 
     def deactivate_user(self, user_id):
@@ -38,7 +36,6 @@ class PokerSession(models.Model):
 class User(models.Model):
     name = models.CharField(max_length=30)
     is_spectator = models.BooleanField(default=False, help_text="Spectators cannot vote themselves")
-    is_admin = models.BooleanField(default=False, help_text="Admins can reveal and reset the votes.")
     is_active = models.BooleanField(
         default=False, help_text="Users are active if they have an active websocket connection"
     )

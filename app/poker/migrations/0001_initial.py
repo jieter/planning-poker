@@ -29,7 +29,6 @@ class Migration(migrations.Migration):
                 ("id", models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
                 ("name", models.CharField(max_length=30)),
                 ("is_spectator", models.BooleanField(default=False, help_text="Spectators cannot vote themselves")),
-                ("is_admin", models.BooleanField(default=False, help_text="Admins can reveal and reset the votes.")),
                 (
                     "is_active",
                     models.BooleanField(
