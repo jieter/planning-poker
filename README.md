@@ -15,6 +15,6 @@
 1. Create a web service from this repository
  - Build command: `./build.sh`
  - Start command: `daphne -b 0.0.0.0 app.asgi:application`
- - Environment variable: `DATABASE_URL` (value from "Internal Database URL")
  - Environment variable: `PYTHON_VERSION` `3.11.2`
+ - Environment variable: `DATABASE_URL` (value from "Internal Database URL")
  - Environment variable: `REDIS_HOST` (hostname part from "Internal Redis URL")

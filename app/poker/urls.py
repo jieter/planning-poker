@@ -7,24 +7,26 @@ from .consumers import PokerConsumer
 from .models import PokerSession
 
 
-# @csrf_exempt
+@csrf_exempt
 def index_view(request, session_id=None):
+    # If requested without a session_id, create a new poker session
     if session_id is None:
         poker = PokerSession.objects.create()
         return redirect("poker", session_id=poker.id)
 
     poker = get_object_or_404(PokerSession, id=session_id)
 
+    # Handle a user join request
     if name := request.POST.get("name"):
         user = poker.add_user(name=name, is_spectator=request.POST.get("is_spectator") == "true")
-        print("created new user ", user)
-        consumer = PokerConsumer()
-        message = {"type": "join", "user": user}
-        async_to_sync(consumer.channel_layer.group_send)(session_id, message)
         request.session["user_id"] = user.id
+
+        # Notify current users of the new user
+        async_to_sync(PokerConsumer().channel_layer.group_send)(session_id, {"type": "join", "user": user})
 
         return redirect("poker", session_id=session_id)
 
+    # If the user is known (in the session), add the websocket URL to the context so the voting can begin.
     context = {}
     if user_id := request.session.get("user_id"):
         if user := poker.users.filter(id=user_id).first():
@@ -35,5 +37,6 @@ def index_view(request, session_id=None):
 
 urlpatterns = [
     path("", index_view, name="index"),
+    path("poker/", index_view, name="index"),
     path("poker/<str:session_id>/", index_view, name="poker"),
 ]
