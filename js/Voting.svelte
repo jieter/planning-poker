@@ -13,6 +13,18 @@ const vote = (value) => () => {
 };
 const reveal = () => update('reveal');
 const clear = () => update('clear');
+
+function add() {
+    participants.update((current) => {
+        const randInt = (min, max) => Math.floor(Math.random() * (max - min) + min);
+        const randomElement = (array) => array[Math.floor(Math.random() * array.length)];
+        const fakeNames = ['Bob', 'Charlie', 'Erin', 'Felix', 'Gude', 'Henri', 'Irma', 'June', 'Kevin'];
+
+        const fake = { id: randInt(10000, 20000), name: randomElement(fakeNames), vote: randomElement($choices) };
+
+        return [...current, fake];
+    });
+}
 </script>
 
 <div class="participants">
@@ -42,6 +54,8 @@ const clear = () => update('clear');
         </div>
     </div>
 {/if}
+
+<button on:click={add} class="btn btn-light">Add fake users</button>
 
 <style>
 .participants {

@@ -47,6 +47,9 @@ class User(models.Model):
 
     vote = models.CharField(max_length=10, null=True)
 
+    def __str__(self):
+        return self.name
+
     def as_dict(self):
         return {field: getattr(self, field) for field in USER_FIELDS}
 

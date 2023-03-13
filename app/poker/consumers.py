@@ -19,6 +19,7 @@ class PokerConsumer(JsonWebsocketConsumer):
         self.accept()
 
         if user := self.poker.users.filter(id=self.user_id).first():
+            print("connect", user)
             async_to_sync(self.channel_layer.group_add)(self.poker_id, self.channel_name)
             user.activate()
 

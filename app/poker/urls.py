@@ -31,7 +31,8 @@ def index_view(request, session_id=None):
     context = {}
     if user_id := request.session.get("user_id"):
         if user := poker.users.filter(id=user_id).first():
-            context["websocket_url"] = f"ws://{request.get_host()}/ws/poker/{poker.id}/"
+            protocol = "wss" if request.scheme == "https" else "ws"
+            context["websocket_url"] = f"{protocol}://{request.get_host()}/ws/poker/{poker.id}/"
 
     return render(request, "index.html", context)
 

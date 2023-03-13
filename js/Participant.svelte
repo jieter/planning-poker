@@ -5,23 +5,24 @@ export let isRevealed;
 export let i;
 export let count;
 
-let startAngle, spread;
+let startAngle, spread, angle;
 $: {
-    if (count > 3) {
-        startAngle = 170;
-        spread = startAngle - 2;
+    if (count == 1) {
+        angle = -90;
     } else {
-        startAngle = 135;
-        spread = 90;
+        const maxAngle = 176;
+        const maxSpread = maxAngle - 4;
+        startAngle = Math.min(maxAngle, 135 + (maxAngle - 135) * (count / 8));
+        spread = Math.min(maxSpread, 90 + (maxSpread - 90) * (count / 8));
+
+        angle = i * (spread / (count - 1)) - startAngle;
     }
 }
 </script>
 
-<div
-    class="participant"
-    style="transform: rotate({i * (spread / (count - 1)) - startAngle}deg) translate(33vw) rotate(90deg)">
+<div class="participant" style="transform: rotate({angle}deg) translate(33vw) rotate(90deg)">
     {user.name}
-    <div class="card" class:isAdmin={user.is_admin} in:fly={{ duration: 800, x: 250, y: 250 }}>
+    <div class="card" class:isAdmin={user.is_admin} in:fly={{ duration: 800, x: 200, y: 200 }}>
         {#if user.is_spectator}
             👁️
         {:else if user.vote}
@@ -59,6 +60,6 @@ $: {
     margin: 4px auto;
 }
 .isAdmin {
-    border: 3px solid blue;
+    border: 2px solid blue;
 }
 </style>
