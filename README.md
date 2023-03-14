@@ -1,5 +1,13 @@
 # Planning poker based on django-channels
 
+ - No user management, just type a name and share the url.
+ - 2 decks: T-shirt sizes & modified fibonacci.
+ - No special admin roles: every participant can reveal, clear and change the deck.
+
+
+![Screenshot of the application in this repo](screenshot.png)
+# Local development
+
 1. Create a virtual envirionment
 1. Install the requirements: `pip install -r requirements.txt`
 1. Apply the migrations: `./manage.py migrate`
@@ -18,5 +26,3 @@
  - Environment variable: `PYTHON_VERSION` `3.11.2`
  - Environment variable: `DATABASE_URL` (value from "External Database URL")
  - Environment variable: `REDIS_HOST` (hostname part from "Internal Redis URL")
-
-![Screenshot of the application in this repo](screenshot.png)
