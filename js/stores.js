@@ -1,10 +1,29 @@
-import { writable } from 'svelte/store';
+import { derived, writable, get } from 'svelte/store';
 
 export default function (websocketUrl) {
     const participants = writable([]);
     const choices = writable([]);
     const isRevealed = writable(false);
     const user = writable({});
+
+    // Derive a sorted list of (card, votes)-pairs off of the parcitipants store
+    const votes = derived(participants, ($participants) => {
+        const _votes = new Proxy({}, { get: (d, key) => (key in d ? d[key] : 0) });
+        $participants.forEach((user) => {
+            if (user.vote != null) {
+                _votes[user.vote] += 1;
+            }
+        });
+
+        return Object.entries(_votes).sort((a, b) => b[1] - a[1]);
+    });
+
+    const setUserVote = (value) => {
+        user.update(($user) => {
+            $user.vote = value;
+            return $user;
+        });
+    };
 
     let socket;
     const connect = () => {
@@ -28,9 +47,7 @@ export default function (websocketUrl) {
                     user.set(data.user);
                     break;
                 case 'join':
-                    participants.update((current) => {
-                        return [...current, data.user];
-                    });
+                    participants.update((current) => [...current, data.user]);
                     break;
                 case 'leave':
                     participants.update((current) => {
@@ -50,12 +67,12 @@ export default function (websocketUrl) {
                 case 'clear':
                     isRevealed.set(false);
                     participants.update((current) => {
-                        current.map((p) => {
-                            p.vote = null;
-                            return p;
+                        return current.map((u) => {
+                            u.vote = null;
+                            return u;
                         });
-                        return current;
                     });
+                    setUserVote(null);
                     break;
                 case 'vote':
                     participants.update((current) => {
@@ -79,5 +96,18 @@ export default function (websocketUrl) {
         console.log('update', params);
         socket.send(JSON.stringify(params));
     }
-    return { participants, isRevealed, user, choices, update };
+    const revealVotes = () => update('reveal');
+    const clearVotes = () => {
+        setUserVote(null);
+        update('clear');
+    };
+
+    const vote = (value) => () => {
+        if (!get(isRevealed)) {
+            update('vote', { value: value });
+            setUserVote(value);
+        }
+    };
+
+    return { participants, isRevealed, user, choices, votes, revealVotes, clearVotes, vote };
 }

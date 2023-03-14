@@ -1,23 +1,13 @@
 <script>
+import { confetti } from '@neoconfetti/svelte';
+
 import Card from './Card.svelte';
 import Participant from './Participant.svelte';
 import pokerStore from './stores.js';
 import { jsonScriptContents } from './utils.js';
 
 const url = jsonScriptContents('websocket_url');
-const { user, participants, isRevealed, choices, update } = pokerStore(url);
-
-const vote = (value) => () => {
-    if (!$isRevealed) {
-        update('vote', { value: value });
-        $user.vote = value;
-    }
-};
-const reveal = () => update('reveal');
-const clear = () => {
-    $user.vote = null;
-    update('clear');
-}
+const { user, participants, isRevealed, choices, votes, revealVotes, clearVotes, vote } = pokerStore(url);
 
 function add() {
     participants.update((current) => {
@@ -30,25 +20,6 @@ function add() {
         return [...current, fake];
     });
 }
-
-let votes;
-function voteSummary() {
-    const _votes = new Proxy(
-        {},
-        {
-            get: (target, name) => (name in target ? target[name] : 0),
-        }
-    );
-    $participants.forEach((user) => {
-        if (user.vote != null) {
-            _votes[user.vote] += 1;
-        }
-    });
-
-    return Object.entries(_votes).sort((a, b) => b[1] - a[1]);
-}
-
-$: votes = voteSummary($isRevealed);
 </script>
 
 <div class="participants">
@@ -57,11 +28,14 @@ $: votes = voteSummary($isRevealed);
     {/each}
     <div class="controls">
         {#if $isRevealed}
+            {#if $votes && $votes.length == 1 && $votes[0][1] > 1}
+                <div use:confetti />
+            {/if}
             <div class="row">
-                {#each votes as [vote, count] (vote)}
+                {#each $votes as [vote, count] (vote)}
                     <div class="col text-center">
                         <Card>{vote}</Card>
-                        <span class="text-muted">{count}x</span>
+                        <div class="text-muted text-center">{count}x</div>
                     </div>
                 {:else}
                     <div class="col text-center">No votes</div>
@@ -73,9 +47,9 @@ $: votes = voteSummary($isRevealed);
         {/if}
         <div class="d-flex justify-content-center mb-3">
             {#if $isRevealed}
-                <button class="btn btn-warning" on:click={clear}>Clear</button>
+                <button class="btn btn-warning" on:click={clearVotes}>Clear</button>
             {:else}
-                <button class="btn btn-primary" on:click={reveal}>Reveal</button>
+                <button class="btn btn-primary" on:click={revealVotes}>Reveal</button>
             {/if}
         </div>
     </div>
@@ -95,7 +69,7 @@ $: votes = voteSummary($isRevealed);
 {/if}
 
 {#if $user.name == 'Jieter'}
-    <button on:click={add} class="btn btn-light">Add fake users</button>
+    <button on:click={add} class="btn btn-light">Add fake user</button>
 {/if}
 
 <style>
