@@ -5,6 +5,7 @@ export default function (websocketUrl) {
     const choices = writable([]);
     const isRevealed = writable(false);
     const user = writable({});
+    const error = writable(undefined);
 
     // Derive a sorted list of (card, votes)-pairs off of the parcitipants store
     const votes = derived(participants, ($participants) => {
@@ -18,6 +19,7 @@ export default function (websocketUrl) {
         return Object.entries(_votes).sort((a, b) => b[1] - a[1]);
     });
 
+    // Set the vote for the current user to `value`
     const setUserVote = (value) => {
         user.update(($user) => {
             $user.vote = value;
@@ -29,7 +31,7 @@ export default function (websocketUrl) {
     const connect = () => {
         socket = new WebSocket(websocketUrl);
         socket.onclose = () => {
-            console.log('WebSocket connection closed unexpectedly. Trying to reconnect in 2s...');
+            error.set('WebSocket connection closed unexpectedly. Trying to reconnect in 2s...');
             setTimeout(() => {
                 console.log('Reconnecting...');
                 connect();
@@ -45,45 +47,40 @@ export default function (websocketUrl) {
                     participants.set(data.users);
                     choices.set(data.choices);
                     user.set(data.user);
+                    isRevealed.set(false);
+                    error.set(undefined);
                     break;
                 case 'join':
-                    participants.update((current) => [...current, data.user]);
+                    participants.update(($parcitipants) => [...$parcitipants, data.user]);
                     break;
                 case 'leave':
-                    participants.update((current) => {
+                    participants.update(($parcitipants) => {
                         let index;
-                        current.forEach((p, i) => {
+                        $parcitipants.forEach((p, i) => {
                             if (p.name == data.name) {
                                 index = i;
                             }
                         });
-                        current.splice(index, 1);
-                        return current;
+                        $parcitipants.splice(index, 1);
+                        return $parcitipants;
                     });
                     break;
                 case 'reveal':
                     isRevealed.set(true);
                     break;
-                case 'clear':
-                    isRevealed.set(false);
-                    participants.update((current) => {
-                        return current.map((u) => {
-                            u.vote = null;
-                            return u;
-                        });
-                    });
-                    setUserVote(null);
-                    break;
                 case 'vote':
-                    participants.update((current) => {
-                        current.forEach((p) => {
+                    participants.update(($parcitipants) => {
+                        $parcitipants.forEach((p) => {
                             if (p.id == data.user_id) {
                                 p.vote = data.value;
                             }
                         });
 
-                        return [...current];
+                        return [...$parcitipants];
                     });
+                    break;
+                case 'error':
+                    error.set(data.message);
                     break;
             }
         };
@@ -108,6 +105,9 @@ export default function (websocketUrl) {
             setUserVote(value);
         }
     };
+    const changeDeck = () => {
+        update('change_deck');
+    };
 
-    return { participants, isRevealed, user, choices, votes, revealVotes, clearVotes, vote };
+    return { participants, isRevealed, user, choices, votes, revealVotes, clearVotes, vote, changeDeck, error };
 }

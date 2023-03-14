@@ -7,7 +7,8 @@ import pokerStore from './stores.js';
 import { jsonScriptContents } from './utils.js';
 
 const url = jsonScriptContents('websocket_url');
-const { user, participants, isRevealed, choices, votes, revealVotes, clearVotes, vote } = pokerStore(url);
+const { user, participants, isRevealed, choices, votes, revealVotes, clearVotes, vote, changeDeck, error } =
+    pokerStore(url);
 
 function add() {
     participants.update((current) => {
@@ -20,11 +21,16 @@ function add() {
         return [...current, fake];
     });
 }
+let numParcitipants;
+$: numParcitipants = $participants.length;
 </script>
 
+{#if $error}
+    <div class="alert alert-danger" role="alert">{$error}</div>
+{/if}
 <div class="participants">
     {#each $participants as user, i (user.id)}
-        <Participant isRevealed={$isRevealed} {user} {i} count={$participants.length} />
+        <Participant isRevealed={$isRevealed} {user} {i} count={numParcitipants} />
     {/each}
     <div class="controls">
         {#if $isRevealed}
@@ -54,6 +60,7 @@ function add() {
         </div>
     </div>
 </div>
+
 {#if !$user.is_spectator}
     <div class="d-flex justify-content-center mb-3">
         {#each $choices as choice}
@@ -68,9 +75,12 @@ function add() {
     </div>
 {/if}
 
-{#if $user.name == 'Jieter'}
-    <button on:click={add} class="btn btn-light">Add fake user</button>
-{/if}
+<div class="d-flex justify-content-center mb-3">
+    {#if $user.name == 'Jieter'}
+        <button on:click={add} class="btn btn-light">Add fake user</button>
+    {/if}
+    <button on:click={changeDeck} class="btn btn-secondary" disabled={!$isRevealed}> Change deck </button>
+</div>
 
 <style>
 .participants {

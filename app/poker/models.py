@@ -23,7 +23,20 @@ class PokerSession(models.Model):
         return list(self.users.values(*USER_FIELDS))
 
     def deck_as_list(self):
-        return "XXS,XS,S,M,L,XL,?,☕️".split(",") if self.deck == "tshirt" else "0,½,1,2,3,5,8,13,20,?,∞,☕️".split(",")
+        return (
+            "XXS,XS,S,M,L,XL,?,☕️".split(",")
+            if self.deck == self.Decks.TSHIRT
+            else "0,½,1,2,3,5,8,13,20,?,∞,☕️".split(",")
+        )
+
+    def clear(self):
+        self.users.all().update(vote=None)
+
+    def cycle_deck(self):
+        if_fibonacci = self.deck == PokerSession.Decks.FIBONACCI
+        self.deck = PokerSession.Decks.TSHIRT if if_fibonacci else PokerSession.Decks.FIBONACCI
+        self.save()
+        self.clear()
 
     def add_user(self, name, is_spectator=False):
         user, created = self.users.get_or_create(name=name, is_spectator=is_spectator)

@@ -9,16 +9,15 @@ let error;
 let name = '';
 
 onMount(() => {
-    const params = new Proxy(new URLSearchParams(window.location.search), {
-        get: (searchParams, prop) => searchParams.get(prop),
-    });
-    if (params.name) {
-        name = params.name;
+    const previousName = window.localStorage.getItem('name');
+    if (previousName) {
+        name = previousName;
     }
 });
 
 const update = () => {
     if (name) {
+        window.localStorage.setItem('name', name);
         error = undefined;
     } else {
         error = 'Name cannot be empty';

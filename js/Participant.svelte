@@ -48,7 +48,5 @@ $: {
     left: 50%;
 
     margin: -2em;
-    border-radius: 100%;
-    border: 1px dotted yellow;
 }
 </style>
