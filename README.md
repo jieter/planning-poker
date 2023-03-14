@@ -4,7 +4,6 @@
  - 2 decks: T-shirt sizes & modified fibonacci.
  - No special admin roles: every participant can reveal, clear and change the deck.
 
-
 ![Screenshot of the application in this repo](screenshot.png)
 # Local development
 

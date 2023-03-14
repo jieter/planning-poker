@@ -6,19 +6,14 @@ export let isRevealed;
 export let i;
 export let count;
 
-let startAngle, spread, angle;
+// Amount of degrees to spread the participants over at the table
+const maxAngle = 174;
+let angle;
 $: {
-    if (count == 1) {
-        angle = -90;
-    } else {
-        const maxAngle = 176;
-        const minSpread = 90;
-        const maxSpread = maxAngle - 4;
-        spread = Math.min(maxSpread, minSpread + (maxSpread - minSpread) * (count / 8));
-
-        startAngle = Math.min(maxAngle, 135 + (maxAngle - 135) * (count / 8));
-
-        angle = i * (spread / (count - 1)) - startAngle;
+    angle = -90;
+    if (count > 1) {
+        // A fixed amount of degrees, or all parcitipants evenly distributed, whatever is smaller.
+        angle -= Math.min(20, maxAngle / count) * (i - (count - 1) / 2);
     }
 }
 </script>

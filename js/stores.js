@@ -49,6 +49,7 @@ export default function (websocketUrl) {
                     user.set(data.user);
                     isRevealed.set(false);
                     error.set(undefined);
+
                     break;
                 case 'join':
                     participants.update(($parcitipants) => [...$parcitipants, data.user]);

@@ -3,24 +3,13 @@ import { confetti } from '@neoconfetti/svelte';
 
 import Card from './Card.svelte';
 import Participant from './Participant.svelte';
-import pokerStore from './stores.js';
+import pokerStores from './stores.js';
 import { jsonScriptContents } from './utils.js';
 
 const url = jsonScriptContents('websocket_url');
 const { user, participants, isRevealed, choices, votes, revealVotes, clearVotes, vote, changeDeck, error } =
-    pokerStore(url);
+    pokerStores(url);
 
-function add() {
-    participants.update((current) => {
-        const randInt = (min, max) => Math.floor(Math.random() * (max - min) + min);
-        const randomElement = (array) => array[Math.floor(Math.random() * array.length)];
-        const fakeNames = ['Bob', 'Charlie', 'Erin', 'Felix', 'Gude', 'Henri', 'Irma', 'June', 'Kevin'];
-
-        const fake = { id: randInt(10000, 20000), name: randomElement(fakeNames), vote: randomElement(['1', '2']) };
-
-        return [...current, fake];
-    });
-}
 let numParcitipants;
 $: numParcitipants = $participants.length;
 </script>
@@ -76,9 +65,6 @@ $: numParcitipants = $participants.length;
 {/if}
 
 <div class="d-flex justify-content-center mb-3">
-    {#if $user.name == 'Jieter'}
-        <button on:click={add} class="btn btn-light">Add fake user</button>
-    {/if}
     <button on:click={changeDeck} class="btn btn-secondary" disabled={!$isRevealed}> Change deck </button>
 </div>
 
