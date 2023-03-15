@@ -20,8 +20,8 @@
 1. Configure a database, wait until it is ready and use "External Database URL"
 1. Configure a redis instance, use the hostname part of "Internal Redis URL"
 1. Create a web service from this repository
- - Build command: `./build.sh`
- - Start command: `daphne -b 0.0.0.0 app.asgi:application`
- - Environment variable: `PYTHON_VERSION` `3.11.2`
- - Environment variable: `DATABASE_URL` (value from "External Database URL")
- - Environment variable: `REDIS_HOST` (hostname part from "Internal Redis URL")
+    - Build command: `./build.sh`
+    - Start command: `daphne -b 0.0.0.0 app.asgi:application`
+    - Environment variable: `PYTHON_VERSION` `3.11.2`
+    - Environment variable: `DATABASE_URL` (value from "External Database URL")
+    - Environment variable: `REDIS_HOST` (hostname part from "Internal Redis URL")
