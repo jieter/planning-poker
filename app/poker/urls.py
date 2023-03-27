@@ -32,7 +32,7 @@ def index_view(request, session_id=None):
     context = {}
     if user_id := request.session.get("user_id"):
         if user := poker.users.filter(id=user_id).first():
-            protocol = "wss" if settings.IS_RENDER else "ws"
+            protocol = "wss" if settings.IS_PRODUCTION else "ws"
             context["websocket_url"] = f"{protocol}://{request.get_host()}/ws/poker/{poker.id}/"
 
     return render(request, "index.html", context)

@@ -12,18 +12,25 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 import os
 from pathlib import Path
 
-IS_RENDER = "RENDER" in os.environ
+
+def env(key, default=None):
+    return os.environ.get(key, default)
+
+
+IS_PRODUCTION = "RENDER" in os.environ
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-SECRET_KEY = os.environ.get("SECRET_KEY", "django-insecure-94=1j=n6rby0fglmw_%@#_n8oe65+q=flh8hd%lf8!qm%4cjhz")
+SECRET_KEY = env("SECRET_KEY", "django-insecure-94=1j=n6rby0fglmw_%@#_n8oe65+q=flh8hd%lf8!qm%4cjhz")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = []
-if RENDER_EXTERNAL_HOSTNAME := os.environ.get("RENDER_EXTERNAL_HOSTNAME"):
+if RENDER_EXTERNAL_HOSTNAME := env("RENDER_EXTERNAL_HOSTNAME"):
     ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
+if HOSTNAME := env("HOSTNAME"):
+    ALLOWED_HOSTS.append(HOSTNAME)
 
 INSTALLED_APPS = [
     "daphne",
@@ -61,10 +68,11 @@ TEMPLATES = [
 WSGI_APPLICATION = "app.wsgi.application"
 ASGI_APPLICATION = "app.asgi.application"
 
-if IS_RENDER:
+
+if DATABASE_URL := env("DATABASE_URL"):
     import dj_database_url
 
-    DATABASES = {"default": dj_database_url.config(default=os.environ.get("DATABASE_URL"), conn_max_age=600)}
+    DATABASES = {"default": dj_database_url.config(default=DATABASE_URL, conn_max_age=600)}
 else:
     DATABASES = {
         "default": {
@@ -72,36 +80,28 @@ else:
             "NAME": BASE_DIR / "db.sqlite3",
         }
     }
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
 # Internationalization
-# https://docs.djangoproject.com/en/4.0/topics/i18n/
-
 LANGUAGE_CODE = "en-us"
-
 TIME_ZONE = "UTC"
-
 USE_I18N = True
-
 USE_TZ = True
 
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/4.0/howto/static-files/
-
+# Static files
 STATIC_URL = "static/"
 STATICFILES_DIRS = ["assets/"]
-if IS_RENDER:
+if IS_PRODUCTION:
     STATIC_ROOT = BASE_DIR / "staticfiles"
     STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
-DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [(os.environ.get("REDIS_HOST", "127.0.0.1"), 6379)],
+            "hosts": [(env("REDIS_HOST", "127.0.0.1"), 6379)],
         },
     },
 }
