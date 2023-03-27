@@ -15,7 +15,9 @@ $: numParcitipants = $participants.length;
 </script>
 
 {#if $error}
-    <div class="alert alert-danger" role="alert">{$error}</div>
+    <div class="fixed-top">
+        <div class="alert alert-danger" role="alert">{$error}</div>
+    </div>
 {/if}
 <div class="participants">
     {#each $participants as user, i (user.id)}
