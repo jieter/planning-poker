@@ -47,27 +47,9 @@ export default function (websocketUrl) {
                     participants.set(data.users);
                     choices.set(data.choices);
                     user.set(data.user);
-                    isRevealed.set(false);
+                    isRevealed.set(data.is_revealed);
                     error.set(undefined);
 
-                    break;
-                case 'join':
-                    participants.update(($parcitipants) => [...$parcitipants, data.user]);
-                    break;
-                case 'leave':
-                    participants.update(($parcitipants) => {
-                        let index;
-                        $parcitipants.forEach((p, i) => {
-                            if (p.name == data.name) {
-                                index = i;
-                            }
-                        });
-                        $parcitipants.splice(index, 1);
-                        return $parcitipants;
-                    });
-                    break;
-                case 'reveal':
-                    isRevealed.set(true);
                     break;
                 case 'vote':
                     participants.update(($parcitipants) => {

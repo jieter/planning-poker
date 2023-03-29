@@ -33,9 +33,7 @@ class PokerConsumer(JsonWebsocketConsumer):
         if self.user_id:
             self.user.deactivate()
 
-            message = {"type": "leave", "id": self.user_id}
-            async_to_sync(self.channel_layer.group_send)(self.poker_id, message)
-
+            async_to_sync(self.channel_layer.group_send)(self.poker_id, {"type": "init"})
             self.user_id = None
 
     def receive_json(self, content):
@@ -43,8 +41,7 @@ class PokerConsumer(JsonWebsocketConsumer):
             case "join":
                 new_user = self.poker.add_user(name=content["name"], is_spectator=content["is_spectator"]).as_dict()
                 self.user_id = new_user.id
-                message = {"type": "join", "user": new_user}
-                async_to_sync(self.channel_layer.group_send)(self.poker_id, message)
+                async_to_sync(self.channel_layer.group_send)(self.poker_id, {"type": "init"})
 
             case "vote":
                 if self.user:
@@ -57,7 +54,7 @@ class PokerConsumer(JsonWebsocketConsumer):
             case "reveal":
                 self.poker.is_revealed = True
                 self.poker.save()
-                async_to_sync(self.channel_layer.group_send)(self.poker_id, {"type": "reveal"})
+                async_to_sync(self.channel_layer.group_send)(self.poker_id, {"type": "init"})
 
             case "clear":
                 self.poker.clear()
@@ -77,6 +74,7 @@ class PokerConsumer(JsonWebsocketConsumer):
         self.poker.refresh_from_db()
         message = {
             "type": "init",
+            "is_revealed": self.poker.is_revealed,
             "user": user,
             "users": self.poker.users_as_dict(),
             "choices": self.poker.deck_as_list(),
@@ -90,7 +88,4 @@ class PokerConsumer(JsonWebsocketConsumer):
         self.send_json(event)
 
     def vote(self, event):
-        self.send_json(event)
-
-    def reveal(self, event):
         self.send_json(event)

@@ -31,11 +31,12 @@ class PokerSession(models.Model):
 
     def clear(self):
         self.users.all().update(vote=None)
+        self.is_revealed = False
+        self.save()
 
     def cycle_deck(self):
         if_fibonacci = self.deck == PokerSession.Decks.FIBONACCI
         self.deck = PokerSession.Decks.TSHIRT if if_fibonacci else PokerSession.Decks.FIBONACCI
-        self.save()
         self.clear()
 
     def add_user(self, name, is_spectator=False):
