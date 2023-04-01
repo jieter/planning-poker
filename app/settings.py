@@ -69,7 +69,12 @@ WSGI_APPLICATION = "app.wsgi.application"
 ASGI_APPLICATION = "app.asgi.application"
 
 # We need no database, but Django insists it needs a proper DATABASES config
-DATABASES = {"default": {"ENGINE": "django.db.backends.sqlite3", "NAME": ":memory:"}}
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
+    }
+}
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 

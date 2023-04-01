@@ -5,7 +5,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import path
 from django.views.decorators.csrf import csrf_exempt
 
-from .consumers import PokerSession
+from .consumers import PokerConsumer, PokerSession
 
 
 @csrf_exempt
@@ -37,4 +37,9 @@ urlpatterns = [
     path("", index_view, name="index"),
     path("poker/", index_view, name="index"),
     path("poker/<str:session_id>/", index_view, name="poker"),
+]
+
+
+websocket_urlpatterns = [
+    path("ws/poker/<str:poker_id>/", PokerConsumer.as_asgi()),
 ]

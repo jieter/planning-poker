@@ -8,13 +8,12 @@ from django.core.asgi import get_asgi_application
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "app.settings")
 
 django_asgi_app = get_asgi_application()
-import app.poker.routing
 
-router = SessionMiddlewareStack(URLRouter(app.poker.routing.websocket_urlpatterns))
+import app.poker.urls
+
 application = ProtocolTypeRouter(
     {
         "http": django_asgi_app,
-        "websocket": router,
-        # "websocket": AllowedHostsOriginValidator(router),
+        "websocket": SessionMiddlewareStack(URLRouter(app.poker.urls.websocket_urlpatterns)),
     }
 )
