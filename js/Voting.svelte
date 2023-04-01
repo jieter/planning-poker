@@ -67,7 +67,11 @@ $: numParcitipants = $participants.length;
 {/if}
 
 <div class="d-flex justify-content-center mb-3">
-    <button on:click={changeDeck} class="btn btn-secondary" disabled={!$isRevealed}> Change deck </button>
+    {#if $isRevealed}
+        <button on:click={changeDeck} class="btn btn-secondary"> Change deck </button>
+    {:else}
+        You can change deck after revealing.
+    {/if}
 </div>
 
 <style>
