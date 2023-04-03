@@ -21,11 +21,6 @@ def index_view(request, session_id=None):
     if name := request.POST.get("name"):
         user = poker.add_user(name=name, is_spectator=request.POST.get("is_spectator") == "true")
         request.session["user_id"] = user.id
-
-        # Notify current users of the new user
-        channel_layer = get_channel_layer()
-        async_to_sync(channel_layer.group_send)(session_id, {"type": "join", "user": user.as_dict()})
-
         return redirect("poker", session_id=session_id)
 
     # If the user is known (in the session), add the websocket URL to the context so the voting can begin.
