@@ -33,7 +33,7 @@ class PokerSession(models.Model):
         self.save()
 
     def cycle_deck(self):
-        if_fibonacci = self.deck in PokerSession.Decks.FIBONACCI
+        if_fibonacci = self.deck == PokerSession.Decks.FIBONACCI
         self.deck = PokerSession.Decks.TSHIRT if if_fibonacci else PokerSession.Decks.FIBONACCI
         self.clear()
 
