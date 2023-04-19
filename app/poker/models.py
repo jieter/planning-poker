@@ -14,7 +14,7 @@ class PokerSession(models.Model):
         TSHIRT = "tshirt", "T-shirt sizes"
         FIBONACCI = "fibonacci", "Fibonacci"
 
-    deck = models.CharField(max_length=20, choices=Decks.choices)
+    deck = models.CharField(max_length=20, choices=Decks.choices, default=Decks.TSHIRT)
 
     def __str__(self):
         return f"{self.id}"
@@ -24,9 +24,7 @@ class PokerSession(models.Model):
 
     def deck_as_list(self):
         return (
-            "XXS,XS,S,M,L,XL,?,☕️".split(",")
-            if self.deck == self.Decks.TSHIRT
-            else "0,½,1,2,3,5,8,13,20,?,∞,☕️".split(",")
+            "XS,S,M,L,XL,?,☕️".split(",") if self.deck == self.Decks.TSHIRT else "0,½,1,2,3,5,8,13,20,?,∞,☕️".split(",")
         )
 
     def clear(self):
@@ -35,7 +33,7 @@ class PokerSession(models.Model):
         self.save()
 
     def cycle_deck(self):
-        if_fibonacci = self.deck == PokerSession.Decks.FIBONACCI
+        if_fibonacci = self.deck in PokerSession.Decks.FIBONACCI
         self.deck = PokerSession.Decks.TSHIRT if if_fibonacci else PokerSession.Decks.FIBONACCI
         self.clear()
 

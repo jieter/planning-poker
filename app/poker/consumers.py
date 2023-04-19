@@ -62,6 +62,7 @@ class PokerConsumer(JsonWebsocketConsumer):
 
             case "change_deck":
                 self.poker.cycle_deck()
+
                 async_to_sync(self.channel_layer.group_send)(self.poker_id, {"type": "init"})
 
     def init(self, event=None):
