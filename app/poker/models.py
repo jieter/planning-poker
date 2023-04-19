@@ -20,7 +20,7 @@ class PokerSession(models.Model):
         return f"{self.id}"
 
     def users_as_dict(self):
-        return list(self.users.order_by("id").values(*USER_FIELDS))
+        return list(self.users.filter(is_active=True).order_by("id").values(*USER_FIELDS))
 
     def deck_as_list(self):
         return (

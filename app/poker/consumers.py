@@ -71,7 +71,7 @@ class PokerConsumer(JsonWebsocketConsumer):
             self.user.refresh_from_db()
             user = self.user.as_dict()
 
-        self.poker.refresh_from_db()
+        self.poker = PokerSession.objects.get(pk=self.poker.pk)
         message = {
             "type": "init",
             "is_revealed": self.poker.is_revealed,
