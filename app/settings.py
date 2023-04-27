@@ -17,14 +17,13 @@ def env(key, default=None):
     return os.environ.get(key, default)
 
 
-IS_PRODUCTION = "RENDER" in os.environ
+IS_PRODUCTION = "PRODUCTION" in os.environ
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = env("SECRET_KEY", "django-insecure-94=1j=n6rby0fglmw_%@#_n8oe65+q=flh8hd%lf8!qm%4cjhz")
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = not IS_PRODUCTION
 
 ALLOWED_HOSTS = []
 if RENDER_EXTERNAL_HOSTNAME := env("RENDER_EXTERNAL_HOSTNAME"):

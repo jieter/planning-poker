@@ -19,7 +19,7 @@ def index_view(request, session_id=None):
 
     # Handle a user join request
     if name := request.POST.get("name"):
-        user = poker.add_user(name=name, is_spectator=request.POST.get("is_spectator") == "true")
+        user = poker.add_user(name=name, is_spectator=request.POST.get("is_spectator") == "on")
         request.session["user_id"] = user.id
         return redirect("poker", session_id=session_id)
 
