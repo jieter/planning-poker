@@ -82,7 +82,7 @@ class PokerConsumer(JsonWebsocketConsumer):
             "type": "init",
             "is_revealed": self.poker.is_revealed,
             "user": user,
-            "users": self.poker.users_as_dict(),
+            "users": self.poker.users_as_list(),
             "choices": self.poker.deck_as_list(),
         }
         self.send_json(message)
