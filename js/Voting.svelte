@@ -12,6 +12,7 @@ const { user, participants, isRevealed, choices, votes, revealVotes, clearVotes,
 
 let numParcitipants;
 $: numParcitipants = $participants.length;
+$: votingComplete = $participants.every((p) => p.is_spectator || p.vote);
 </script>
 
 {#if $error}
@@ -40,12 +41,20 @@ $: numParcitipants = $participants.length;
             </div>
         {/if}
         {#if $user.is_spectator}
-            <p>You joined as spectator</p>
+            <p>
+                You joined as spectator.<br />
+                Current deck: {$choices.join(', ')}.
+            </p>
         {/if}
         <div class="d-flex justify-content-center mb-3">
             {#if $isRevealed}
                 <button class="btn btn-warning" on:click={clearVotes}>Clear</button>
             {:else}
+                <div class="voting-complete">
+                    {#if votingComplete}
+                        ✓
+                    {/if}
+                </div>
                 <button class="btn btn-primary" on:click={revealVotes}>Reveal</button>
             {/if}
         </div>
@@ -88,5 +97,9 @@ $: numParcitipants = $participants.length;
     bottom: 0;
     left: 50%;
     transform: translateX(-50%);
+}
+.voting-complete {
+    width: 1.5em;
+    color: green;
 }
 </style>

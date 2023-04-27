@@ -30,7 +30,7 @@ class PokerSession(models.Model):
         return self.deck == PokerSession.Decks.FIBONACCI
 
     def cycle_deck(self) -> None:
-        self.deck = PokerSession.Decks.TSHIRT if self.if_fibonacci else PokerSession.Decks.FIBONACCI
+        self.deck = PokerSession.Decks.TSHIRT if self.is_fibonacci else PokerSession.Decks.FIBONACCI
         self.clear()
 
     def clear(self) -> None:

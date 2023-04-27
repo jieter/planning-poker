@@ -37,3 +37,7 @@ class PokerTestCase(TestCase):
         poker.cycle_deck()
         self.assertEqual(poker.deck, "fibonacci")
         self.assertEqual(poker.deck_as_list()[0], "0")
+
+        poker.cycle_deck()
+        self.assertEqual(poker.deck, "tshirt")
+        self.assertEqual(poker.deck_as_list()[0], "XS")
