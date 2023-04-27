@@ -30,7 +30,7 @@ $: numParcitipants = $participants.length;
             {/if}
             <div class="row">
                 {#each $votes as [vote, count] (vote)}
-                    <div class="col-2 text-center">
+                    <div class="col-4 text-center">
                         <Card>{vote}</Card>
                         <div class="text-muted text-center">{count}x</div>
                     </div>

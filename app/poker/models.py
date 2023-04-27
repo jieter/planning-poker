@@ -16,32 +16,34 @@ class PokerSession(models.Model):
 
     deck = models.CharField(max_length=20, choices=Decks.choices, default=Decks.TSHIRT)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.id}"
 
-    def users_as_list(self):
+    def users_as_list(self) -> list[dict]:
         return list(self.users.filter(is_active=True).order_by("id").values(*USER_FIELDS))
 
-    def deck_as_list(self):
-        return (
-            "XS,S,M,L,XL,?,☕️".split(",") if self.deck == self.Decks.TSHIRT else "0,½,1,2,3,5,8,13,20,?,∞,☕️".split(",")
-        )
+    def deck_as_list(self) -> list:
+        return ("0,½,1,2,3,5,8,13,20,?,∞,☕️" if self.is_fibonacci else "XS,S,M,L,XL,?,☕️").split(",")
 
-    def clear(self):
+    @property
+    def is_fibonacci(self) -> bool:
+        return self.deck == PokerSession.Decks.FIBONACCI
+
+    def cycle_deck(self) -> None:
+        self.deck = PokerSession.Decks.TSHIRT if self.if_fibonacci else PokerSession.Decks.FIBONACCI
+        self.clear()
+
+    def clear(self) -> None:
+        """Clear all votes and return to voting state."""
         self.users.all().update(vote=None)
         self.is_revealed = False
         self.save()
 
-    def cycle_deck(self):
-        if_fibonacci = self.deck == PokerSession.Decks.FIBONACCI
-        self.deck = PokerSession.Decks.TSHIRT if if_fibonacci else PokerSession.Decks.FIBONACCI
-        self.clear()
-
-    def add_user(self, name, is_spectator=False):
+    def add_user(self, name, is_spectator=False) -> "User":
         user, created = self.users.get_or_create(name=name, is_spectator=is_spectator)
         return user
 
-    def deactivate_user(self, user_id):
+    def deactivate_user(self, user_id) -> None:
         self.users.filter(id=user_id).first().deactivate()
 
 
@@ -56,16 +58,16 @@ class User(models.Model):
 
     vote = models.CharField(max_length=10, null=True)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
-    def as_dict(self):
+    def as_dict(self) -> dict:
         return {field: getattr(self, field) for field in USER_FIELDS}
 
-    def activate(self):
+    def activate(self) -> None:
         self.is_active = True
         self.save()
 
-    def deactivate(self):
+    def deactivate(self) -> None:
         self.is_active = False
         self.save()
