@@ -24,7 +24,7 @@ class PokerConsumer(JsonWebsocketConsumer):
         if self.user:
             async_to_sync(self.channel_layer.group_add)(self.poker_id, self.channel_name)
             self.user.activate()
-            self.channel_send_message()
+            self.channel_send_init()
         else:
             self.send_json({"type": "error", "message": "User not found"})
 
@@ -34,11 +34,12 @@ class PokerConsumer(JsonWebsocketConsumer):
             self.user.deactivate()
             self.user_id = None
 
-            self.channel_send_message()
+            self.channel_send_init()
 
-    def channel_send_message(self, message: dict | None = None):
-        if message is None:
-            message = {"type": "init"}
+    def channel_send_init(self):
+        self.channel_send_message({"type": "init"})
+
+    def channel_send_message(self, message: dict):
         async_to_sync(self.channel_layer.group_send)(self.poker_id, message)
 
     def receive_json(self, content):
@@ -46,7 +47,7 @@ class PokerConsumer(JsonWebsocketConsumer):
             case "join":
                 new_user = self.poker.add_user(name=content["name"], is_spectator=content["is_spectator"]).as_dict()
                 self.user_id = new_user.id
-                self.channel_send_message()
+                self.channel_send_init()
 
             case "vote":
                 if self.user:
@@ -59,15 +60,15 @@ class PokerConsumer(JsonWebsocketConsumer):
             case "reveal":
                 self.poker.is_revealed = True
                 self.poker.save()
-                self.channel_send_message()
+                self.channel_send_init()
 
             case "clear":
                 self.poker.clear()
-                self.channel_send_message()
+                self.channel_send_init()
 
             case "change_deck":
                 self.poker.cycle_deck()
-                self.channel_send_message()
+                self.channel_send_init()
 
     def init(self, event=None):
         # Create the message here to make sure it contains the up to date user and poker session
@@ -85,12 +86,6 @@ class PokerConsumer(JsonWebsocketConsumer):
             "choices": self.poker.deck_as_list(),
         }
         self.send_json(message)
-
-    def join(self, event):
-        self.send_json(event)
-
-    def leave(self, event):
-        self.send_json(event)
 
     def vote(self, event):
         self.send_json(event)
