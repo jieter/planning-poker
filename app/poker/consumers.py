@@ -24,7 +24,7 @@ class PokerConsumer(JsonWebsocketConsumer):
         if self.user:
             async_to_sync(self.channel_layer.group_add)(self.poker_id, self.channel_name)
             self.user.activate()
-            self.init()
+            self.channel_send_message()
         else:
             self.send_json({"type": "error", "message": "User not found"})
 
@@ -32,16 +32,21 @@ class PokerConsumer(JsonWebsocketConsumer):
         async_to_sync(self.channel_layer.group_discard)(self.poker_id, self.channel_name)
         if self.user_id:
             self.user.deactivate()
-
-            async_to_sync(self.channel_layer.group_send)(self.poker_id, {"type": "init"})
             self.user_id = None
+
+            self.channel_send_message()
+
+    def channel_send_message(self, message: dict | None = None):
+        if message is None:
+            message = {"type": "init"}
+        async_to_sync(self.channel_layer.group_send)(self.poker_id, message)
 
     def receive_json(self, content):
         match (content["action"]):
             case "join":
                 new_user = self.poker.add_user(name=content["name"], is_spectator=content["is_spectator"]).as_dict()
                 self.user_id = new_user.id
-                async_to_sync(self.channel_layer.group_send)(self.poker_id, {"type": "init"})
+                self.channel_send_message()
 
             case "vote":
                 if self.user:
@@ -49,21 +54,20 @@ class PokerConsumer(JsonWebsocketConsumer):
                     self.user.save()
 
                     message = {"type": "vote", "user_id": self.user_id, "value": content["value"]}
-                    async_to_sync(self.channel_layer.group_send)(self.poker_id, message)
+                    self.channel_send_message(message)
 
             case "reveal":
                 self.poker.is_revealed = True
                 self.poker.save()
-                async_to_sync(self.channel_layer.group_send)(self.poker_id, {"type": "init"})
+                self.channel_send_message()
 
             case "clear":
                 self.poker.clear()
-                async_to_sync(self.channel_layer.group_send)(self.poker_id, {"type": "init"})
+                self.channel_send_message()
 
             case "change_deck":
                 self.poker.cycle_deck()
-
-                async_to_sync(self.channel_layer.group_send)(self.poker_id, {"type": "init"})
+                self.channel_send_message()
 
     def init(self, event=None):
         # Create the message here to make sure it contains the up to date user and poker session

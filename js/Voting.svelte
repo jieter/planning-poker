@@ -30,7 +30,7 @@ $: numParcitipants = $participants.length;
             {/if}
             <div class="row">
                 {#each $votes as [vote, count] (vote)}
-                    <div class="col text-center">
+                    <div class="col-2 text-center">
                         <Card>{vote}</Card>
                         <div class="text-muted text-center">{count}x</div>
                     </div>
@@ -40,7 +40,7 @@ $: numParcitipants = $participants.length;
             </div>
         {/if}
         {#if $user.is_spectator}
-            You joined as spectator
+            <p>You joined as spectator</p>
         {/if}
         <div class="d-flex justify-content-center mb-3">
             {#if $isRevealed}
@@ -70,9 +70,7 @@ $: numParcitipants = $participants.length;
     {#if $isRevealed}
         <button on:click={changeDeck} class="btn btn-secondary"> Change deck </button>
     {:else}
-        <button disabled={true} class="btn btn-light">
-            Reveal first!
-        </button>
+        <button disabled={true} class="btn btn-light"> Reveal first! </button>
     {/if}
 </div>
 
