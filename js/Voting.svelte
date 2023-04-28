@@ -6,7 +6,7 @@ import Participant from './Participant.svelte';
 import pokerStores from './stores.js';
 import { jsonScriptContents } from './utils.js';
 
-const isProduction = false;
+const isProduction = !window.location.host.includes('localhost');
 
 const url = jsonScriptContents('websocket_url');
 const { user, participants, isRevealed, choices, votes, revealVotes, clearVotes, vote, changeDeck, error, update } =
