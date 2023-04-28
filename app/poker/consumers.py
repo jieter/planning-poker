@@ -1,5 +1,8 @@
+import random
+
 from asgiref.sync import async_to_sync
 from channels.generic.websocket import JsonWebsocketConsumer
+from django.conf import settings
 
 from .models import PokerSession
 
@@ -69,6 +72,21 @@ class PokerConsumer(JsonWebsocketConsumer):
             case "change_deck":
                 self.poker.cycle_deck()
                 self.channel_send_init()
+
+            case "add_fakes":
+                if not settings.IS_PRODUCTION:
+                    for name in ["Marina", "Shanna", "Jalen", "Kobe", "Dallin", "Erin", "Will"]:
+                        self.poker.add_user(name)
+                    self.channel_send_init()
+
+            case "fake_votes":
+                if not settings.IS_PRODUCTION:
+                    deck = self.poker.deck_as_list()
+                    deck.extend([deck[0]] * 3)
+                    for user in self.poker.users.all():
+                        user.vote = random.choice(deck)
+                        user.save()
+                    self.channel_send_init()
 
     def init(self, event=None):
         # Create the message here to make sure it contains the up to date user and poker session

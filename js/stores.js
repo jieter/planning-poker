@@ -92,5 +92,5 @@ export default function (websocketUrl) {
         update('change_deck');
     };
 
-    return { participants, isRevealed, user, choices, votes, revealVotes, clearVotes, vote, changeDeck, error };
+    return { participants, isRevealed, user, choices, votes, revealVotes, clearVotes, vote, changeDeck, error, update };
 }
