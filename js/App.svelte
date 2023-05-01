@@ -13,7 +13,3 @@ const url = jsonScriptContents('websocket_url');
 {:else}
     <Join />
 {/if}
-
-<br />
-
-<a href="/">New poker session</a>

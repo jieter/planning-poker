@@ -53,5 +53,4 @@ $: window.localStorage.setItem('isSpectator', isSpectator);
             <input type="checkbox" name="is_spectator" bind:checked={isSpectator} /> Join as a spectator 👁️
         </label>
     </div>
-    {isSpectator}
 </form>
