@@ -9,6 +9,7 @@ class PokerSession(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     created = models.DateTimeField(auto_now_add=True)
     is_revealed = models.BooleanField(default=False)
+    reveal_count = models.IntegerField(default=0)
 
     class Decks(models.TextChoices):
         TSHIRT = "tshirt", "T-shirt sizes"
@@ -32,6 +33,11 @@ class PokerSession(models.Model):
     def cycle_deck(self) -> None:
         self.deck = PokerSession.Decks.TSHIRT if self.is_fibonacci else PokerSession.Decks.FIBONACCI
         self.clear()
+
+    def reveal(self) -> None:
+        self.is_revealed = True
+        self.reveal_count += 1
+        self.save()
 
     def clear(self) -> None:
         """Clear all votes and return to voting state."""

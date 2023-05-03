@@ -61,8 +61,7 @@ class PokerConsumer(JsonWebsocketConsumer):
                     self.channel_send_message(message)
 
             case "reveal":
-                self.poker.is_revealed = True
-                self.poker.save()
+                self.poker.reveal()
                 self.channel_send_init()
 
             case "clear":

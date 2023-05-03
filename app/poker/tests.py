@@ -17,6 +17,16 @@ class PokerTestCase(TestCase):
         poker.deactivate_user(user.pk)
         self.assertEqual(poker.users_as_list(), [])
 
+    def test_reveal(self):
+        poker = PokerSession.objects.create()
+
+        poker.reveal()
+        self.assertTrue(poker.is_revealed)
+        self.assertEqual(poker.reveal_count, 1)
+
+        poker.reveal()
+        self.assertEqual(poker.reveal_count, 2)
+
     def test_clear(self):
         poker = PokerSession.objects.create()
 
