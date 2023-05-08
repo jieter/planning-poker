@@ -58,7 +58,7 @@ class PokerConsumer(JsonWebsocketConsumer):
                     self.user.vote = vote if vote in self.poker.deck_as_list() else "🍗"
                     self.user.save()
 
-                    message = {"type": "vote", "user_id": self.user_id, "value": content["value"]}
+                    message = {"type": "vote", "user_id": self.user_id, "value": vote}
                     self.channel_send_message(message)
 
             case "reveal":
