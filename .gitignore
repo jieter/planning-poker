@@ -242,3 +242,5 @@ modules.xml
 
 node_modules
 django-channels-example
+
+.vscode
