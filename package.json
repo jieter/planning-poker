@@ -1,21 +1,21 @@
 {
     "name": "planning-poker",
     "dependencies": {
-        "svelte": "^3.55.1"
+        "svelte": "^3.59.1"
     },
     "devDependencies": {
-        "@babel/preset-env": "^7.20.2",
+        "@babel/preset-env": "^7.22.2",
         "@neoconfetti/svelte": "^1.0.0",
-        "@rollup/plugin-commonjs": "^24.0.1",
-        "@rollup/plugin-node-resolve": "^15.0.1",
-        "@rollup/plugin-terser": "^0.4.0",
-        "eslint": "^8.35.0",
+        "@rollup/plugin-commonjs": "^25.0.0",
+        "@rollup/plugin-node-resolve": "^15.0.2",
+        "@rollup/plugin-terser": "^0.4.3",
+        "eslint": "^8.41.0",
         "eslint-plugin-import": "^2.27.5",
         "eslint-plugin-svelte3": "^4.0.0",
-        "js-cookie": "^3.0.1",
-        "prettier": "^2.8.4",
-        "prettier-plugin-svelte": "^2.9.0",
-        "rollup": "^3.17.3",
+        "js-cookie": "^3.0.5",
+        "prettier": "^2.8.8",
+        "prettier-plugin-svelte": "^2.10.1",
+        "rollup": "^3.23.0",
         "rollup-plugin-analyzer": "^4.0.0",
         "rollup-plugin-cleanup": "^3.2.1",
         "rollup-plugin-css-only": "^4.3.0",
