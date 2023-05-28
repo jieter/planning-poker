@@ -3,6 +3,7 @@ import { derived, writable, get } from 'svelte/store';
 export default function (websocketUrl) {
     const participants = writable([]);
     const choices = writable([]);
+    const autoReveal = writable(false);
     const isRevealed = writable(false);
     const user = writable({});
     const error = writable(undefined);
@@ -47,6 +48,7 @@ export default function (websocketUrl) {
                     participants.set(data.users);
                     choices.set(data.choices);
                     user.set(data.user);
+                    autoReveal.set(data.auto_reveal);
                     isRevealed.set(data.is_revealed);
                     error.set(undefined);
 
@@ -71,9 +73,13 @@ export default function (websocketUrl) {
     connect();
 
     async function update(action, params = undefined) {
+        console.log('update', action, params);
+        if (socket.readyState != 1) {
+            return;
+        }
+
         params = params || {};
         params.action = action;
-        console.log('update', params);
         socket.send(JSON.stringify(params));
     }
     const revealVotes = () => update('reveal');
@@ -88,9 +94,25 @@ export default function (websocketUrl) {
             setUserVote(value);
         }
     };
+
+    autoReveal.subscribe((value) => update('set_auto_reveal', { value: value }));
+
     const changeDeck = () => {
         update('change_deck');
     };
 
-    return { participants, isRevealed, user, choices, votes, revealVotes, clearVotes, vote, changeDeck, error, update };
+    return {
+        participants,
+        autoReveal,
+        isRevealed,
+        user,
+        choices,
+        votes,
+        revealVotes,
+        clearVotes,
+        vote,
+        changeDeck,
+        error,
+        update,
+    };
 }

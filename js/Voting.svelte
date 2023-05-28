@@ -9,8 +9,20 @@ import { jsonScriptContents } from './utils.js';
 const isProduction = !window.location.host.includes('localhost');
 
 const url = jsonScriptContents('websocket_url');
-const { user, participants, isRevealed, choices, votes, revealVotes, clearVotes, vote, changeDeck, error, update } =
-    pokerStores(url);
+const {
+    user,
+    participants,
+    autoReveal,
+    isRevealed,
+    choices,
+    votes,
+    revealVotes,
+    clearVotes,
+    vote,
+    changeDeck,
+    error,
+    update,
+} = pokerStores(url);
 
 let numParcitipants;
 $: numParcitipants = $participants.length;
@@ -51,41 +63,48 @@ $: votingComplete = $participants.every((p) => p.is_spectator || p.vote);
             {#if $isRevealed}
                 <button class="btn btn-warning" on:click={clearVotes}>Clear</button>
             {:else}
-                <button class="btn btn-primary" on:click={revealVotes}>Reveal</button>
+                <button class="btn btn-primary" on:click={revealVotes}>Reveal </button>
             {/if}
         </div>
     </div>
 </div>
-
-<div class="d-flex justify-content-center mb-3">
-    {#if $user.is_spectator}
-        You joined as spectator.<br />
-        Current deck: {$choices.join(', ')}.
-    {:else}
-        {#each $choices as choice}
-            <Card
-                on:click={vote(choice)}
-                on:keypress={vote(choice)}
-                disabled={$isRevealed}
-                selected={choice == $user.vote}>
-                {choice}
-            </Card>
-        {/each}
-    {/if}
+<div class="container text-center">
+    <div class="row">
+        <div class="col-md-2">
+            {#if !isProduction}
+                <button on:click={() => update('add_fakes')} class="btn btn-danger">Add fake users</button>
+                <button on:click={() => update('fake_votes')} class="btn btn-danger">Fake votes</button>
+            {/if}
+        </div>
+        <div class="col-md-8">
+            {#if $user.is_spectator}
+                You joined as spectator.<br />
+                Current deck: {$choices.join(', ')}.
+            {:else}
+                <div class="d-flex justify-content-center">
+                    {#each $choices as choice}
+                        <Card
+                            on:click={vote(choice)}
+                            on:keypress={vote(choice)}
+                            disabled={$isRevealed}
+                            selected={choice == $user.vote}>
+                            {choice}
+                        </Card>
+                    {/each}
+                </div>
+            {/if}
+        </div>
+        <div class="col-md-2 text-start">
+            {#if $isRevealed}
+                <button on:click={changeDeck} class="btn btn-secondary"> Change deck </button>
+            {:else}
+                <button disabled={true} class="btn btn-light"> Reveal first! </button>
+            {/if}
+            <label><input type="checkbox" bind:checked={$autoReveal} /> auto reveal</label>
+            after voting is complete
+        </div>
+    </div>
 </div>
-
-<div class="d-flex justify-content-center mb-3">
-    {#if $isRevealed}
-        <button on:click={changeDeck} class="btn btn-secondary"> Change deck </button>
-    {:else}
-        <button disabled={true} class="btn btn-light"> Reveal first! </button>
-    {/if}
-</div>
-
-{#if !isProduction}
-    <button on:click={() => update('add_fakes')} class="btn btn-danger">Add fake users</button>
-    <button on:click={() => update('fake_votes')} class="btn btn-danger">Fake votes</button>
-{/if}
 
 <style>
 .participants {

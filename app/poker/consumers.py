@@ -46,49 +46,52 @@ class PokerConsumer(JsonWebsocketConsumer):
         async_to_sync(self.channel_layer.group_send)(self.poker_id, message)
 
     def receive_json(self, content):
+        poker = self.poker
         match (content["action"]):
             case "join":
-                new_user = self.poker.add_user(name=content["name"], is_spectator=content["is_spectator"]).as_dict()
+                new_user = poker.add_user(name=content["name"], is_spectator=content["is_spectator"]).as_dict()
                 self.user_id = new_user.id
-                self.channel_send_init()
+
+            case "set_auto_reveal":
+                poker.auto_reveal = bool(content.get("value"))
+                poker.save()
 
             case "vote":
                 if self.user:
                     vote = content.get("value")
-                    vote = vote if vote in self.poker.deck_as_list() else "🍗"
+                    vote = vote if vote in poker.deck_as_list() else "🍗"
 
                     self.user.vote = vote
                     self.user.save()
 
-                    message = {"type": "vote", "user_id": self.user_id, "value": vote}
-                    self.channel_send_message(message)
+                    if not poker.is_voting_complete:
+                        message = {"type": "vote", "user_id": self.user_id, "value": vote}
+                        self.channel_send_message(message)
+                        return
 
             case "reveal":
-                self.poker.reveal()
-                self.channel_send_init()
+                poker.reveal()
 
             case "clear":
-                self.poker.clear()
-                self.channel_send_init()
+                poker.clear()
 
             case "change_deck":
-                self.poker.cycle_deck()
-                self.channel_send_init()
+                poker.cycle_deck()
 
             case "add_fakes":
                 if not settings.IS_PRODUCTION:
                     for name in ["Marina", "Shanna", "Jalen", "Kobe", "Dallin", "Erin", "Will"]:
-                        self.poker.add_user(name)
-                    self.channel_send_init()
+                        poker.add_user(name)
 
             case "fake_votes":
                 if not settings.IS_PRODUCTION:
-                    deck = self.poker.deck_as_list()
+                    deck = poker.deck_as_list().copy()
                     deck.extend([deck[0]] * 3)
-                    for user in self.poker.users.all():
+                    for user in poker.users.all():
                         user.vote = random.choice(deck)
                         user.save()
-                    self.channel_send_init()
+
+        self.channel_send_init()
 
     def init(self, event=None):
         # Create the message here to make sure it contains the up to date user and poker session
@@ -97,13 +100,17 @@ class PokerConsumer(JsonWebsocketConsumer):
             self.user.refresh_from_db()
             user = self.user.as_dict()
 
-        self.poker = PokerSession.objects.get(pk=self.poker.pk)
+        self.poker = poker = PokerSession.objects.get(pk=self.poker.pk)
+        if poker.is_voting_complete and poker.auto_reveal:
+            poker.reveal()
+
         message = {
             "type": "init",
-            "is_revealed": self.poker.is_revealed,
+            "is_revealed": poker.is_revealed,
             "user": user,
-            "users": self.poker.users_as_list(),
-            "choices": self.poker.deck_as_list(),
+            "users": poker.users_as_list(),
+            "choices": poker.deck_as_list(),
+            "auto_reveal": poker.auto_reveal,
         }
         self.send_json(message)
 
