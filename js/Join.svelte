@@ -7,16 +7,16 @@ let error;
 
 // Screen name in the poker session
 let name = '';
-let isSpectator = false;
+let isSpectator = null;
 
 onMount(() => {
-    const previousName = window.localStorage.getItem('name');
+    const previousName = localStorage.getItem('name');
     if (previousName) {
         name = previousName;
     }
-    const previousSpectator = window.localStorage.getItem('isSpectator');
-    if (previousSpectator !== null) {
-        isSpectator = previousSpectator === 'true';
+    const previousIsSpectator = localStorage.getItem('isSpectator');
+    if (previousIsSpectator !== null) {
+        isSpectator = previousIsSpectator === 'true';
     }
 });
 
@@ -24,9 +24,11 @@ const update = () => {
     error = name ? undefined : 'Name cannot be empty';
 };
 $: if (name) {
-    window.localStorage.setItem('name', name);
+    localStorage.setItem('name', name);
 }
-$: window.localStorage.setItem('isSpectator', isSpectator);
+$: if (isSpectator != null) {
+    localStorage.setItem('isSpectator', isSpectator ? 'true' : 'false');
+}
 </script>
 
 <form method="post">

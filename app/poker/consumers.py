@@ -54,7 +54,6 @@ class PokerConsumer(JsonWebsocketConsumer):
                 if "deck" in content:
                     poker.set_deck(content["deck"])
                 if "is_spectator" in content:
-                    print("is_spectator", content)
                     self.user.is_spectator = bool(content["is_spectator"])
                     self.user.save()
                 poker.save()
