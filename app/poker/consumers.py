@@ -52,8 +52,11 @@ class PokerConsumer(JsonWebsocketConsumer):
                 new_user = poker.add_user(name=content["name"], is_spectator=content["is_spectator"]).as_dict()
                 self.user_id = new_user.id
 
-            case "set_auto_reveal":
-                poker.auto_reveal = bool(content.get("value"))
+            case "settings":
+                if "autoReveal" in content:
+                    poker.auto_reveal = bool(content["autoReveal"])
+                if "deck" in content:
+                    poker.set_deck(content["deck"])
                 poker.save()
 
             case "vote":
@@ -74,9 +77,6 @@ class PokerConsumer(JsonWebsocketConsumer):
 
             case "clear":
                 poker.clear()
-
-            case "change_deck":
-                poker.cycle_deck()
 
             case "add_fakes":
                 if not settings.IS_PRODUCTION:
@@ -106,11 +106,15 @@ class PokerConsumer(JsonWebsocketConsumer):
 
         message = {
             "type": "init",
-            "is_revealed": poker.is_revealed,
             "user": user,
             "users": poker.users_as_list(),
-            "choices": poker.deck_as_list(),
-            "auto_reveal": poker.auto_reveal,
+            "settings": {
+                "autoReveal": poker.auto_reveal,
+                "isRevealed": poker.is_revealed,
+                "deck": poker.deck,
+                "decks": poker.Decks.choices,
+                "choices": poker.deck_as_list(),
+            },
         }
         self.send_json(message)
 

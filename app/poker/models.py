@@ -14,7 +14,7 @@ class PokerSession(models.Model):
     reveal_count = models.IntegerField(default=0)
 
     class Decks(models.TextChoices):
-        TSHIRT = "tshirt", "T-shirt sizes"
+        TSHIRT = "tshirt", "T-shirt"
         FIBONACCI = "fibonacci", "Fibonacci"
 
     deck = models.CharField(max_length=20, choices=Decks.choices, default=Decks.TSHIRT)
@@ -36,8 +36,9 @@ class PokerSession(models.Model):
     def is_fibonacci(self) -> bool:
         return self.deck == PokerSession.Decks.FIBONACCI
 
-    def cycle_deck(self) -> None:
-        self.deck = PokerSession.Decks.TSHIRT if self.is_fibonacci else PokerSession.Decks.FIBONACCI
+    def set_deck(self, deck: str) -> None:
+        if deck in self.Decks:
+            self.deck = deck
         self.clear()
 
     def reveal(self) -> None:

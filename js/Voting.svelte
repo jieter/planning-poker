@@ -1,28 +1,32 @@
 <script>
 import { confetti } from '@neoconfetti/svelte';
+import { onMount } from 'svelte';
 
 import Card from './Card.svelte';
 import Participant from './Participant.svelte';
-import pokerStores from './stores.js';
+import Settings from './Settings.svelte';
+
+import {
+    connect,
+    user,
+    participants,
+    choices,
+    isRevealed,
+    error,
+    votes,
+    clearVotes,
+    revealVotes,
+    update,
+    vote,
+} from './stores.js';
 import { jsonScriptContents } from './utils.js';
 
 const isProduction = !window.location.host.includes('localhost');
 
-const url = jsonScriptContents('websocket_url');
-const {
-    user,
-    participants,
-    autoReveal,
-    isRevealed,
-    choices,
-    votes,
-    revealVotes,
-    clearVotes,
-    vote,
-    changeDeck,
-    error,
-    update,
-} = pokerStores(url);
+onMount(() => {
+    const url = jsonScriptContents('websocket_url');
+    connect(url);
+});
 
 let numParcitipants;
 $: numParcitipants = $participants.length;
@@ -78,8 +82,7 @@ $: votingComplete = $participants.every((p) => p.is_spectator || p.vote);
         </div>
         <div class="col-md-8">
             {#if $user.is_spectator}
-                You joined as spectator.<br />
-                Current deck: {$choices.join(', ')}.
+                You joined as spectator.
             {:else}
                 <div class="d-flex justify-content-center">
                     {#each $choices as choice}
@@ -95,13 +98,7 @@ $: votingComplete = $participants.every((p) => p.is_spectator || p.vote);
             {/if}
         </div>
         <div class="col-md-2 text-start">
-            {#if $isRevealed}
-                <button on:click={changeDeck} class="btn btn-secondary"> Change deck </button>
-            {:else}
-                <button disabled={true} class="btn btn-light"> Reveal first! </button>
-            {/if}
-            <label><input type="checkbox" bind:checked={$autoReveal} /> auto reveal</label>
-            after voting is complete
+            <Settings />
         </div>
     </div>
 </div>
