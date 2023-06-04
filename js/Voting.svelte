@@ -33,11 +33,6 @@ $: numParcitipants = $participants.length;
 $: votingComplete = $participants.every((p) => p.is_spectator || p.vote);
 </script>
 
-{#if $error}
-    <div class="fixed-top">
-        <div class="alert alert-danger" role="alert">{$error}</div>
-    </div>
-{/if}
 <div class="participants">
     {#each $participants as user, i (user.id)}
         <Participant isRevealed={$isRevealed} {user} {i} count={numParcitipants} />
@@ -76,8 +71,11 @@ $: votingComplete = $participants.every((p) => p.is_spectator || p.vote);
     <div class="row">
         <div class="col-md-2">
             {#if !isProduction}
-                <button on:click={() => update('add_fakes')} class="btn btn-danger">Add fake users</button>
-                <button on:click={() => update('fake_votes')} class="btn btn-danger">Fake votes</button>
+                Fake:
+                <div class="btn-group btn-group-sm" role="group">
+                    <button on:click={() => update('add_fakes')} class="btn btn-warning">Users</button>
+                    <button on:click={() => update('fake_votes')} class="btn btn-warning">Votes</button>
+                </div>
             {/if}
         </div>
         <div class="col-md-8">
@@ -102,6 +100,12 @@ $: votingComplete = $participants.every((p) => p.is_spectator || p.vote);
         </div>
     </div>
 </div>
+
+{#if $error}
+    <div class="fixed-bottom">
+        <div class="alert alert-danger" role="alert">{$error}</div>
+    </div>
+{/if}
 
 <style>
 .participants {

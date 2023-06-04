@@ -77,7 +77,8 @@ export function connect(websocketUrl) {
 
 export async function update(action, params = undefined) {
     console.log('update', action, params);
-    if (socket && socket.readyState != 1) {
+    if (!socket || socket.readyState != 1) {
+        // wait until socket is open
         return;
     }
 
