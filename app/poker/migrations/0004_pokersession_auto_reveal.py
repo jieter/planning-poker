@@ -14,4 +14,11 @@ class Migration(migrations.Migration):
             name="auto_reveal",
             field=models.BooleanField(default=False),
         ),
+        migrations.AlterField(
+            model_name="pokersession",
+            name="deck",
+            field=models.CharField(
+                choices=[("tshirt", "T-shirt"), ("fibonacci", "Fibonacci")], default="tshirt", max_length=20
+            ),
+        ),
     ]
