@@ -9,10 +9,12 @@ class PokerSession(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     created = models.DateTimeField(auto_now_add=True)
     is_revealed = models.BooleanField(default=False)
+
+    auto_reveal = models.BooleanField(default=False)
     reveal_count = models.IntegerField(default=0)
 
     class Decks(models.TextChoices):
-        TSHIRT = "tshirt", "T-shirt sizes"
+        TSHIRT = "tshirt", "T-shirt"
         FIBONACCI = "fibonacci", "Fibonacci"
 
     deck = models.CharField(max_length=20, choices=Decks.choices, default=Decks.TSHIRT)
@@ -20,8 +22,12 @@ class PokerSession(models.Model):
     def __str__(self) -> str:
         return f"{self.id}"
 
+    @property
+    def active_users(self):
+        return self.users.filter(is_active=True)
+
     def users_as_list(self) -> list[dict]:
-        return list(self.users.filter(is_active=True).order_by("id").values(*USER_FIELDS))
+        return list(self.active_users.order_by("id").values(*USER_FIELDS))
 
     def deck_as_list(self) -> list:
         return ("0,½,1,2,3,5,8,13,20,?,∞,☕️" if self.is_fibonacci else "XS,S,M,L,XL,?,☕️").split(",")
@@ -30,14 +36,19 @@ class PokerSession(models.Model):
     def is_fibonacci(self) -> bool:
         return self.deck == PokerSession.Decks.FIBONACCI
 
-    def cycle_deck(self) -> None:
-        self.deck = PokerSession.Decks.TSHIRT if self.is_fibonacci else PokerSession.Decks.FIBONACCI
+    def set_deck(self, deck: str) -> None:
+        if deck in self.Decks:
+            self.deck = deck
         self.clear()
 
     def reveal(self) -> None:
         self.is_revealed = True
         self.reveal_count += 1
         self.save()
+
+    @property
+    def is_voting_complete(self):
+        return self.active_users.filter(vote__isnull=True).count() == 0
 
     def clear(self) -> None:
         """Clear all votes and return to voting state."""

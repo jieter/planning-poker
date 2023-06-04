@@ -27,6 +27,18 @@ class PokerTestCase(TestCase):
         poker.reveal()
         self.assertEqual(poker.reveal_count, 2)
 
+    def test_is_voting_complete(self):
+        poker = PokerSession.objects.create()
+        self.assertTrue(poker.is_voting_complete)
+
+        user = poker.add_user("Alice")
+        self.assertFalse(poker.is_voting_complete)
+
+        user.vote = "L"
+        user.save()
+
+        self.assertTrue(poker.is_voting_complete)
+
     def test_clear(self):
         poker = PokerSession.objects.create()
 
@@ -38,16 +50,19 @@ class PokerTestCase(TestCase):
         user.refresh_from_db()
         self.assertEqual(user.vote, None)
 
-    def test_cycle_deck(self):
+    def test_set_deck(self):
         poker = PokerSession.objects.create()
 
         self.assertEqual(poker.deck, "tshirt")
         self.assertEqual(poker.deck_as_list()[0], "XS")
 
-        poker.cycle_deck()
+        poker.set_deck(PokerSession.Decks.FIBONACCI)
         self.assertEqual(poker.deck, "fibonacci")
         self.assertEqual(poker.deck_as_list()[0], "0")
 
-        poker.cycle_deck()
+        poker.set_deck(PokerSession.Decks.TSHIRT)
         self.assertEqual(poker.deck, "tshirt")
         self.assertEqual(poker.deck_as_list()[0], "XS")
+
+        poker.set_deck("foo")
+        self.assertEqual(poker.deck, "tshirt")
