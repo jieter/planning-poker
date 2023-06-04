@@ -1,8 +1,8 @@
 <script>
 import Join from './Join.svelte';
+import { jsonScriptContents } from './utils.js';
 import Voting from './Voting.svelte';
 
-import { jsonScriptContents } from './utils.js';
 
 const url = jsonScriptContents('websocket_url');
 </script>

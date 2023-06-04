@@ -30,16 +30,32 @@ const setUserVote = (value) => {
 };
 
 let socket;
+export function update(action, params = undefined) {
+    if (!socket || socket.readyState != 1) {
+        // wait until socket is open
+        console.log('Socket not open yet');
+        return;
+    }
+
+    params = params || {};
+    params.action = action;
+    console.log('update', params);
+    socket.send(JSON.stringify(params));
+}
 export function connect(websocketUrl) {
     socket = new WebSocket(websocketUrl);
     socket.onclose = () => {
         error.set('WebSocket connection closed unexpectedly. Trying to reconnect in 2s...');
         setTimeout(() => {
             console.log('Reconnecting...');
-            connect();
+            connect(websocketUrl);
         }, 2000);
     };
-
+    socket.onopen = () => {
+        // Sometimes the 'init' message is not send from the backend if the page was already open,
+        // sending an iniit message will result in an init response.
+        update({ action: 'init' });
+    };
     socket.onmessage = (e) => {
         const data = JSON.parse(e.data);
         console.log('message', data);
@@ -49,8 +65,8 @@ export function connect(websocketUrl) {
                 participants.set(data.users);
                 user.set(data.user);
                 choices.set(data.settings.choices);
-                autoReveal.set(data.settings.autoReveal);
-                isRevealed.set(data.settings.isRevealed);
+                autoReveal.set(data.settings.auto_reveal);
+                isRevealed.set(data.settings.is_revealed);
                 decks.set(data.settings.decks);
                 deck.set(data.settings.deck);
 
@@ -75,24 +91,13 @@ export function connect(websocketUrl) {
     };
 }
 
-export async function update(action, params = undefined) {
-    console.log('update', action, params);
-    if (!socket || socket.readyState != 1) {
-        // wait until socket is open
-        return;
-    }
-
-    params = params || {};
-    params.action = action;
-    socket.send(JSON.stringify(params));
-}
 export const revealVotes = () => update('reveal');
 export const clearVotes = () => {
     setUserVote(null);
     update('clear');
 };
 
-export function vote(value) {
+export function castVote(value) {
     return () => {
         if (!get(isRevealed)) {
             update('vote', { value: value });
@@ -101,5 +106,5 @@ export function vote(value) {
     };
 }
 
-deck.subscribe((_value) => update('settings', { deck: _value }));
-autoReveal.subscribe((_value) => update('settings', { autoReveal: _value }));
+deck.subscribe(($deck) => update('settings', { deck: $deck }));
+autoReveal.subscribe(($autoReveal) => update('settings', { auto_reveal: $autoReveal }));

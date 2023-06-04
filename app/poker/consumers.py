@@ -47,16 +47,16 @@ class PokerConsumer(JsonWebsocketConsumer):
 
     def receive_json(self, content):
         poker = self.poker
-        match (content["action"]):
-            case "join":
-                new_user = poker.add_user(name=content["name"], is_spectator=content["is_spectator"]).as_dict()
-                self.user_id = new_user.id
-
+        match (content.get("action")):
             case "settings":
-                if "autoReveal" in content:
-                    poker.auto_reveal = bool(content["autoReveal"])
+                if "auto_reveal" in content:
+                    poker.auto_reveal = bool(content["auto_reveal"])
                 if "deck" in content:
                     poker.set_deck(content["deck"])
+                if "is_spectator" in content:
+                    print("is_spectator", content)
+                    self.user.is_spectator = bool(content["is_spectator"])
+                    self.user.save()
                 poker.save()
 
             case "vote":
@@ -109,8 +109,8 @@ class PokerConsumer(JsonWebsocketConsumer):
             "user": user,
             "users": poker.users_as_list(),
             "settings": {
-                "autoReveal": poker.auto_reveal,
-                "isRevealed": poker.is_revealed,
+                "auto_reveal": poker.auto_reveal,
+                "is_revealed": poker.is_revealed,
                 "deck": poker.deck,
                 "decks": poker.Decks.choices,
                 "choices": poker.deck_as_list(),

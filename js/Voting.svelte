@@ -5,19 +5,18 @@ import { onMount } from 'svelte';
 import Card from './Card.svelte';
 import Participant from './Participant.svelte';
 import Settings from './Settings.svelte';
-
 import {
-    connect,
-    user,
-    participants,
     choices,
-    isRevealed,
-    error,
-    votes,
     clearVotes,
+    connect,
+    error,
+    isRevealed,
+    participants,
     revealVotes,
     update,
-    vote,
+    user,
+    castVote,
+    votes,
 } from './stores.js';
 import { jsonScriptContents } from './utils.js';
 
@@ -33,6 +32,11 @@ $: numParcitipants = $participants.length;
 $: votingComplete = $participants.every((p) => p.is_spectator || p.vote);
 </script>
 
+{#if $error}
+    <div class="fixed-top">
+        <div class="alert alert-danger" role="alert">{$error}</div>
+    </div>
+{/if}
 <div class="participants">
     {#each $participants as user, i (user.id)}
         <Participant isRevealed={$isRevealed} {user} {i} count={numParcitipants} />
@@ -80,13 +84,17 @@ $: votingComplete = $participants.every((p) => p.is_spectator || p.vote);
         </div>
         <div class="col-md-8">
             {#if $user.is_spectator}
-                You joined as spectator.
+                You joined as spectator.<br />
+                I want to
+                <button on:click={() => update('settings', { is_spectator: false })} class="btn btn-light btn-sm">
+                    become a voter
+                </button>
             {:else}
                 <div class="d-flex justify-content-center">
                     {#each $choices as choice}
                         <Card
-                            on:click={vote(choice)}
-                            on:keypress={vote(choice)}
+                            on:click={castVote(choice)}
+                            on:keypress={castVote(choice)}
                             disabled={$isRevealed}
                             selected={choice == $user.vote}>
                             {choice}
@@ -100,12 +108,6 @@ $: votingComplete = $participants.every((p) => p.is_spectator || p.vote);
         </div>
     </div>
 </div>
-
-{#if $error}
-    <div class="fixed-bottom">
-        <div class="alert alert-danger" role="alert">{$error}</div>
-    </div>
-{/if}
 
 <style>
 .participants {
