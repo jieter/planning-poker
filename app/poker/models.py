@@ -48,7 +48,7 @@ class PokerSession(models.Model):
 
     @property
     def is_voting_complete(self):
-        return self.active_users.filter(vote__isnull=True).count() == 0
+        return self.active_users.exclude(is_spectator=True).filter(vote__isnull=True).count() == 0
 
     def clear(self) -> None:
         """Clear all votes and return to voting state."""
