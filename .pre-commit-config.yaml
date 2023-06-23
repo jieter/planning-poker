@@ -17,27 +17,13 @@ repos:
      - id: django-upgrade
        args: [--target-version, "4.1"]
 
-  - repo: https://github.com/asottile/pyupgrade
-    rev: v3.3.1
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.0.272
     hooks:
-     - id: pyupgrade
+      - id: ruff
+        args: [--fix, --exit-non-zero-on-fix]
 
   - repo: https://github.com/psf/black
     rev: 23.1.0
     hooks:
      - id: black
-
-  - repo: https://github.com/pycqa/isort
-    rev: 5.12.0
-    hooks:
-      - id: isort
-
-  # - repo: https://github.com/PyCQA/flake8
-  #   rev: 6.0.0
-  #   hooks:
-  #     - id: flake8
-
-  # - repo: https://github.com/ecugol/pre-commit-hooks-django
-  #   rev: v0.4.0
-  #   hooks:
-  #     - id: check-absent-migrations
