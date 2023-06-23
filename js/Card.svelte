@@ -3,7 +3,7 @@ export let disabled = true;
 export let selected = '';
 </script>
 
-<div class="card btn" class:selected {disabled} on:click on:keypress>
+<div class="card btn" class:selected {disabled} on:click on:keypress role="button" tabindex="0">
     <slot />
 </div>
 
