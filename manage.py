@@ -18,7 +18,9 @@ def main():
 
     # Use a non-8000 default port
     if len(sys.argv) > 1 and sys.argv[1] == "runserver":
-        only_digits = lambda items: (item for item in items if item.isdigit())
+
+        def only_digits(items):
+            return (item for item in items if item.isdigit())
 
         port = next(only_digits(sys.argv), None)
         if not port:
