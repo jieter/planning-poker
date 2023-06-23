@@ -1,5 +1,4 @@
 /* globals process:true */
-import { readdirSync } from 'fs';
 
 import svelte from 'rollup-plugin-svelte';
 import resolve from '@rollup/plugin-node-resolve';
@@ -31,7 +30,7 @@ export default {
         // we'll extract any component CSS out into
         // a separate file - better for performance
         css({
-            output: `poker.css`,
+            output: 'poker.css',
         }),
 
         // If you have external dependencies installed from
