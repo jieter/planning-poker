@@ -55,6 +55,6 @@ $: if (isSpectator != null) {
         <label class="col">
             <input type="checkbox" name="is_spectator" bind:checked={isSpectator} /> Join as a spectator 👁️
         </label>
-        <span class="text-muted">You can always enab to voting later</span>
+        <span class="text-muted">You can always enable voting later</span>
     </div>
 </form>

@@ -20,7 +20,7 @@ $: {
 
 <div class="participant" style="transform: rotate({angle}deg) translate(37.5vw) rotate(90deg)">
     <strong>{user.name}</strong>
-    <Card>
+    <Card color={user.is_spectator ? '#effbf7' : undefined}>
         {#if user.is_spectator}
             👁️
         {:else if user.vote}

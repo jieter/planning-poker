@@ -1,9 +1,16 @@
 <script>
 export let disabled = true;
 export let selected = '';
+export let color = null;
+
+let backgroundColor;
+
+$: backgroundColor = color || '#d8f7ec';
+
+
 </script>
 
-<div class="card btn" class:selected {disabled} on:click on:keypress role="button" tabindex="0">
+<div class="card btn" class:selected style="background-color: {backgroundColor}" {disabled} on:click on:keypress role="button" tabindex="0">
     <slot />
 </div>
 
@@ -18,7 +25,6 @@ export let selected = '';
     justify-content: center;
     align-content: center;
     margin: 4px 2px;
-    background-color: #d8f7ec;
     transition: margin 100ms ease-out 100ms;
 }
 .selected {
