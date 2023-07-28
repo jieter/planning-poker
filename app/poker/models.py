@@ -27,7 +27,7 @@ class PokerSession(models.Model):
         return self.users.filter(is_active=True)
 
     def users_as_list(self) -> list[dict]:
-        return list(self.active_users.order_by("id").values(*USER_FIELDS))
+        return list(self.active_users.values(*USER_FIELDS))
 
     def deck_as_list(self) -> list:
         return ("0,½,1,2,3,5,8,13,20,?,∞,☕️" if self.is_fibonacci else "XS,S,M,L,XL,?,☕️").split(",")
@@ -37,9 +37,10 @@ class PokerSession(models.Model):
         return self.deck == PokerSession.Decks.FIBONACCI
 
     def set_deck(self, deck: str) -> None:
-        if deck in self.Decks:
+        """Set a new deck if the requested dack is different from the current deck."""
+        if deck in self.Decks and self.deck != deck:
             self.deck = deck
-        self.clear()
+            self.clear()
 
     def reveal(self) -> None:
         self.is_revealed = True
@@ -74,6 +75,9 @@ class User(models.Model):
     session = models.ForeignKey(PokerSession, on_delete=models.CASCADE, related_name="users")
 
     vote = models.CharField(max_length=10, null=True)
+
+    class Meta:
+        ordering = ["pk"]
 
     def __str__(self) -> str:
         return self.name

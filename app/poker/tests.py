@@ -9,13 +9,22 @@ class PokerTestCase(TestCase):
 
         self.assertEqual(poker.users_as_list(), [])
         user = poker.add_user("Alice")
-        user.is_active = True
-        user.save()
 
         self.assertEqual(poker.users_as_list(), [user.as_dict()])
 
         poker.deactivate_user(user.pk)
         self.assertEqual(poker.users_as_list(), [])
+
+    def test_join_after_other_user_voted(self):
+        poker = PokerSession.objects.create()
+
+        alice = poker.add_user("Alice")
+        alice.vote = "L"
+        alice.save()
+
+        poker.add_user("Bob")
+
+        self.assertCountEqual([user.vote for user in poker.users.all()], ["L", None])
 
     def test_reveal(self):
         poker = PokerSession.objects.create()
@@ -66,3 +75,16 @@ class PokerTestCase(TestCase):
 
         poker.set_deck("foo")
         self.assertEqual(poker.deck, "tshirt")
+
+    def test_set_deck_preserves_votes_if_not_changed(self):
+        poker = PokerSession.objects.create()
+        self.assertEqual(poker.deck, "tshirt")
+
+        bob = poker.add_user("Bob")
+        bob.vote = "L"
+        bob.save()
+        poker.add_user("Alice")
+
+        poker.set_deck("tshirt")
+
+        self.assertCountEqual([user.vote for user in poker.users.all()], ["L", None])

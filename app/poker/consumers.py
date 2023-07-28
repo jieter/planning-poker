@@ -27,7 +27,7 @@ class PokerConsumer(JsonWebsocketConsumer):
         if self.user:
             async_to_sync(self.channel_layer.group_add)(self.poker_id, self.channel_name)
             self.user.activate()
-            self.channel_send_init()
+            self.channel_send_init("connect")
         else:
             self.send_json({"type": "error", "message": "User not found"})
 
@@ -37,10 +37,10 @@ class PokerConsumer(JsonWebsocketConsumer):
             self.user.deactivate()
             self.user_id = None
 
-            self.channel_send_init()
+            self.channel_send_init("disconnect")
 
-    def channel_send_init(self):
-        self.channel_send_message({"type": "init"})
+    def channel_send_init(self, origin=None):
+        self.channel_send_message({"type": "init", "origin": origin})
 
     def channel_send_message(self, message: dict):
         async_to_sync(self.channel_layer.group_send)(self.poker_id, message)
@@ -90,7 +90,7 @@ class PokerConsumer(JsonWebsocketConsumer):
                         user.vote = random.choice(deck)
                         user.save()
 
-        self.channel_send_init()
+        self.channel_send_init(content.get("action"))
 
     def init(self, event=None):
         # Create the message here to make sure it contains the up to date user and poker session
@@ -105,6 +105,7 @@ class PokerConsumer(JsonWebsocketConsumer):
 
         message = {
             "type": "init",
+            "event": event,
             "user": user,
             "users": poker.users_as_list(),
             "settings": {
