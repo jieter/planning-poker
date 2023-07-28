@@ -18,7 +18,7 @@ export let selected = '';
     justify-content: center;
     align-content: center;
     margin: 4px 2px;
-    background-color: #ebfaf5;
+    background-color: #d8f7ec;
     transition: margin 100ms ease-out 100ms;
 }
 .selected {

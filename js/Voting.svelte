@@ -1,10 +1,10 @@
 <script>
-import { confetti } from '@neoconfetti/svelte';
 import { onMount } from 'svelte';
 
 import Card from './Card.svelte';
 import Participant from './Participant.svelte';
 import Settings from './Settings.svelte';
+import Debug from './Debug.svelte';
 import {
     choices,
     clearVotes,
@@ -19,12 +19,13 @@ import {
     votes,
 } from './stores.js';
 import { jsonScriptContents } from './utils.js';
+import Summary from './Summary.svelte';
 
-const isProduction = !window.location.host.includes('localhost');
-
+let debugOn = false;
 onMount(() => {
     const url = jsonScriptContents('websocket_url');
     connect(url);
+    debugOn = new URLSearchParams(window.location.search).get('debug');
 });
 
 let numParcitipants;
@@ -43,19 +44,7 @@ $: votingComplete = $participants.every((p) => p.is_spectator || p.vote);
     {/each}
     <div class="controls">
         {#if $isRevealed}
-            {#if $votes && $votes.length == 1 && $votes[0][1] > 1}
-                <div use:confetti />
-            {/if}
-            <div class="summary rounded mb-3 text-center">
-                {#each $votes as [vote, count] (vote)}
-                    <div class="d-inline-block text-center m-2">
-                        <Card>{vote}</Card>
-                        <div class="text-muted">{count}x</div>
-                    </div>
-                {:else}
-                    <div class="col text-center">No votes</div>
-                {/each}
-            </div>
+            <Summary votes={$votes}/>
         {/if}
         <div class="d-flex justify-content-center mb-3">
             <div class="voting-status">
@@ -73,16 +62,7 @@ $: votingComplete = $participants.every((p) => p.is_spectator || p.vote);
 </div>
 <div class="container text-center">
     <div class="row">
-        <div class="col-md-2">
-            {#if !isProduction}
-                Fake:
-                <div class="btn-group btn-group-sm" role="group">
-                    <button on:click={() => update('add_fakes')} class="btn btn-warning">Users</button>
-                    <button on:click={() => update('fake_votes')} class="btn btn-warning">Votes</button>
-                </div>
-            {/if}
-        </div>
-        <div class="col-md-8">
+        <div class="col">
             {#if $user.is_spectator}
                 You joined as spectator.<br />
                 I want to
@@ -103,20 +83,22 @@ $: votingComplete = $participants.every((p) => p.is_spectator || p.vote);
                 </div>
             {/if}
         </div>
-        <div class="col-md-2 text-start">
-            <Settings />
-        </div>
     </div>
+            <Settings />
 </div>
+
+{#if debugOn}
+    <Debug />
+{/if}
 
 <style>
 .participants {
-    width: 70vw;
-    height: 35vw;
-    border-radius: 35vw 35vw 0 0;
+    width: 80vw;
+    height: 40vw;
+    border-radius: 40vw 40vw 0 0;
     position: relative;
     background-color: #eee;
-    margin: 20px auto;
+    margin: 4vh auto;
 }
 .controls {
     position: absolute;
@@ -128,7 +110,5 @@ $: votingComplete = $participants.every((p) => p.is_spectator || p.vote);
     width: 1.5em;
     color: green;
 }
-.summary {
-    background-color: #e6e6e6;
-}
+
 </style>

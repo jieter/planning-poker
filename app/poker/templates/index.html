@@ -9,9 +9,7 @@
     <link rel="stylesheet" href="{% static 'poker.css' %}" />
 </head>
 <body>
-    <div class="container mt-3 p-5">
-        <div id="poker"></div>
-    </div>
+    <div id="poker" class="m-3"></div>
 
     {{ websocket_url|json_script:"websocket_url" }}
     <script defer src="{% static 'index.js' %}"></script>

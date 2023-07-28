@@ -24,7 +24,7 @@
     },
     "scripts": {
         "eslint": "eslint -c package.json --ext .js,.svelte --fix js/",
-        "format": "prettier --write --plugin-search-dir=. js/",
+        "format": "prettier  --write --plugin prettier-plugin-svelte js/",
         "build": "rollup -c",
         "dev": "rollup -c -w"
     },

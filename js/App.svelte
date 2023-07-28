@@ -6,7 +6,6 @@ import Voting from './Voting.svelte';
 const url = jsonScriptContents('websocket_url');
 </script>
 
-<h1>Planning poker</h1>
 
 {#if url}
     <Voting />

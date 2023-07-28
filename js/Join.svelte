@@ -31,6 +31,7 @@ $: if (isSpectator != null) {
 }
 </script>
 
+<h1>Planning poker</h1>
 <form method="post">
     <div class="row row-cols-lg-auto">
         <input type="hidden" name="csrfmiddlewaretoken" value={csrfToken()} />
@@ -54,5 +55,6 @@ $: if (isSpectator != null) {
         <label class="col">
             <input type="checkbox" name="is_spectator" bind:checked={isSpectator} /> Join as a spectator 👁️
         </label>
+        <span class="text-muted">You can always enab to voting later</span>
     </div>
 </form>

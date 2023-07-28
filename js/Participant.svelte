@@ -18,7 +18,7 @@ $: {
 }
 </script>
 
-<div class="participant" style="transform: rotate({angle}deg) translate(33vw) rotate(90deg)">
+<div class="participant" style="transform: rotate({angle}deg) translate(37.5vw) rotate(90deg)">
     <strong>{user.name}</strong>
     <Card>
         {#if user.is_spectator}
@@ -41,7 +41,6 @@ $: {
 
     top: 95%;
     left: 50%;
-
     margin: -2em;
 }
 </style>
