@@ -47,7 +47,8 @@ class PokerConsumer(JsonWebsocketConsumer):
 
     def receive_json(self, content):
         poker = self.poker
-        match (content.get("action")):
+        action = content.get("action")
+        match (action):
             case "settings":
                 if "auto_reveal" in content:
                     poker.auto_reveal = bool(content["auto_reveal"])
@@ -90,7 +91,7 @@ class PokerConsumer(JsonWebsocketConsumer):
                         user.vote = random.choice(deck)
                         user.save()
 
-        self.channel_send_init(content.get("action"))
+        self.channel_send_init(f"{action=}")
 
     def init(self, event=None):
         # Create the message here to make sure it contains the up to date user and poker session
