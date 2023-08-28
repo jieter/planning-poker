@@ -1,17 +1,24 @@
 <script>
+import { onMount } from 'svelte';
+
 export let disabled = true;
 export let selected = '';
 export let color = null;
 
-let backgroundColor;
+let button;
 
-$: backgroundColor = color || '#d8f7ec';
+$: {
+    if (button && selected) {
+        button.blur();
+    }
+}
 </script>
 
 <div
+    bind:this={button}
     class="card btn"
     class:selected
-    style="background-color: {backgroundColor}"
+    style="background-color: {color || '#d8f7ec'}"
     {disabled}
     on:click
     on:keypress
