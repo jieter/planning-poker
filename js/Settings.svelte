@@ -25,7 +25,7 @@ import { autoReveal, deck, decks, isRevealed } from './stores.js';
 </div>
 
 <style>
-    label {
-        white-space: nowrap;
-    }
+label {
+    white-space: nowrap;
+}
 </style>

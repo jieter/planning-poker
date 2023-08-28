@@ -44,7 +44,7 @@ $: votingComplete = $participants.every((p) => p.is_spectator || p.vote);
     {/each}
     <div class="controls">
         {#if $isRevealed}
-            <Summary votes={$votes}/>
+            <Summary votes={$votes} />
         {/if}
         <div class="d-flex justify-content-center mb-3">
             <div class="voting-status">
@@ -84,7 +84,7 @@ $: votingComplete = $participants.every((p) => p.is_spectator || p.vote);
             {/if}
         </div>
     </div>
-            <Settings />
+    <Settings />
 </div>
 
 {#if debugOn}
@@ -110,5 +110,4 @@ $: votingComplete = $participants.every((p) => p.is_spectator || p.vote);
     width: 1.5em;
     color: green;
 }
-
 </style>

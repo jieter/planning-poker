@@ -4,8 +4,8 @@ import { confetti } from '@neoconfetti/svelte';
 import Card from './Card.svelte';
 
 export let votes;
-
 </script>
+
 {#if votes && votes.length == 1 && votes[0][1] > 1}
     <div use:confetti />
 {/if}
@@ -21,7 +21,7 @@ export let votes;
 </div>
 
 <style>
-    .summary {
-        background-color: #e6e6e6;
-    }
+.summary {
+    background-color: #e6e6e6;
+}
 </style>

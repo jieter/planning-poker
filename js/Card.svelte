@@ -6,11 +6,17 @@ export let color = null;
 let backgroundColor;
 
 $: backgroundColor = color || '#d8f7ec';
-
-
 </script>
 
-<div class="card btn" class:selected style="background-color: {backgroundColor}" {disabled} on:click on:keypress role="button" tabindex="0">
+<div
+    class="card btn"
+    class:selected
+    style="background-color: {backgroundColor}"
+    {disabled}
+    on:click
+    on:keypress
+    role="button"
+    tabindex="0">
     <slot />
 </div>
 

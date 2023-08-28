@@ -1,7 +1,14 @@
 <script>
 import { deck, decks, choices, error, isRevealed, participants, update, user, autoReveal, votes } from './stores.js';
 
-$: settings = { error: $error, deck: $deck, decks: $decks, choices: $choices, isRevealed: $isRevealed, autoReveal: $autoReveal };
+$: settings = {
+    error: $error,
+    deck: $deck,
+    decks: $decks,
+    choices: $choices,
+    isRevealed: $isRevealed,
+    autoReveal: $autoReveal,
+};
 
 const isProduction = !window.location.host.includes('localhost');
 </script>
