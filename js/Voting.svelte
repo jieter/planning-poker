@@ -2,12 +2,12 @@
 import { onMount } from 'svelte';
 
 import Card from './Card.svelte';
+import Debug from './Debug.svelte';
 import Participant from './Participant.svelte';
 import Settings from './Settings.svelte';
-import Debug from './Debug.svelte';
 import { choices, connect, error, isRevealed, participants, update, user, castVote, votes } from './stores.js';
-import { jsonScriptContents } from './utils.js';
 import Summary from './Summary.svelte';
+import { jsonScriptContents } from './utils.js';
 
 let debugOn = false;
 onMount(() => {

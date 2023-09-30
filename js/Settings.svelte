@@ -19,11 +19,11 @@ import { autoReveal, deck, decks, isRevealed, clearVotes, revealVotes, votingCom
     &nbsp;
 
     {#if !$autoReveal}
-        <div class="voting-status">
-            {#if !$isRevealed && votingComplete}
-                ✓
-            {/if}
-        </div>
+        {#if !$isRevealed && $votingComplete}
+            <div class="voting-status" title="Voting complete">✓</div>
+        {:else}
+            <div class="voting-status" title="Voting in progress">~</div>
+        {/if}
     {/if}
     {#if $isRevealed}
         <button class="btn btn-sm btn-warning" on:click={clearVotes}>Clear</button>

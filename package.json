@@ -29,7 +29,7 @@
         "dev": "rollup -c -w"
     },
     "eslintConfig": {
-        "extends": "eslint:recommended",
+        "extends": "plugin:svelte/prettier",
         "parserOptions": {
             "ecmaVersion": 2020,
             "sourceType": "module"
@@ -39,49 +39,21 @@
             "browser": true
         },
         "plugins": [
-            "svelte3",
             "import"
         ],
-        "overrides": [
-            {
-                "files": [
-                    "**/*.svelte"
-                ],
-                "processor": "svelte3/svelte3"
-            }
-        ],
         "rules": {
-            "indent": [
-                "error",
-                4,
-                {
-                    "SwitchCase": 1
-                }
-            ],
-            "linebreak-style": [
-                "error",
-                "unix"
-            ],
-            "quotes": [
-                "error",
-                "single"
-            ],
-            "semi": [
-                "error",
-                "always"
-            ],
+            "indent": ["error", 4, {"SwitchCase": 1}],
+            "linebreak-style": ["error","unix"],
+            "quotes": ["error", "single"],
+            "semi": ["error", "always"],
             "no-unsafe-optional-chaining": "error",
-            "import/order": [
-                "error",
+            "import/order": ["error",
                 {
                     "groups": [
                         "builtin",
                         "external",
                         "internal",
-                        [
-                            "parent",
-                            "sibling"
-                        ]
+                        ["parent", "sibling"]
                     ],
                     "newlines-between": "always",
                     "alphabetize": {

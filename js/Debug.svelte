@@ -1,17 +1,5 @@
 <script>
-import {
-    deck,
-    decks,
-    choices,
-    error,
-    isRevealed,
-    participants,
-    update,
-    user,
-    autoReveal,
-    votes,
-    log,
-} from './stores.js';
+import { deck, decks, choices, error, isRevealed, participants, update, user, autoReveal, votes, log } from './stores.js';
 
 $: settings = {
     error: $error,
@@ -32,9 +20,15 @@ const isProduction = !window.location.host.includes('localhost');
         <div>user: <code>{JSON.stringify($user)}</code></div>
         <div>participants: <code>{JSON.stringify($participants)}</code></div>
         {#if !isProduction}
-            <button on:click={() => update('add_fakes')} class="btn btn-warning">Add fake users</button>
-            <button on:click={() => update('fake_votes')} class="btn btn-warning">Add fake votes</button>
+            <button on:click={() => update('add_fakes')} class="btn btn-xs btn-warning">Add fake users</button>
+            <button on:click={() => update('fake_votes')} class="btn btn-xs btn-warning">Add fake votes</button>
         {/if}
     </div>
-    <div class="col">log</div>
+    <div class="col">
+        {#each log as item}
+            <div>
+                <span>{item.event}</span>
+            </div>
+        {/each}
+    </div>
 </div>

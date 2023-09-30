@@ -10,7 +10,7 @@ class PokerSession(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     is_revealed = models.BooleanField(default=False)
 
-    auto_reveal = models.BooleanField(default=False)
+    auto_reveal = models.BooleanField(default=True)
     reveal_count = models.IntegerField(default=0)
 
     class Decks(models.TextChoices):
@@ -40,12 +40,16 @@ class PokerSession(models.Model):
         """Set a new deck if the requested dack is different from the current deck."""
         if deck in self.Decks and self.deck != deck:
             self.deck = deck
+            self.logs.create(event="set_deck", data={"deck": deck})
             self.clear()
 
     def reveal(self) -> None:
         self.is_revealed = True
         self.reveal_count += 1
         self.save()
+
+        votes = list(self.active_users.values_list("vote", flat=True))
+        self.logs.create(event="reveal", data=dict(round=self.reveal_count, deck=self.deck, votes=votes))
 
     @property
     def is_voting_complete(self):
@@ -59,10 +63,19 @@ class PokerSession(models.Model):
 
     def add_user(self, name, is_spectator=False) -> "User":
         user, created = self.users.get_or_create(name=name, is_spectator=is_spectator, is_active=True)
+        self.logs.create(event="add_user", data=dict(name=name, is_spectator=is_spectator))
         return user
 
     def deactivate_user(self, user_id) -> None:
         self.users.filter(id=user_id).first().deactivate()
+
+
+class Log(models.Model):
+    session = models.ForeignKey(PokerSession, on_delete=models.CASCADE, related_name="logs")
+
+    created = models.DateTimeField(auto_now_add=True)
+    event = models.CharField(max_length=100)
+    data = models.JSONField(default=dict)
 
 
 class User(models.Model):

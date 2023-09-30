@@ -22,9 +22,11 @@ export const votes = derived(participants, ($participants) => {
     return Object.entries(_votes).sort((a, b) => b[1] - a[1]);
 });
 
-export const votingComplete = derived(participants, ($parcitipants) => {
+// Voting is considered complete if all active non-spectators voted:
+export const votingComplete = derived(participants, ($participants) => {
     return $participants.every((p) => p.is_spectator || p.vote);
 });
+
 // Set the vote for the current user to `value`
 const setUserVote = (value) => {
     user.update(($user) => {
