@@ -8,8 +8,9 @@ export const deck = writable('tshirt');
 export const isRevealed = writable(false);
 export const user = writable({});
 export const error = writable(undefined);
+export const log = writable([]);
 
-// Derive a sorted list of (card, votes)-pairs off of the parcitipants store
+// Derive a sorted list of (card, votes)-pairs off of the participants store:
 export const votes = derived(participants, ($participants) => {
     const _votes = new Proxy({}, { get: (d, key) => (key in d ? d[key] : 0) });
     $participants.forEach((user) => {
@@ -72,7 +73,7 @@ export function connect(websocketUrl) {
                 isRevealed.set(data.settings.is_revealed);
                 decks.set(data.settings.decks);
                 deck.set(data.settings.deck);
-
+                log.set(data.log);
                 error.set(undefined);
 
                 break;
@@ -108,7 +109,6 @@ export function castVote(value) {
         }
     };
 }
-
 
 deck.subscribe(($deck) => update('settings', { deck: $deck }));
 autoReveal.subscribe(($autoReveal) => update('settings', { auto_reveal: $autoReveal }));
