@@ -67,18 +67,12 @@ TEMPLATES = [
 WSGI_APPLICATION = "app.wsgi.application"
 ASGI_APPLICATION = "app.asgi.application"
 
-
-if DATABASE_URL := env("DATABASE_URL"):
-    import dj_database_url
-
-    DATABASES = {"default": dj_database_url.config(default=DATABASE_URL, conn_max_age=600)}
-else:
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.sqlite3",
-            "NAME": BASE_DIR / "db.sqlite3",
-        }
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
     }
+}
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
