@@ -21,6 +21,9 @@ export const votes = derived(participants, ($participants) => {
     return Object.entries(_votes).sort((a, b) => b[1] - a[1]);
 });
 
+export const votingComplete = derived(participants, ($parcitipants) => {
+    return $participants.every((p) => p.is_spectator || p.vote);
+});
 // Set the vote for the current user to `value`
 const setUserVote = (value) => {
     user.update(($user) => {
@@ -105,6 +108,7 @@ export function castVote(value) {
         }
     };
 }
+
 
 deck.subscribe(($deck) => update('settings', { deck: $deck }));
 autoReveal.subscribe(($autoReveal) => update('settings', { auto_reveal: $autoReveal }));

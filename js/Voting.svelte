@@ -5,32 +5,15 @@ import Card from './Card.svelte';
 import Participant from './Participant.svelte';
 import Settings from './Settings.svelte';
 import Debug from './Debug.svelte';
-import {
-    choices,
-    clearVotes,
-    connect,
-    error,
-    isRevealed,
-    participants,
-    revealVotes,
-    update,
-    user,
-    castVote,
-    votes,
-} from './stores.js';
+import { choices, connect, error, isRevealed, participants, update, user, castVote, votes } from './stores.js';
 import { jsonScriptContents } from './utils.js';
 import Summary from './Summary.svelte';
 
 let debugOn = false;
 onMount(() => {
-    const url = jsonScriptContents('websocket_url');
-    connect(url);
+    connect(jsonScriptContents('websocket_url'));
     debugOn = new URLSearchParams(window.location.search).get('debug');
 });
-
-let numParcitipants;
-$: numParcitipants = $participants.length;
-$: votingComplete = $participants.every((p) => p.is_spectator || p.vote);
 </script>
 
 {#if $error}
@@ -40,25 +23,13 @@ $: votingComplete = $participants.every((p) => p.is_spectator || p.vote);
 {/if}
 <div class="participants">
     {#each $participants as user, i (user.id)}
-        <Participant isRevealed={$isRevealed} {user} {i} count={numParcitipants} />
+        <Participant isRevealed={$isRevealed} {user} {i} count={$participants.length} />
     {/each}
-    <div class="controls">
-        {#if $isRevealed}
+    {#if $isRevealed}
+        <div class="controls">
             <Summary votes={$votes} />
-        {/if}
-        <div class="d-flex justify-content-center mb-3">
-            <div class="voting-status">
-                {#if !$isRevealed && votingComplete}
-                    ✓
-                {/if}
-            </div>
-            {#if $isRevealed}
-                <button class="btn btn-warning" on:click={clearVotes}>Clear</button>
-            {:else}
-                <button class="btn btn-primary" on:click={revealVotes}>Reveal </button>
-            {/if}
         </div>
-    </div>
+    {/if}
 </div>
 <div class="container text-center">
     <div class="row">
@@ -84,7 +55,9 @@ $: votingComplete = $participants.every((p) => p.is_spectator || p.vote);
             {/if}
         </div>
     </div>
-    <Settings />
+    <div class="row">
+        <Settings />
+    </div>
 </div>
 
 {#if debugOn}
@@ -106,8 +79,5 @@ $: votingComplete = $participants.every((p) => p.is_spectator || p.vote);
     left: 50%;
     transform: translateX(-50%);
 }
-.voting-status {
-    width: 1.5em;
-    color: green;
-}
+
 </style>

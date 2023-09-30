@@ -16,7 +16,7 @@ export let votes;
             <div class="text-muted">{count}x</div>
         </div>
     {:else}
-        <div class="col text-center">No votes</div>
+        <div class="col text-center p-2">No votes</div>
     {/each}
 </div>
 

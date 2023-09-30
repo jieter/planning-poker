@@ -1,5 +1,5 @@
 .card.svelte-inppn9{display:flex;width:45px;height:70px;padding:6px 2px;justify-content:center;align-content:center;margin:4px 2px;transition:margin 100ms ease-out 100ms}.selected.svelte-inppn9{font-weight:bold;margin-top:-5px !important;margin-bottom:5px !important}
 .participant.svelte-10w4gcr{display:block;position:absolute;text-align:center;top:95%;left:50%;margin:-2em}
-label.svelte-2z9nm3{white-space:nowrap}
+label.svelte-1y9hivi{white-space:nowrap}.btn-sm.svelte-1y9hivi{width:100px}.voting-status.svelte-1y9hivi{width:1.5em;color:green}
 .summary.svelte-2nvyci{background-color:#e6e6e6}
-.participants.svelte-16z11jx{width:80vw;height:40vw;border-radius:40vw 40vw 0 0;position:relative;background-color:#eee;margin:4vh auto}.controls.svelte-16z11jx{position:absolute;bottom:0;left:50%;transform:translateX(-50%)}.voting-status.svelte-16z11jx{width:1.5em;color:green}
+.participants.svelte-a5p6ah{width:80vw;height:40vw;border-radius:40vw 40vw 0 0;position:relative;background-color:#eee;margin:4vh auto}.controls.svelte-a5p6ah{position:absolute;bottom:0;left:50%;transform:translateX(-50%)}

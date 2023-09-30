@@ -1,5 +1,5 @@
 <script>
-import { autoReveal, deck, decks, isRevealed } from './stores.js';
+import { autoReveal, deck, decks, isRevealed, clearVotes, revealVotes, votingComplete } from './stores.js';
 </script>
 
 <div class="d-flex justify-content-center m-3">
@@ -18,7 +18,20 @@ import { autoReveal, deck, decks, isRevealed } from './stores.js';
     </div>
     &nbsp;
 
-    <div class="form-check form-switch mt-2">
+    {#if !$autoReveal}
+        <div class="voting-status">
+            {#if !$isRevealed && votingComplete}
+                ✓
+            {/if}
+        </div>
+    {/if}
+    {#if $isRevealed}
+        <button class="btn btn-sm btn-warning" on:click={clearVotes}>Clear</button>
+    {:else}
+        <button class="btn btn-sm btn-primary" on:click={revealVotes}>Reveal</button>
+    {/if}
+
+    <div class="form-check form-switch mt-1 ms-3">
         <label for="autoReveal">Auto reveal</label>
         <input type="checkbox" bind:checked={$autoReveal} class="form-check-input" id="autoReveal" />
     </div>
@@ -27,5 +40,12 @@ import { autoReveal, deck, decks, isRevealed } from './stores.js';
 <style>
 label {
     white-space: nowrap;
+}
+.btn-sm {
+    width: 100px;
+}
+.voting-status {
+    width: 1.5em;
+    color: green;
 }
 </style>
