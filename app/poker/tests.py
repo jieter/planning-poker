@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.test import TestCase
 
 from .models import PokerSession
@@ -89,6 +91,30 @@ class PokerTestCase(TestCase):
         poker.set_deck("tshirt")
 
         self.assertCountEqual([user.vote for user in poker.users.all()], ["L", None])
+
+    def test_log_as_list(self):
+        log_time = datetime.now().strftime("%H:%M:%I")
+        poker = PokerSession.objects.create()
+        bob = poker.add_user("Bob")
+        bob.vote = "L"
+        bob.save()
+
+        george = poker.add_user("George")
+        george.vote = "XL"
+        george.save()
+        poker.reveal()
+        poker.set_deck("fibonacci")
+
+        self.assertEqual(
+            poker.log_as_list(),
+            [
+                {"time": log_time, "event": "clear", "data": {}},
+                {"time": log_time, "event": "set_deck", "data": {"deck": "fibonacci"}},
+                {"time": log_time, "event": "reveal", "data": {"deck": "tshirt", "round": 1, "votes": ["L", "XL"]}},
+                {"time": log_time, "event": "add_user", "data": {"is_spectator": False, "name": "George"}},
+                {"time": log_time, "event": "add_user", "data": {"is_spectator": False, "name": "Bob"}},
+            ],
+        )
 
     def test_settings_as_dict(self):
         poker = PokerSession.objects.create()
