@@ -15,19 +15,6 @@
 1. Run the server: `./manage.py runserver`
 1. Navigate to http://localhost:8004/ to start a new session
 
-# Running on render.com (free tier)
-
-1. Configure a database, wait until it is ready and use "External Database URL"
-1. Configure a redis instance, use the hostname part of "Internal Redis URL"
-1. Create a web service from this repository
-    - Build command: `./build.sh`
-    - Start command: `daphne -b 0.0.0.0 app.asgi:application`
-    - Environment variable: `PRODUCTION` `True`
-    - Environment variable: `SECRET_KEY` to a secret value
-    - Environment variable: `PYTHON_VERSION` `3.11.2`
-    - Environment variable: `DATABASE_URL` (value from "External Database URL")
-    - Environment variable: `REDIS_HOST` (hostname part from "Internal Redis URL")
-
 # Running on regular ubuntu 22.04
 1. `sudo apt install redis-server python3.11-venv supervisor`
 1. `python3.11 -m venv virtualenv`
