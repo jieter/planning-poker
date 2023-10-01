@@ -77,8 +77,8 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
 # Internationalization
-LANGUAGE_CODE = "en-us"
-TIME_ZONE = "UTC"
+LANGUAGE_CODE = "nl-NL"
+TIME_ZONE = "Europe/Amsterdam"
 USE_I18N = True
 USE_TZ = True
 

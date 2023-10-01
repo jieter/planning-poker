@@ -51,13 +51,15 @@ class PokerConsumer(JsonWebsocketConsumer):
         match (action):
             case "settings":
                 if "auto_reveal" in content:
-                    poker.auto_reveal = bool(content["auto_reveal"])
+                    new_val = bool(content["auto_reveal"])
+                    if poker.auto_reveal != new_val:
+                        poker.auto_reveal = new_val
+                        poker.save()
                 if "deck" in content:
                     poker.set_deck(content["deck"])
                 if "is_spectator" in content:
                     self.user.is_spectator = bool(content["is_spectator"])
                     self.user.save()
-                poker.save()
 
             case "vote":
                 if self.user:
@@ -116,6 +118,7 @@ class PokerConsumer(JsonWebsocketConsumer):
                 "decks": poker.Decks.choices,
                 "choices": poker.deck_as_list(),
             },
+            "log": poker.log_as_list(),
         }
         self.send_json(message)
 

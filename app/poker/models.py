@@ -1,6 +1,7 @@
 import uuid
 
 from django.db import models
+from django.utils import timezone
 
 USER_FIELDS = ("id", "name", "is_spectator", "is_active", "vote")
 
@@ -29,8 +30,14 @@ class PokerSession(models.Model):
     def users_as_list(self) -> list[dict]:
         return list(self.active_users.values(*USER_FIELDS))
 
-    def deck_as_list(self) -> list:
+    def deck_as_list(self) -> list[str]:
         return ("0,½,1,2,3,5,8,13,20,?,∞,☕️" if self.is_fibonacci else "XS,S,M,L,XL,?,☕️").split(",")
+
+    def log_as_list(self) -> list[dict[str, str, dict]]:
+        return list(
+            {"time": timezone.localtime(created).strftime("%H:%M:%I"), "event": event, "data": data}
+            for created, event, data in self.logs.values_list("created", "event", "data")[:20]
+        )
 
     @property
     def is_fibonacci(self) -> bool:
@@ -44,12 +51,13 @@ class PokerSession(models.Model):
             self.clear()
 
     def reveal(self) -> None:
-        self.is_revealed = True
-        self.reveal_count += 1
-        self.save()
+        if not self.is_revealed:
+            self.is_revealed = True
+            self.reveal_count += 1
+            self.save()
 
-        votes = list(self.active_users.values_list("vote", flat=True))
-        self.logs.create(event="reveal", data=dict(round=self.reveal_count, deck=self.deck, votes=votes))
+            votes = list(self.active_users.values_list("vote", flat=True))
+            self.logs.create(event="reveal", data=dict(round=self.reveal_count, deck=self.deck, votes=votes))
 
     @property
     def is_voting_complete(self):
@@ -60,6 +68,7 @@ class PokerSession(models.Model):
         self.users.all().update(vote=None)
         self.is_revealed = False
         self.save()
+        self.logs.create(event="clear")
 
     def add_user(self, name, is_spectator=False) -> "User":
         user, created = self.users.get_or_create(name=name, is_spectator=is_spectator, is_active=True)
@@ -76,6 +85,9 @@ class Log(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     event = models.CharField(max_length=100)
     data = models.JSONField(default=dict)
+
+    class Meta:
+        ordering = ("-created",)
 
 
 class User(models.Model):

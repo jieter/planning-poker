@@ -1,5 +1,17 @@
 <script>
-import { deck, decks, choices, error, isRevealed, participants, update, user, autoReveal, votes, log } from './stores.js';
+import {
+    deck,
+    decks,
+    choices,
+    error,
+    isRevealed,
+    participants,
+    update,
+    user,
+    autoReveal,
+    votes,
+    log,
+} from './stores.js';
 
 $: settings = {
     error: $error,
@@ -13,7 +25,7 @@ $: settings = {
 const isProduction = !window.location.host.includes('localhost');
 </script>
 
-<div class="row bg-light rounded p-2">
+<div class="row bg-light rounded p-2 small">
     <div class="col">
         <div>debug<code>{JSON.stringify(settings)}</code></div>
         <div>votes: <code>{JSON.stringify($votes)}</code></div>
@@ -25,9 +37,11 @@ const isProduction = !window.location.host.includes('localhost');
         {/if}
     </div>
     <div class="col">
-        {#each log as item}
+        {#each $log as item}
             <div>
-                <span>{item.event}</span>
+                <span>{item.time}</span>
+                {item.event}
+                {JSON.stringify(item.data)}
             </div>
         {/each}
     </div>
