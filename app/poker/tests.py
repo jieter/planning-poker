@@ -89,3 +89,16 @@ class PokerTestCase(TestCase):
         poker.set_deck("tshirt")
 
         self.assertCountEqual([user.vote for user in poker.users.all()], ["L", None])
+
+    def test_settings_as_dict(self):
+        poker = PokerSession.objects.create()
+        self.assertEqual(
+            poker.settings_as_dict(),
+            {
+                "auto_reveal": True,
+                "is_revealed": False,
+                "deck": "tshirt",
+                "decks": [("tshirt", "T-shirt"), ("fibonacci", "Fibonacci")],
+                "choices": ["XS", "S", "M", "L", "XL", "?", "☕️"],
+            },
+        )

@@ -1,4 +1,5 @@
 import uuid
+from typing import Any
 
 from django.db import models
 from django.utils import timezone
@@ -26,18 +27,6 @@ class PokerSession(models.Model):
     @property
     def active_users(self):
         return self.users.filter(is_active=True)
-
-    def users_as_list(self) -> list[dict]:
-        return list(self.active_users.values(*USER_FIELDS))
-
-    def deck_as_list(self) -> list[str]:
-        return ("0,½,1,2,3,5,8,13,20,?,∞,☕️" if self.is_fibonacci else "XS,S,M,L,XL,?,☕️").split(",")
-
-    def log_as_list(self) -> list[dict[str, str, dict]]:
-        return list(
-            {"time": timezone.localtime(created).strftime("%H:%M:%I"), "event": event, "data": data}
-            for created, event, data in self.logs.values_list("created", "event", "data")[:20]
-        )
 
     @property
     def is_fibonacci(self) -> bool:
@@ -77,6 +66,27 @@ class PokerSession(models.Model):
 
     def deactivate_user(self, user_id) -> None:
         self.users.filter(id=user_id).first().deactivate()
+
+    def users_as_list(self) -> list[dict]:
+        return list(self.active_users.values(*USER_FIELDS))
+
+    def deck_as_list(self) -> list[str]:
+        return ("0,½,1,2,3,5,8,13,20,?,∞,☕️" if self.is_fibonacci else "XS,S,M,L,XL,?,☕️").split(",")
+
+    def log_as_list(self) -> list[dict[str, str, dict]]:
+        return list(
+            {"time": timezone.localtime(created).strftime("%H:%M:%I"), "event": event, "data": data}
+            for created, event, data in self.logs.values_list("created", "event", "data")[:20]
+        )
+
+    def settings_as_dict(self) -> dict[str, Any]:
+        return {
+            "auto_reveal": self.auto_reveal,
+            "is_revealed": self.is_revealed,
+            "deck": self.deck,
+            "decks": self.Decks.choices,
+            "choices": self.deck_as_list(),
+        }
 
 
 class Log(models.Model):

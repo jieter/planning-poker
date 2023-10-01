@@ -111,13 +111,7 @@ class PokerConsumer(JsonWebsocketConsumer):
             "event": event,
             "user": user,
             "users": poker.users_as_list(),
-            "settings": {
-                "auto_reveal": poker.auto_reveal,
-                "is_revealed": poker.is_revealed,
-                "deck": poker.deck,
-                "decks": poker.Decks.choices,
-                "choices": poker.deck_as_list(),
-            },
+            "settings": poker.settings_as_dict(),
             "log": poker.log_as_list(),
         }
         self.send_json(message)
