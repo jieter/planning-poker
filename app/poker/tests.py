@@ -33,6 +33,7 @@ class PokerTestCase(TestCase):
         self.assertTrue(poker.is_revealed)
         self.assertEqual(poker.reveal_count, 1)
 
+        poker.clear()
         poker.reveal()
         self.assertEqual(poker.reveal_count, 2)
 
