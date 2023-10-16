@@ -13,8 +13,7 @@ $: {
         button.blur();
     }
 }
-$: height = (size == 'sm') ? 45 : 70;
-
+$: height = size == 'sm' ? 45 : 70;
 </script>
 
 <div
