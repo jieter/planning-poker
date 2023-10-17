@@ -59,8 +59,8 @@ onMount(() => {
     <div class="row">
         <Settings />
     </div>
-    <div class="row justify-content-end">
-        <div class="col-4 text-start">
+    <div class="row">
+        <div class="col">
             <History />
         </div>
     </div>

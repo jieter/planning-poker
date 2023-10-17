@@ -20,7 +20,7 @@ $: height = size == 'sm' ? 45 : 70;
     bind:this={button}
     class="card"
     class:selected
-    style="background-color: {color || '#d8f7ec'}; height: {height}px; width: {height * 0.65}px"
+    style="background-color: {color || '#d8f7ec'}; height: {height}px; width: {height * 0.65}px;"
     {disabled}
     on:click
     on:keypress
