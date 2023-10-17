@@ -44,13 +44,16 @@ onMount(() => {
             {:else}
                 <div class="d-flex justify-content-center">
                     {#each $choices as choice}
-                        <Card
+                        <button
                             on:click={castVote(choice)}
                             on:keypress={castVote(choice)}
                             disabled={$isRevealed}
-                            selected={choice == $user.vote}>
-                            {choice}
-                        </Card>
+                            class="btn m-0 p-0"
+                            class:selected={choice == $user.vote}>
+                            <Card color={$isRevealed ? '#eee' : null}>
+                                {choice}
+                            </Card>
+                        </button>
                     {/each}
                 </div>
             {/if}
@@ -59,11 +62,7 @@ onMount(() => {
     <div class="row">
         <Settings />
     </div>
-    <div class="row">
-        <div class="col">
-            <History />
-        </div>
-    </div>
+    <History />
 </div>
 
 {#if debugOn}
@@ -84,5 +83,10 @@ onMount(() => {
     bottom: 0;
     left: 50%;
     transform: translateX(-50%);
+}
+button.selected {
+    font-weight: bold;
+    margin-top: -5px !important;
+    margin-bottom: 5px !important;
 }
 </style>

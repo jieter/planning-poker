@@ -4,7 +4,7 @@ import { confetti } from '@neoconfetti/svelte';
 import Card from './Card.svelte';
 
 export let votes;
-export let size;
+export let size = undefined;
 export let emitConfetti = true;
 </script>
 
