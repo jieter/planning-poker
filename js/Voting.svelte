@@ -3,6 +3,7 @@ import { onMount } from 'svelte';
 
 import Card from './Card.svelte';
 import Debug from './Debug.svelte';
+import History from './History.svelte';
 import Participant from './Participant.svelte';
 import Settings from './Settings.svelte';
 import { choices, connect, error, isRevealed, participants, update, user, castVote, votes } from './stores.js';
@@ -27,7 +28,7 @@ onMount(() => {
     {/each}
     {#if $isRevealed}
         <div class="controls">
-            <Summary votes={$votes} />
+            <Summary votes={$votes} style="background-color: #e6e6e6;" class="p-2 mb-2 text-center rounded" />
         </div>
     {/if}
 </div>
@@ -57,6 +58,11 @@ onMount(() => {
     </div>
     <div class="row">
         <Settings />
+    </div>
+    <div class="row">
+        <div class="col">
+            <History />
+        </div>
     </div>
 </div>
 

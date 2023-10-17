@@ -4,6 +4,7 @@ import { onMount } from 'svelte';
 export let disabled = true;
 export let selected = '';
 export let color = null;
+export let size = 'regular';
 
 let button;
 
@@ -12,13 +13,14 @@ $: {
         button.blur();
     }
 }
+$: height = size == 'sm' ? 45 : 70;
 </script>
 
 <div
     bind:this={button}
-    class="card btn"
+    class="card"
     class:selected
-    style="background-color: {color || '#d8f7ec'}"
+    style="background-color: {color || '#d8f7ec'}; height: {height}px; width: {height * 0.65}px;"
     {disabled}
     on:click
     on:keypress
@@ -30,14 +32,10 @@ $: {
 <style>
 .card {
     display: flex;
-
-    width: 45px;
-    height: 70px;
-
     padding: 6px 2px;
     justify-content: center;
     align-content: center;
-    margin: 4px 2px;
+    margin: 2px 2px;
     transition: margin 100ms ease-out 100ms;
 }
 .selected {

@@ -10,16 +10,21 @@ export const user = writable({});
 export const error = writable(undefined);
 export const log = writable([]);
 
-// Derive a sorted list of (card, votes)-pairs off of the participants store:
-export const votes = derived(participants, ($participants) => {
+// Count votes in a list of votes, returning a list of (card, votes)-pairs in descending order.
+// [1, 1, 2, 3, 3, 3, 3] => [[3, 3], [1, 2], [2, 1]]
+export function countVotes(votes) {
     const _votes = new Proxy({}, { get: (d, key) => (key in d ? d[key] : 0) });
-    $participants.forEach((user) => {
-        if (user.vote != null) {
-            _votes[user.vote] += 1;
+    votes.forEach((vote) => {
+        if (vote != null) {
+            _votes[vote] += 1;
         }
     });
-
     return Object.entries(_votes).sort((a, b) => b[1] - a[1]);
+}
+
+// Derive a sorted list of (card, votes)-pairs off of the participants store:
+export const votes = derived(participants, ($participants) => {
+    return countVotes($participants.map((p) => p.vote));
 });
 
 // Voting is considered complete if all active non-spectators voted:
