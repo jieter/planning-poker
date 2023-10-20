@@ -28,6 +28,12 @@ def index_view(request, session_id=None):
             protocol = "wss" if settings.IS_PRODUCTION else "ws"
             context["websocket_url"] = f"{protocol}://{request.get_host()}/ws/poker/{poker.id}/"
 
+    if not context.get("websocket_url"):
+        try:
+            context["statistics"] = PokerSession.objects.statistics()
+        except Exception:  # Ignore errors in statistics, since is is not crucial functionality
+            if settings.DEBUG:  # But if debug is True, do crash
+                raise
     return render(request, "index.html", context)
 
 

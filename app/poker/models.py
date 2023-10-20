@@ -1,10 +1,35 @@
 import uuid
+from collections import Counter
 from typing import Any
 
 from django.db import models
+from django.db.models import Avg, Count
 from django.utils import timezone
 
 USER_FIELDS = ("id", "name", "is_spectator", "is_active", "vote")
+
+
+class PokerSessionManager(models.Manager):
+    def statistics(self):
+        sessions = self.exclude(reveal_count=0)
+        avg_reveal_count = sessions.aggregate(mean=Avg("reveal_count"))["mean"]
+
+        user_count = sessions.values_list(Count("users"), flat=True)
+
+        vote_counter = Counter()
+        for votes in Log.objects.filter(event="reveal").values_list("data__votes", flat=True):
+            vote_counter.update(filter(lambda x: x, votes))
+
+        cards = list(sorted(vote_counter.items(), key=lambda x: x[1], reverse=True))
+
+        return {
+            "basic": (
+                ("Sessions", self.count()),
+                ("Average #rounds", round(avg_reveal_count, 1) if avg_reveal_count else "-"),
+                ("Average #participants", round(sum(user_count) / len(user_count), 1) if user_count else "-"),
+            ),
+            "cards": cards,
+        }
 
 
 class PokerSession(models.Model):
@@ -20,6 +45,8 @@ class PokerSession(models.Model):
         FIBONACCI = "fibonacci", "Fibonacci"
 
     deck = models.CharField(max_length=20, choices=Decks.choices, default=Decks.TSHIRT)
+
+    objects = PokerSessionManager()
 
     def __str__(self) -> str:
         return f"{self.id}"
