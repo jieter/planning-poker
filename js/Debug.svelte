@@ -25,7 +25,7 @@ $: settings = {
 const isProduction = !window.location.host.includes('localhost');
 </script>
 
-<div class="row bg-light rounded p-2 small">
+<div class="row bg-light rounded p-2 small mb-5">
     <div class="col">
         <div>debug<code>{JSON.stringify(settings)}</code></div>
         <div>votes: <code>{JSON.stringify($votes)}</code></div>
@@ -46,3 +46,4 @@ const isProduction = !window.location.host.includes('localhost');
         {/each}
     </div>
 </div>
+<div class="my-5">&nbsp;</div>

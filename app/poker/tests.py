@@ -41,7 +41,6 @@ class PokerTestCase(TestCase):
 
     def test_is_voting_complete(self):
         poker = PokerSession.objects.create()
-        self.assertTrue(poker.is_voting_complete)
 
         user = poker.add_user("Alice")
         self.assertFalse(poker.is_voting_complete)
@@ -49,6 +48,16 @@ class PokerTestCase(TestCase):
         user.vote = "L"
         user.save()
 
+        self.assertTrue(poker.is_voting_complete)
+
+        poker = PokerSession.objects.create()
+        poker.add_user("Alice", is_spectator=True)
+        self.assertFalse(poker.is_voting_complete)
+
+        user = poker.add_user("Bob")
+        self.assertFalse(poker.is_voting_complete)
+        user.vote = "L"
+        user.save()
         self.assertTrue(poker.is_voting_complete)
 
     def test_clear(self):

@@ -62,12 +62,15 @@ onMount(() => {
     <div class="row">
         <Settings />
     </div>
-    <History />
 </div>
 
 {#if debugOn}
     <Debug />
 {/if}
+
+<div class="fixed-bottom bg-white" style="border-top: 1px solid rgba(0, 0, 0, 0.125);">
+    <History />
+</div>
 
 <style>
 .participants {
