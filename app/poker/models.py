@@ -11,7 +11,7 @@ USER_FIELDS = ("id", "name", "is_spectator", "is_active", "vote")
 
 class PokerSessionManager(models.Manager):
     def statistics(self):
-        sessions = self.exclude(reveal_count=0)
+        sessions = self.exclude(reveal_count=0).filter(created__gte="2023-10-01")
         avg_reveal_count = sessions.aggregate(mean=Avg("reveal_count"))["mean"]
 
         user_count = sessions.values_list(Count("users"), flat=True)
