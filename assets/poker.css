@@ -1,5 +1,6 @@
-.card.svelte-1pd9nvv{display:flex;padding:6px 2px;justify-content:center;align-content:center;margin:2px 2px;transition:margin 100ms ease-out 200ms;transition:background-color 100ms ease-out 200ms}
-.history.svelte-oq1c7h{display:flex;overflow-x:scroll}.voting-round.svelte-oq1c7h{font-size:0.8em;writing-mode:vertical-lr;color:gray}.history-item.svelte-oq1c7h{background-color:#efefef;text-align:left;flex-shrink:0}
+.deck-card.svelte-gm52mk{display:flex;padding:6px 2px;justify-content:center;align-content:center;margin:2px 2px;flex-direction:column;border:1px solid rgba(0, 0, 0, 0.125);border-radius:0.25rem;transition:background-color 100ms ease-out 200ms}
+.voting-round.svelte-n1eljq{writing-mode:vertical-lr}.history-item.svelte-n1eljq{background-color:#efefef}
 .participant.svelte-10w4gcr{display:block;position:absolute;text-align:center;top:95%;left:50%;margin:-2em}
 label.svelte-1y9hivi{white-space:nowrap}.btn-sm.svelte-1y9hivi{width:100px}.voting-status.svelte-1y9hivi{width:1.5em;color:green}
-.participants.svelte-1cqza39{width:80vw;height:40vw;border-radius:40vw 40vw 0 0;position:relative;background-color:#eee;margin:4vh auto}.controls.svelte-1cqza39{position:absolute;bottom:0;left:50%;transform:translateX(-50%)}button.selected.svelte-1cqza39{font-weight:bold;margin-top:-5px !important;margin-bottom:5px !important}
+.participants.svelte-1rvs6lz{width:80vw;height:40vw;border-radius:40vw 40vw 0 0;position:relative;background-color:#eee;margin:4vh auto}.controls.svelte-1rvs6lz{position:absolute;bottom:0;left:50%;transform:translateX(-50%)}button.selected.svelte-1rvs6lz{font-weight:bold;margin:-8px 0 8px 0 !important;transition:margin 100ms ease-in-out 100ms,
+        font-weight 100ms ease-out 100ms}

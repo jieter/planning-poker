@@ -86,7 +86,9 @@ onMount(() => {
 }
 button.selected {
     font-weight: bold;
-    margin-top: -5px !important;
-    margin-bottom: 5px !important;
+    margin: -8px 0 8px 0 !important;
+    transition:
+        margin 100ms ease-in-out 100ms,
+        font-weight 100ms ease-out 100ms;
 }
 </style>

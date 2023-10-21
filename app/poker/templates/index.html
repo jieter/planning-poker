@@ -9,8 +9,11 @@
     <link rel="stylesheet" href="{% static 'poker.css' %}" />
 </head>
 <body>
-    <div id="poker" class="m-3"></div>
+    <div id="poker" class="m-1"></div>
 
+    {% if statistics %}
+        {{ statistics|json_script:'statistics' }}
+    {% endif %}
     {{ websocket_url|json_script:"websocket_url" }}
     <script defer src="{% static 'index.js' %}"></script>
 

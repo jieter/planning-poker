@@ -1,10 +1,38 @@
 import uuid
+from collections import Counter, defaultdict
 from typing import Any
 
 from django.db import models
+from django.db.models import Avg, Count
 from django.utils import timezone
 
 USER_FIELDS = ("id", "name", "is_spectator", "is_active", "vote")
+
+
+class PokerSessionManager(models.Manager):
+    def statistics(self):
+        sessions = self.exclude(reveal_count=0).filter(created__gte="2023-10-01")
+        avg_reveal_count = sessions.aggregate(mean=Avg("reveal_count"))["mean"]
+
+        user_count = sessions.values_list(Count("users"), flat=True)
+
+        vote_counter = defaultdict(Counter)
+        for deck, votes in (
+            Log.objects.filter(event="reveal").values("data__deck").values_list("data__deck", "data__votes")
+        ):
+            vote_counter[deck].update(filter(lambda x: x, votes))
+
+        return {
+            "basic": (
+                ("Sessions", self.count()),
+                ("Total votes", sum(deck.total() for deck in vote_counter.values())),
+                ("Average #rounds", round(avg_reveal_count, 1) if avg_reveal_count else "-"),
+                ("Average #participants", round(sum(user_count) / len(user_count), 1) if user_count else "-"),
+            ),
+            "decks": [
+                list(sorted(counter.items(), key=lambda x: x[1], reverse=True)) for counter in vote_counter.values()
+            ],
+        }
 
 
 class PokerSession(models.Model):
@@ -20,6 +48,8 @@ class PokerSession(models.Model):
         FIBONACCI = "fibonacci", "Fibonacci"
 
     deck = models.CharField(max_length=20, choices=Decks.choices, default=Decks.TSHIRT)
+
+    objects = PokerSessionManager()
 
     def __str__(self) -> str:
         return f"{self.id}"

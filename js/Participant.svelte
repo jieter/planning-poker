@@ -12,7 +12,7 @@ let angle;
 $: {
     angle = -90;
     if (count > 1) {
-        // A fixed amount of degrees, or all parcitipants evenly distributed, whatever is smaller.
+        // A fixed amount of degrees, or all participants evenly distributed, whatever is smaller.
         angle -= Math.min(20, maxAngle / count) * (i - (count - 1) / 2);
     }
 }
