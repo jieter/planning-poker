@@ -1,30 +1,27 @@
 {
     "name": "planning-poker",
     "dependencies": {
-        "svelte": "^4.2.1"
+        "js-cookie": "^3.0.5",
+        "@neoconfetti/svelte": "^1.0.0",
+        "svelte": "^4.2.2"
     },
     "devDependencies": {
-        "@babel/preset-env": "^7.22.20",
-        "@neoconfetti/svelte": "^1.0.0",
-        "@rollup/plugin-commonjs": "^25.0.4",
-        "@rollup/plugin-node-resolve": "^15.2.1",
-        "@rollup/plugin-terser": "^0.4.3",
-        "eslint": "^8.50.0",
+        "@babel/preset-env": "^7.23.2",
+        "@rollup/plugin-commonjs": "^25.0.7",
+        "@rollup/plugin-node-resolve": "^15.2.3",
+        "@rollup/plugin-terser": "^0.4.4",
+        "eslint": "^8.52.0",
         "eslint-plugin-import": "^2.28.1",
-        "eslint-plugin-svelte": "^2.33.2",
-        "js-cookie": "^3.0.5",
+        "eslint-plugin-svelte": "^2.34.0",
         "prettier": "^3.0.3",
         "prettier-plugin-svelte": "^3.0.3",
-        "rollup": "^3.29.4",
-        "rollup-plugin-analyzer": "^4.0.0",
-        "rollup-plugin-cleanup": "^3.2.1",
-        "rollup-plugin-css-only": "^4.3.0",
+        "rollup": "^4.1.4",
         "rollup-plugin-livereload": "^2.0.5",
         "rollup-plugin-svelte": "~7.1.6"
     },
     "scripts": {
         "eslint": "eslint -c package.json --ext .js,.svelte --fix js/",
-        "format": "prettier  --write --plugin prettier-plugin-svelte js/",
+        "format": "prettier  --write --plugin prettier-plugin-svelte js/ *.mjs",
         "build": "rollup -c",
         "dev": "rollup -c -w"
     },
@@ -42,18 +39,37 @@
             "import"
         ],
         "rules": {
-            "indent": ["error", 4, {"SwitchCase": 1}],
-            "linebreak-style": ["error","unix"],
-            "quotes": ["error", "single"],
-            "semi": ["error", "always"],
+            "indent": [
+                "error",
+                4,
+                {
+                    "SwitchCase": 1
+                }
+            ],
+            "linebreak-style": [
+                "error",
+                "unix"
+            ],
+            "quotes": [
+                "error",
+                "single"
+            ],
+            "semi": [
+                "error",
+                "always"
+            ],
             "no-unsafe-optional-chaining": "error",
-            "import/order": ["error",
+            "import/order": [
+                "error",
                 {
                     "groups": [
                         "builtin",
                         "external",
                         "internal",
-                        ["parent", "sibling"]
+                        [
+                            "parent",
+                            "sibling"
+                        ]
                     ],
                     "newlines-between": "always",
                     "alphabetize": {
