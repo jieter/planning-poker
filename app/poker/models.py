@@ -1,5 +1,5 @@
 import uuid
-from collections import Counter
+from collections import Counter, defaultdict
 from typing import Any
 
 from django.db import models
@@ -16,19 +16,22 @@ class PokerSessionManager(models.Manager):
 
         user_count = sessions.values_list(Count("users"), flat=True)
 
-        vote_counter = Counter()
-        for votes in Log.objects.filter(event="reveal").values_list("data__votes", flat=True):
-            vote_counter.update(filter(lambda x: x, votes))
-
-        cards = list(sorted(vote_counter.items(), key=lambda x: x[1], reverse=True))
+        vote_counter = defaultdict(Counter)
+        for deck, votes in (
+            Log.objects.filter(event="reveal").values("data__deck").values_list("data__deck", "data__votes")
+        ):
+            vote_counter[deck].update(filter(lambda x: x, votes))
 
         return {
             "basic": (
                 ("Sessions", self.count()),
+                ("Total votes", sum(deck.total() for deck in vote_counter.values())),
                 ("Average #rounds", round(avg_reveal_count, 1) if avg_reveal_count else "-"),
                 ("Average #participants", round(sum(user_count) / len(user_count), 1) if user_count else "-"),
             ),
-            "cards": cards,
+            "decks": [
+                list(sorted(counter.items(), key=lambda x: x[1], reverse=True)) for counter in vote_counter.values()
+            ],
         }
 
 
