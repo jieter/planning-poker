@@ -3,17 +3,17 @@ import { log, countVotes } from './stores.js';
 import Summary from './Summary.svelte';
 </script>
 
-<div class="history">
+<div class="d-flex overflow-scroll">
     {#each $log.filter((x) => x.event == 'reveal') as { data }}
         {@const voteSummary = countVotes(data.votes)}
-        <div class="voting-round ms-2">
+        <small class="voting-round ms-2 text-muted">
             Round {data.round}
             {#if voteSummary.length == 0}
                 <br />no votes
             {/if}
-        </div>
+        </small>
         {#if voteSummary.length > 0}
-            <div class="small history-item rounded me-1 my-3 p-1">
+            <div class="small history-item text-start rounded flex-shrink-0 me-1 my-3 p-1">
                 <Summary votes={voteSummary} emitConfetti={false} size="sm" />
             </div>
         {/if}
@@ -21,18 +21,10 @@ import Summary from './Summary.svelte';
 </div>
 
 <style>
-.history {
-    display: flex;
-    overflow-x: scroll;
-}
 .voting-round {
-    font-size: 0.8em;
     writing-mode: vertical-lr;
-    color: gray;
 }
 .history-item {
     background-color: #efefef;
-    text-align: left;
-    flex-shrink: 0;
 }
 </style>

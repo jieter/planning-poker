@@ -77,7 +77,7 @@ $: if (isSpectator != null) {
             {#if statistics}
                 <div class="col-md-3">
                     {#each statistics['basic'] as [label, value]}
-                        <div class=" d-flex justify-content-between align-items-center p-1">
+                        <div class="d-flex justify-content-between align-items-center p-1">
                             {label}
                             <span class="badge bg-primary rounded-pill">{value}</span>
                         </div>
@@ -86,7 +86,7 @@ $: if (isSpectator != null) {
                 <div class="col-md-6">
                     <div class="m-1">
                         {#each statistics.decks as deck}
-                            <div class="deck">
+                            <div class="d-flex overflow-scroll">
                                 {#each deck as [card, count]}
                                     <div class="d-inline-block text-center">
                                         <Card size="sm">{card}</Card>
@@ -104,10 +104,3 @@ $: if (isSpectator != null) {
         </div>
     </div>
 </div>
-
-<style>
-.deck {
-    display: flex;
-    overflow-x: scroll;
-}
-</style>
