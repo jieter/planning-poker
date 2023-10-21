@@ -86,7 +86,7 @@ class PokerSession(models.Model):
     def is_voting_complete(self):
         """With at least one voter, all voters voted."""
         voters = self.active_users.exclude(is_spectator=True)
-        return voters.exists() and voters.filter(vote__isnull=True).count() == 0
+        return voters.exists() and not voters.filter(vote__isnull=True).exists()
 
     def clear(self) -> None:
         """Clear all votes and return to voting state."""
