@@ -18,10 +18,10 @@ function toggleCollapsed() {
     Voting history {#if collapsed}▲{:else}▼{/if}
 </div>
 {#if !collapsed}
-    <div class="d-flex overflow-scroll mb-2">
+    <div class="d-flex overflow-scroll mb-2 text-muted">
         {#each $log.filter((x) => x.event == 'reveal') as { data }}
             {@const voteSummary = countVotes(data.votes)}
-            <small class="voting-round ms-1 text-center text-muted">
+            <small class="voting-round ms-1 text-center">
                 Round {data.round}
                 {#if voteSummary.length == 0}
                     <br />no votes
@@ -32,6 +32,8 @@ function toggleCollapsed() {
                     <Summary votes={voteSummary} emitConfetti={false} size="sm" />
                 </div>
             {/if}
+        {:else}
+            <p class="small m-2">No history yet.</p>
         {/each}
     </div>
 {/if}
