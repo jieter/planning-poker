@@ -5,7 +5,6 @@ import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import livereload from 'rollup-plugin-livereload';
 import terser from '@rollup/plugin-terser';
-import analyze from 'rollup-plugin-analyzer';
 
 const production = !process.env.ROLLUP_WATCH;
 const target = 'assets/';
