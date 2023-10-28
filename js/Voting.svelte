@@ -68,6 +68,8 @@ onMount(() => {
     <Debug />
 {/if}
 
+<div class="my-5">&nbsp;</div>
+
 <div class="fixed-bottom bg-white" style="border-top: 1px solid rgba(0, 0, 0, 0.125);">
     <History />
 </div>

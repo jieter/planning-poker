@@ -46,4 +46,3 @@ const isProduction = !window.location.host.includes('localhost');
         {/each}
     </div>
 </div>
-<div class="my-5">&nbsp;</div>
