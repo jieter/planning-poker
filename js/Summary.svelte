@@ -2,13 +2,14 @@
 import { confetti } from '@neoconfetti/svelte';
 
 import Card from './Card.svelte';
+import { showConfetti } from './stores.js';
 
 export let votes;
 export let size = undefined;
 export let emitConfetti = true;
 </script>
 
-{#if emitConfetti && votes && votes.length == 1 && votes[0][1] > 1}
+{#if emitConfetti && $showConfetti}
     <div use:confetti />
 {/if}
 <div {...$$restProps}>
