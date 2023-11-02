@@ -37,13 +37,25 @@ export const votingComplete = derived(participants, ($participants) => {
     return $participants.every((p) => p.is_spectator || p.vote);
 });
 
-// Your vote is the last vote missing; others are waiting for you!
-export const othersAreWaitingForYou = derived([participants, user], ([$participants, $user]) => {
-    const voters = $participants.filter((p) => !p.is_spectator);
-    const totalVotes = voters.filter((p) => p.vote);
-    const almostComplete = voters.length - totalVotes.length == 1;
-    return !$user.vote && almostComplete;
-});
+export const icon = derived(
+    [participants, user, showConfetti, isRevealed],
+    ([$participants, $user, $showConfetti, $isRevealed]) => {
+        if ($showConfetti) {
+            return '🎉';
+        } else if ($isRevealed) {
+            return '🃏';
+        }
+
+        const voters = $participants.filter((p) => !p.is_spectator);
+        const totalVotes = voters.filter((p) => p.vote);
+        const almostComplete = voters.length - totalVotes.length == 1;
+        // Your vote is the last vote missing; others are waiting for you!
+        if (!$user.vote && almostComplete) {
+            return '🚨';
+        }
+        return '🕶️';
+    },
+);
 
 // Set the vote for the current user to `value`
 const setUserVote = (value) => {
