@@ -6,15 +6,16 @@ import Debug from './Debug.svelte';
 import History from './History.svelte';
 import Participant from './Participant.svelte';
 import Settings from './Settings.svelte';
-import { choices, connect, error, isRevealed, participants, update, user, castVote, votes } from './stores.js';
+import { choices, connect, error, isRevealed, participants, update, user, castVote, votes, icon } from './stores.js';
 import Summary from './Summary.svelte';
-import { jsonScriptContents } from './utils.js';
+import { jsonScriptContents, changeFavicon } from './utils.js';
 
 let debugOn = false;
 onMount(() => {
     connect(jsonScriptContents('websocket_url'));
     debugOn = new URLSearchParams(window.location.search).get('debug');
 });
+$: changeFavicon($icon);
 </script>
 
 {#if $error}
@@ -22,6 +23,7 @@ onMount(() => {
         <div class="alert alert-danger" role="alert">{$error}</div>
     </div>
 {/if}
+
 <div class="participants">
     {#each $participants as user, i (user.id)}
         <Participant isRevealed={$isRevealed} {user} {i} count={$participants.length} />
