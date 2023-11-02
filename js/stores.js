@@ -29,7 +29,6 @@ export const votes = derived(participants, ($participants) => {
 
 // Show confetti if votes are revealed and all participants voted the same and there are more than 1 participants.
 export const showConfetti = derived([isRevealed, votes], ([$isRevealed, $votes]) => {
-    console.log($isRevealed, $votes);
     return $isRevealed && $votes.length == 1 && $votes[0] && $votes[0][1] > 1;
 });
 
