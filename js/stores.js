@@ -27,9 +27,23 @@ export const votes = derived(participants, ($participants) => {
     return countVotes($participants.map((p) => p.vote));
 });
 
+// Show confetti if votes are revealed and all participants voted the same and there are more than 1 participants.
+export const showConfetti = derived([isRevealed, votes], ([$isRevealed, $votes]) => {
+    console.log($isRevealed, $votes);
+    return $isRevealed && $votes.length == 1 && $votes[0] && $votes[0][1] > 1;
+});
+
 // Voting is considered complete if all active non-spectators voted:
 export const votingComplete = derived(participants, ($participants) => {
     return $participants.every((p) => p.is_spectator || p.vote);
+});
+
+// Your vote is the last vote missing; others are waiting for you!
+export const othersAreWaitingForYou = derived([participants, user], ([$participants, $user]) => {
+    const voters = $participants.filter((p) => !p.is_spectator);
+    const totalVotes = voters.filter((p) => p.vote);
+    const almostComplete = voters.length - totalVotes.length == 1;
+    return !$user.vote && almostComplete;
 });
 
 // Set the vote for the current user to `value`
@@ -85,14 +99,14 @@ export function connect(websocketUrl) {
 
                 break;
             case 'vote':
-                participants.update(($parcitipants) => {
-                    $parcitipants.forEach((p) => {
+                participants.update(($participants) => {
+                    $participants.forEach((p) => {
                         if (p.id == data.user_id) {
                             p.vote = data.value;
                         }
                     });
 
-                    return [...$parcitipants];
+                    return [...$participants];
                 });
                 break;
             case 'error':
