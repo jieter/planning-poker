@@ -24,9 +24,7 @@ function toggleCollapsed() {
     {/if}
 
     {#if $revealCount > 0}
-        {#if collapsed}
-            ▲{:else}
-            ▼{/if}
+        {#if collapsed}▲{:else}▼{/if}
     {/if}
 </div>
 {#if !collapsed}
