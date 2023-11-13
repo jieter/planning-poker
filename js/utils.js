@@ -19,7 +19,7 @@ function faviconHref(emoji) {
 
 export function changeFavicon(emoji) {
     const document = window.document;
-    const link = document.querySelector("link[rel*='icon']") || document.createElement('link');
+    const link = document.querySelector('link[rel*=\'icon\']') || document.createElement('link');
     link.type = 'image/svg+xml';
     link.rel = 'shortcut icon';
     link.href = faviconHref(emoji);

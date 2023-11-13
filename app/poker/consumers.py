@@ -112,6 +112,7 @@ class PokerConsumer(JsonWebsocketConsumer):
             "user": user,
             "users": poker.users_as_list(),
             "settings": poker.settings_as_dict(),
+            "reveal_count": poker.reveal_count,
             "log": poker.log_as_list(),
         }
         self.send_json(message)

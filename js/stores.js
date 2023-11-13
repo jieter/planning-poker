@@ -9,6 +9,7 @@ export const isRevealed = writable(false);
 export const user = writable({});
 export const error = writable(undefined);
 export const log = writable([]);
+export const revealCount = writable(0);
 
 // Count votes in a list of votes, returning a list of (card, votes)-pairs in descending order.
 // [1, 1, 2, 3, 3, 3, 3] => [[3, 3], [1, 2], [2, 1]]
@@ -50,7 +51,7 @@ export const icon = derived(
         const totalVotes = voters.filter((p) => p.vote);
         const almostComplete = voters.length - totalVotes.length == 1;
         // Your vote is the last vote missing; others are waiting for you!
-        if (!$user.vote && almostComplete) {
+        if (voters.length > 1 && !$user.vote && almostComplete) {
             return '🚨';
         }
         return '🕶️';
@@ -107,6 +108,7 @@ export function connect(websocketUrl) {
                 deck.set(data.settings.deck);
                 log.set(data.log);
                 error.set(undefined);
+                revealCount.set(data.reveal_count);
 
                 break;
             case 'vote':

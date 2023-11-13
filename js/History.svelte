@@ -1,5 +1,5 @@
 <script>
-import { log, countVotes } from './stores.js';
+import { log, countVotes, revealCount, votes } from './stores.js';
 import Summary from './Summary.svelte';
 
 let collapsed = true;
@@ -15,7 +15,19 @@ function toggleCollapsed() {
     on:click={toggleCollapsed}
     on:keypress={toggleCollapsed}
     tabindex="0">
-    Voting history {#if collapsed}▲{:else}▼{/if}
+    {#if $revealCount == 0}
+        No history yet.
+    {:else if $revealCount == 1}
+        {#if collapsed}Show{:else}Hide{/if} previous votes
+    {:else}
+        {#if collapsed}Show{:else}Hide{/if} previous {$revealCount} rounds
+    {/if}
+
+    {#if $revealCount > 0}
+        {#if collapsed}
+            ▲{:else}
+            ▼{/if}
+    {/if}
 </div>
 {#if !collapsed}
     <div class="d-flex overflow-scroll mb-2 text-muted">
@@ -32,8 +44,6 @@ function toggleCollapsed() {
                     <Summary votes={voteSummary} emitConfetti={false} size="sm" />
                 </div>
             {/if}
-        {:else}
-            <p class="small m-2">No history yet.</p>
         {/each}
     </div>
 {/if}
