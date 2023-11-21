@@ -26,3 +26,12 @@ export function changeFavicon(emoji) {
 
     document.getElementsByTagName('head')[0].appendChild(link);
 }
+
+export function formatNumber(num) {
+    const absNum = Math.abs(num);
+    if (absNum > 999) {
+        return Math.sign(num) * (absNum / 1000).toFixed(1) + 'k';
+    } else {
+        return Math.sign(num) * absNum;
+    }
+}

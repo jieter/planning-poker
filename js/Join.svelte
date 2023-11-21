@@ -2,7 +2,7 @@
 import { onMount } from 'svelte';
 
 import Card from './Card.svelte';
-import { csrfToken, jsonScriptContents } from './utils.js';
+import { csrfToken, formatNumber, jsonScriptContents } from './utils.js';
 
 let error;
 
@@ -90,7 +90,7 @@ $: if (isSpectator != null) {
                                 {#each deck as [card, count]}
                                     <div class="d-inline-block text-center">
                                         <Card size="sm">{card}</Card>
-                                        <div class="text-muted">{count}x</div>
+                                        <div class="text-muted">{formatNumber(count)}</div>
                                     </div>
                                 {/each}
                             </div>
