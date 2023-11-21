@@ -137,3 +137,36 @@ class PokerTestCase(TestCase):
                 "choices": ["XS", "S", "M", "L", "XL", "?", "☕️"],
             },
         )
+
+    def test_statistics(self):
+        poker = PokerSession.objects.create(reveal_count=1)
+        poker.add_user("Bob")
+        poker.add_user("Charlie")
+        poker.add_user("George")
+        poker.logs.create(event="reveal", data={"deck": PokerSession.Decks.FIBONACCI, "votes": ["1", "1", "3"]})
+
+        poker = PokerSession.objects.create(reveal_count=2)
+        poker.add_user("Bob")
+        poker.add_user("George")
+        poker.logs.create(event="reveal", data={"deck": PokerSession.Decks.TSHIRT, "votes": ["L", None, "L"]})
+        poker.logs.create(
+            event="reveal", data={"deck": PokerSession.Decks.TSHIRT, "votes": ["L", None, "L", "XL", "XL"]}
+        )
+        # Single vote rounds are ignored
+        poker.logs.create(event="reveal", data={"deck": PokerSession.Decks.TSHIRT, "votes": ["L"]})
+
+        self.assertEqual(
+            PokerSession.objects.statistics(),
+            {
+                "basic": (
+                    ("Sessions", 2),
+                    ("Total votes", 9),
+                    ("Average #rounds", 1.5),
+                    ("Average #participants", 2.5),
+                ),
+                "decks": [
+                    [("L", 4), ("XL", 2)],
+                    [("1", 2), ("3", 1)],
+                ],
+            },
+        )

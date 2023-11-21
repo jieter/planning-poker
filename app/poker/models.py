@@ -23,7 +23,9 @@ class PokerSessionManager(models.Manager):
         vote_counter = defaultdict(Counter)
         reveals = Log.objects.filter(event="reveal")
         for deck, votes in reveals.values("data__deck").values_list("data__deck", "data__votes"):
-            vote_counter[deck].update(filter(lambda x: x, votes))
+            votes = list(filter(lambda x: x, votes))
+            if len(votes) > 1:  # Ignore rounds with only one vote.
+                vote_counter[deck].update(votes)
 
         def order_by_frequency(counter):
             return list(sorted(counter.items(), key=lambda x: x[1], reverse=True))
