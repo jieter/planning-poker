@@ -83,7 +83,6 @@ $: changeFavicon($icon);
     border-radius: 40vw 40vw 0 0;
     background: radial-gradient(circle at bottom, #3e803f 0%, #093d15 56%, #743f11 56%, #f0a25c);
     position: relative;
-    /* background-color: #eee; */
     margin: 4vh auto;
 }
 .controls {

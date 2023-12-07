@@ -1,11 +1,16 @@
 <script>
 export let color = null;
 export let size = 'regular';
+export let rotation = (Math.random() * 6)-3;
 
-$: height = size == 'sm' ? 45 : 70;
+$: height = size == 'sm' ? '4.5vw' : '7vw';
+$: width = size == 'sm' ? '2.6vw' : '4vw';
 </script>
 
-<div class="deck-card" style="background-color: {color || '#d8f7ec'}; height: 7vw; width: 4vw;">
+<div
+    class="deck-card"
+    style="transform: rotate({rotation}deg); background-color: {color || '#d8f7ec'}; height: {height}; width: {width};"
+>
     <slot />
 </div>
 
@@ -21,5 +26,6 @@ $: height = size == 'sm' ? 45 : 70;
     border-radius: 0.25rem;
     transition: background-color 100ms ease-out 200ms;
     filter: drop-shadow(0 0 0.50rem rgba(100, 100, 100, 0.3));
+    transform: rotate(2deg);
 }
 </style>
