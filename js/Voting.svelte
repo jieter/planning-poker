@@ -32,7 +32,6 @@ $: changeFavicon($icon);
 let random;
 $: {
     random = pseudoRandomGenerator($revealCount, -3, 3);
-    console.log($revealCount, random);
 }
 </script>
 

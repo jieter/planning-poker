@@ -42,7 +42,6 @@ export function pseudoRandomGenerator(seed, min, max) {
     return function random() {
         const x = Math.sin(seed++) * 10000;
         const n = x - Math.floor(x);
-        console.log(n);
 
         return n * (max - min) + min;
     };
