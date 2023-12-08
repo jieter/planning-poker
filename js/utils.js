@@ -19,7 +19,7 @@ function faviconHref(emoji) {
 
 export function changeFavicon(emoji) {
     const document = window.document;
-    const link = document.querySelector("link[rel*='icon']") || document.createElement('link');
+    const link = document.querySelector('link[rel*=\'icon\']') || document.createElement('link');
     link.type = 'image/svg+xml';
     link.rel = 'shortcut icon';
     link.href = faviconHref(emoji);
@@ -34,4 +34,16 @@ export function formatNumber(num) {
     } else {
         return Math.sign(num) * absNum;
     }
+}
+
+/* Function returning a pseudo-random number between min and max with a seed.
+ */
+export function pseudoRandomGenerator(seed, min, max) {
+    return function random() {
+        const x = Math.sin(seed++) * 10000;
+        const n = x - Math.floor(x);
+        console.log(n);
+
+        return n * (max - min) + min;
+    };
 }

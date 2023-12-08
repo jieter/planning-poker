@@ -6,9 +6,21 @@ import Debug from './Debug.svelte';
 import History from './History.svelte';
 import Participant from './Participant.svelte';
 import Settings from './Settings.svelte';
-import { choices, connect, error, isRevealed, participants, update, user, castVote, votes, icon } from './stores.js';
+import {
+    choices,
+    connect,
+    error,
+    isRevealed,
+    participants,
+    update,
+    user,
+    castVote,
+    votes,
+    icon,
+    revealCount,
+} from './stores.js';
 import Summary from './Summary.svelte';
-import { jsonScriptContents, changeFavicon } from './utils.js';
+import { jsonScriptContents, changeFavicon, pseudoRandomGenerator } from './utils.js';
 
 let debugOn = false;
 onMount(() => {
@@ -16,6 +28,12 @@ onMount(() => {
     debugOn = new URLSearchParams(window.location.search).get('debug');
 });
 $: changeFavicon($icon);
+
+let random;
+$: {
+    random = pseudoRandomGenerator($revealCount, -3, 3);
+    console.log($revealCount, random);
+}
 </script>
 
 {#if $error}
@@ -26,7 +44,7 @@ $: changeFavicon($icon);
 
 <div class="participants">
     {#each $participants as user, i (user.id)}
-        <Participant isRevealed={$isRevealed} {user} {i} count={$participants.length} />
+        <Participant isRevealed={$isRevealed} {user} {i} count={$participants.length} rotation={random()} />
     {/each}
     {#if $isRevealed}
         <div class="controls">
@@ -52,7 +70,7 @@ $: changeFavicon($icon);
                             disabled={$isRevealed}
                             class="btn m-0 p-0"
                             class:selected={choice == $user.vote}>
-                            <Card color={$isRevealed ? '#eee' : null}>
+                            <Card color={$isRevealed ? '#eee' : null} rotation={random()}>
                                 {choice}
                             </Card>
                         </button>
