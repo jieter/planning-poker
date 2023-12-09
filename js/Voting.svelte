@@ -6,9 +6,21 @@ import Debug from './Debug.svelte';
 import History from './History.svelte';
 import Participant from './Participant.svelte';
 import Settings from './Settings.svelte';
-import { choices, connect, error, isRevealed, participants, update, user, castVote, votes, icon } from './stores.js';
+import {
+    choices,
+    connect,
+    error,
+    isRevealed,
+    participants,
+    update,
+    user,
+    castVote,
+    votes,
+    icon,
+    revealCount,
+} from './stores.js';
 import Summary from './Summary.svelte';
-import { jsonScriptContents, changeFavicon } from './utils.js';
+import { jsonScriptContents, changeFavicon, pseudoRandomGenerator } from './utils.js';
 
 let debugOn = false;
 onMount(() => {
@@ -16,6 +28,13 @@ onMount(() => {
     debugOn = new URLSearchParams(window.location.search).get('debug');
 });
 $: changeFavicon($icon);
+
+let random;
+$: {
+    random = pseudoRandomGenerator($revealCount, -3, 3);
+}
+
+const radius = 45;
 </script>
 
 {#if $error}
@@ -24,13 +43,19 @@ $: changeFavicon($icon);
     </div>
 {/if}
 
-<div class="participants">
+<div class="participants" style="--radius: {radius}vw">
     {#each $participants as user, i (user.id)}
-        <Participant isRevealed={$isRevealed} {user} {i} count={$participants.length} />
+        <Participant
+            isRevealed={$isRevealed}
+            {user}
+            {i}
+            count={$participants.length}
+            radius="{radius * 0.94}vw"
+            rotation={random()} />
     {/each}
     {#if $isRevealed}
         <div class="controls">
-            <Summary votes={$votes} style="background-color: #e6e6e6;" class="p-2 mb-2 text-center rounded" />
+            <Summary votes={$votes} style="color: white;" class="p-2 mb-2 text-center rounded" />
         </div>
     {/if}
 </div>
@@ -52,7 +77,7 @@ $: changeFavicon($icon);
                             disabled={$isRevealed}
                             class="btn m-0 p-0"
                             class:selected={choice == $user.vote}>
-                            <Card color={$isRevealed ? '#eee' : null}>
+                            <Card color={$isRevealed ? '#eee' : null} rotation={random()}>
                                 {choice}
                             </Card>
                         </button>
@@ -78,11 +103,11 @@ $: changeFavicon($icon);
 
 <style>
 .participants {
-    width: 80vw;
-    height: 40vw;
-    border-radius: 40vw 40vw 0 0;
+    width: calc(var(--radius) * 1.98);
+    height: var(--radius);
+    border-radius: var(--radius) var(--radius) 0.75vw 0.75vw;
+    background: radial-gradient(circle at bottom, #3e803f 0%, #093d15 58%, #743f11 58.5%, #f0a25c);
     position: relative;
-    background-color: #eee;
     margin: 4vh auto;
 }
 .controls {
