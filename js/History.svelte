@@ -34,7 +34,7 @@ function toggleCollapsed() {
             <small class="voting-round ms-1 text-center">
                 Round {data.round}
                 {#if voteSummary.length == 0}
-                    <br />no votes
+                    <br />No votes
                 {/if}
             </small>
             {#if voteSummary.length > 0}

@@ -33,6 +33,8 @@ let random;
 $: {
     random = pseudoRandomGenerator($revealCount, -3, 3);
 }
+
+const radius = 45;
 </script>
 
 {#if $error}
@@ -41,13 +43,19 @@ $: {
     </div>
 {/if}
 
-<div class="participants">
+<div class="participants" style="--radius: {radius}vw">
     {#each $participants as user, i (user.id)}
-        <Participant isRevealed={$isRevealed} {user} {i} count={$participants.length} rotation={random()} />
+        <Participant
+            isRevealed={$isRevealed}
+            {user}
+            {i}
+            count={$participants.length}
+            radius="{radius * 0.94}vw"
+            rotation={random()} />
     {/each}
     {#if $isRevealed}
         <div class="controls">
-            <Summary votes={$votes} style="background-color: #e6e6e6;" class="p-2 mb-2 text-center rounded" />
+            <Summary votes={$votes} style="color: white;" class="p-2 mb-2 text-center rounded" />
         </div>
     {/if}
 </div>
@@ -95,10 +103,10 @@ $: {
 
 <style>
 .participants {
-    width: 80vw;
-    height: 40vw;
-    border-radius: 40vw 40vw 0 0;
-    background: radial-gradient(circle at bottom, #3e803f 0%, #093d15 56%, #743f11 56%, #f0a25c);
+    width: calc(var(--radius) * 1.98);
+    height: var(--radius);
+    border-radius: var(--radius) var(--radius) 0.75vw 0.75vw;
+    background: radial-gradient(circle at bottom, #3e803f 0%, #093d15 58%, #743f11 58.5%, #f0a25c);
     position: relative;
     margin: 4vh auto;
 }

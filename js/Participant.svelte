@@ -6,6 +6,7 @@ export let isRevealed;
 export let i;
 export let count;
 export let rotation;
+export let radius;
 
 // Amount of degrees to spread the participants over at the table
 const maxAngle = 174;
@@ -19,7 +20,7 @@ $: {
 }
 </script>
 
-<div class="participant" style="transform: rotate({angle}deg) translate(37.5vw) rotate(90deg)">
+<div class="participant" style="transform: translate(1.3vw) rotate({angle}deg) translate({radius}) rotate(90deg)">
     <strong>{user.name}</strong>
     <Card color={user.is_spectator ? '#effbf7' : undefined} {rotation}>
         {#if user.is_spectator}

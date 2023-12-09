@@ -2,14 +2,14 @@
 import { confetti } from '@neoconfetti/svelte';
 
 import Card from './Card.svelte';
-import { showConfetti } from './stores.js';
+import { showConfetti, revealCount } from './stores.js';
 import { pseudoRandomGenerator } from './utils';
 
 export let votes;
 export let size = undefined;
 export let emitConfetti = true;
 
-$: random = pseudoRandomGenerator(votes.length, -3, 3);
+$: random = pseudoRandomGenerator($revealCount, -3, 3);
 </script>
 
 {#if emitConfetti && $showConfetti}
@@ -19,7 +19,7 @@ $: random = pseudoRandomGenerator(votes.length, -3, 3);
     {#each votes as [vote, count] (vote)}
         <div class="d-inline-block text-center">
             <Card {size} rotation={random()}>{vote}</Card>
-            <div class="text-muted">{count}x</div>
+            <div class="count">{count}x</div>
         </div>
     {:else}
         <div class="col text-center p-2">No votes</div>
@@ -29,5 +29,8 @@ $: random = pseudoRandomGenerator(votes.length, -3, 3);
 <style>
 div {
     font-size: 1.85vw;
+}
+.count {
+    filter: drop-shadow(0 0 0.5em rgba(1, 1, 1, 0.5));
 }
 </style>
