@@ -21,8 +21,8 @@ $: {
 </script>
 
 <div class="participant" style="transform: translate(1.3vw) rotate({angle}deg) translate({radius}) rotate(90deg)">
-    <strong>{user.name}</strong>
-    <Card color={user.is_spectator ? '#effbf7' : undefined} {rotation}>
+    <strong class="name">{user.name}</strong>
+    <Card vote={user.vote} player={true} color={user.is_spectator ? '#effbf7' : undefined} {rotation}>
         {#if user.is_spectator}
             👁️
         {:else if user.vote}
@@ -43,6 +43,10 @@ $: {
 
     top: 95%;
     left: 50%;
-    margin: -2em;
+    margin: -4vw;
+}
+
+.participant .name {
+    font-size: 2vw;
 }
 </style>
