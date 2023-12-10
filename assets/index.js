@@ -1248,7 +1248,7 @@ if (typeof window !== 'undefined')
 const file$7 = "js/Card.svelte";
 
 function add_css$5(target) {
-	append_styles(target, "svelte-1g61g5j", ".deck-card.svelte-1g61g5j{display:flex;padding:6px 2px;justify-content:center;align-content:center;color:#444;margin:2px 2px;flex-direction:column;border:1px solid rgba(0, 0, 0, 0.125);border-radius:0.4vw;transition:background-color 100ms ease-out 200ms;filter:drop-shadow(0 0 0.5rem rgba(100, 100, 100, 0.3));transform:rotate(2deg);transition:transform 200ms ease-in-out 100ms;transition:margin-top 200ms ease-in-out 100ms}.player.svelte-1g61g5j{position:relative;opacity:0;top:-50px}.voted.svelte-1g61g5j{opacity:100 !important;top:0px !important;transition:all 525ms cubic-bezier(0, 0, 0, 1)}\n/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiQ2FyZC5zdmVsdGUiLCJzb3VyY2VzIjpbIkNhcmQuc3ZlbHRlIl0sInNvdXJjZXNDb250ZW50IjpbIjxzY3JpcHQ+XG5leHBvcnQgbGV0IGNvbG9yID0gbnVsbDtcbmV4cG9ydCBsZXQgc2l6ZSA9ICdyZWd1bGFyJztcbmV4cG9ydCBsZXQgcm90YXRpb24gPSAwO1xuZXhwb3J0IGxldCBwbGF5ZXIgPSBmYWxzZTtcbmV4cG9ydCBsZXQgdm90ZSA9IGZhbHNlO1xuXG4kOiB2b3RlZCA9IHZvdGUgPyBcInZvdGVkXCIgOiBcIlwiO1xuJDogcGxheWVyX2NsYXNzID0gcGxheWVyID09IHRydWUgPyBcInBsYXllclwiIDogXCJcIjtcbiQ6IGhlaWdodCA9IHNpemUgPT0gJ3NtJyA/ICc0LjV2dycgOiAnN3Z3JztcbiQ6IHdpZHRoID0gc2l6ZSA9PSAnc20nID8gJzIuNnZ3JyA6ICc0dncnO1xuJDogZm9udFNpemUgPSBzaXplID09ICdzbScgPyAnMS40dncnIDogJzEuODV2dyc7XG48L3NjcmlwdD5cblxuPGRpdlxuICAgIGNsYXNzPVwiZGVjay1jYXJkIHtwbGF5ZXJfY2xhc3N9IHt2b3RlZH1cIlxuICAgIHN0eWxlPVwidHJhbnNmb3JtOiByb3RhdGUoe3JvdGF0aW9ufWRlZyk7IGJhY2tncm91bmQtY29sb3I6IHtjb2xvciB8fFxuICAgICAgICAnI2Q4ZjdlYyd9OyBoZWlnaHQ6IHtoZWlnaHR9OyB3aWR0aDoge3dpZHRofTsgZm9udC1zaXplOiB7Zm9udFNpemV9XCI+XG4gICAgPHNsb3QgLz5cbjwvZGl2PlxuXG48c3R5bGU+XG4uZGVjay1jYXJkIHtcbiAgICBkaXNwbGF5OiBmbGV4O1xuICAgIHBhZGRpbmc6IDZweCAycHg7XG4gICAganVzdGlmeS1jb250ZW50OiBjZW50ZXI7XG4gICAgYWxpZ24tY29udGVudDogY2VudGVyO1xuICAgIGNvbG9yOiAjNDQ0O1xuICAgIG1hcmdpbjogMnB4IDJweDtcbiAgICBmbGV4LWRpcmVjdGlvbjogY29sdW1uO1xuICAgIGJvcmRlcjogMXB4IHNvbGlkIHJnYmEoMCwgMCwgMCwgMC4xMjUpO1xuICAgIGJvcmRlci1yYWRpdXM6IDAuNHZ3O1xuICAgIHRyYW5zaXRpb246IGJhY2tncm91bmQtY29sb3IgMTAwbXMgZWFzZS1vdXQgMjAwbXM7XG4gICAgZmlsdGVyOiBkcm9wLXNoYWRvdygwIDAgMC41cmVtIHJnYmEoMTAwLCAxMDAsIDEwMCwgMC4zKSk7XG4gICAgdHJhbnNmb3JtOiByb3RhdGUoMmRlZyk7XG4gICAgdHJhbnNpdGlvbjogdHJhbnNmb3JtIDIwMG1zIGVhc2UtaW4tb3V0IDEwMG1zO1xuICAgIHRyYW5zaXRpb246IG1hcmdpbi10b3AgMjAwbXMgZWFzZS1pbi1vdXQgMTAwbXM7XG59XG5cbi5wbGF5ZXIge1xuICAgIHBvc2l0aW9uOiByZWxhdGl2ZTtcbiAgICBvcGFjaXR5OiAwO1xuICAgIHRvcDogLTUwcHg7XG59XG5cbi52b3RlZCB7XG4gICAgb3BhY2l0eTogMTAwICFpbXBvcnRhbnQ7XG4gICAgdG9wOiAwcHggIWltcG9ydGFudDtcbiAgICB0cmFuc2l0aW9uOiBhbGwgNTI1bXMgY3ViaWMtYmV6aWVyKDAsIDAsIDAsIDEpO1xufVxuPC9zdHlsZT5cbiJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFzQkEseUJBQVcsQ0FDUCxPQUFPLENBQUUsSUFBSSxDQUNiLE9BQU8sQ0FBRSxHQUFHLENBQUMsR0FBRyxDQUNoQixlQUFlLENBQUUsTUFBTSxDQUN2QixhQUFhLENBQUUsTUFBTSxDQUNyQixLQUFLLENBQUUsSUFBSSxDQUNYLE1BQU0sQ0FBRSxHQUFHLENBQUMsR0FBRyxDQUNmLGNBQWMsQ0FBRSxNQUFNLENBQ3RCLE1BQU0sQ0FBRSxHQUFHLENBQUMsS0FBSyxDQUFDLEtBQUssQ0FBQyxDQUFDLENBQUMsQ0FBQyxDQUFDLENBQUMsQ0FBQyxDQUFDLENBQUMsS0FBSyxDQUFDLENBQ3RDLGFBQWEsQ0FBRSxLQUFLLENBQ3BCLFVBQVUsQ0FBRSxnQkFBZ0IsQ0FBQyxLQUFLLENBQUMsUUFBUSxDQUFDLEtBQUssQ0FDakQsTUFBTSxDQUFFLFlBQVksQ0FBQyxDQUFDLENBQUMsQ0FBQyxNQUFNLENBQUMsS0FBSyxHQUFHLENBQUMsQ0FBQyxHQUFHLENBQUMsQ0FBQyxHQUFHLENBQUMsQ0FBQyxHQUFHLENBQUMsQ0FBQyxDQUN4RCxTQUFTLENBQUUsT0FBTyxJQUFJLENBQUMsQ0FDdkIsVUFBVSxDQUFFLFNBQVMsQ0FBQyxLQUFLLENBQUMsV0FBVyxDQUFDLEtBQUssQ0FDN0MsVUFBVSxDQUFFLFVBQVUsQ0FBQyxLQUFLLENBQUMsV0FBVyxDQUFDLEtBQzdDLENBRUEsc0JBQVEsQ0FDSixRQUFRLENBQUUsUUFBUSxDQUNsQixPQUFPLENBQUUsQ0FBQyxDQUNWLEdBQUcsQ0FBRSxLQUNULENBRUEscUJBQU8sQ0FDSCxPQUFPLENBQUUsR0FBRyxDQUFDLFVBQVUsQ0FDdkIsR0FBRyxDQUFFLEdBQUcsQ0FBQyxVQUFVLENBQ25CLFVBQVUsQ0FBRSxHQUFHLENBQUMsS0FBSyxDQUFDLGFBQWEsQ0FBQyxDQUFDLENBQUMsQ0FBQyxDQUFDLENBQUMsQ0FBQyxDQUFDLENBQUMsQ0FBQyxDQUNqRCJ9 */");
+	append_styles(target, "svelte-1g61g5j", ".deck-card.svelte-1g61g5j{display:flex;padding:6px 2px;justify-content:center;align-content:center;color:#444;margin:2px 2px;flex-direction:column;border:1px solid rgba(0, 0, 0, 0.125);border-radius:0.4vw;transition:background-color 100ms ease-out 200ms;filter:drop-shadow(0 0 0.5rem rgba(100, 100, 100, 0.3));transform:rotate(2deg);transition:transform 200ms ease-in-out 100ms;transition:margin-top 200ms ease-in-out 100ms}.player.svelte-1g61g5j{position:relative;opacity:0;top:-50px}.voted.svelte-1g61g5j{opacity:100 !important;top:0px !important;transition:all 525ms cubic-bezier(0, 0, 0, 1)}\n/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiQ2FyZC5zdmVsdGUiLCJzb3VyY2VzIjpbIkNhcmQuc3ZlbHRlIl0sInNvdXJjZXNDb250ZW50IjpbIjxzY3JpcHQ+XG5leHBvcnQgbGV0IGNvbG9yID0gbnVsbDtcbmV4cG9ydCBsZXQgc2l6ZSA9ICdyZWd1bGFyJztcbmV4cG9ydCBsZXQgcm90YXRpb24gPSAwO1xuZXhwb3J0IGxldCBwbGF5ZXIgPSBmYWxzZTtcbmV4cG9ydCBsZXQgdm90ZSA9IGZhbHNlO1xuXG4kOiB2b3RlZF9jbGFzcyA9IHZvdGUgPyBcInZvdGVkXCIgOiBcIlwiO1xuJDogcGxheWVyX2NsYXNzID0gcGxheWVyID09IHRydWUgPyBcInBsYXllclwiIDogXCJcIjtcbiQ6IGhlaWdodCA9IHNpemUgPT0gJ3NtJyA/ICc0LjV2dycgOiAnN3Z3JztcbiQ6IHdpZHRoID0gc2l6ZSA9PSAnc20nID8gJzIuNnZ3JyA6ICc0dncnO1xuJDogZm9udFNpemUgPSBzaXplID09ICdzbScgPyAnMS40dncnIDogJzEuODV2dyc7XG48L3NjcmlwdD5cblxuPGRpdlxuICAgIGNsYXNzPVwiZGVjay1jYXJkIHtwbGF5ZXJfY2xhc3N9IHt2b3RlZF9jbGFzc31cIlxuICAgIHN0eWxlPVwidHJhbnNmb3JtOiByb3RhdGUoe3JvdGF0aW9ufWRlZyk7IGJhY2tncm91bmQtY29sb3I6IHtjb2xvciB8fFxuICAgICAgICAnI2Q4ZjdlYyd9OyBoZWlnaHQ6IHtoZWlnaHR9OyB3aWR0aDoge3dpZHRofTsgZm9udC1zaXplOiB7Zm9udFNpemV9XCI+XG4gICAgPHNsb3QgLz5cbjwvZGl2PlxuXG48c3R5bGU+XG4uZGVjay1jYXJkIHtcbiAgICBkaXNwbGF5OiBmbGV4O1xuICAgIHBhZGRpbmc6IDZweCAycHg7XG4gICAganVzdGlmeS1jb250ZW50OiBjZW50ZXI7XG4gICAgYWxpZ24tY29udGVudDogY2VudGVyO1xuICAgIGNvbG9yOiAjNDQ0O1xuICAgIG1hcmdpbjogMnB4IDJweDtcbiAgICBmbGV4LWRpcmVjdGlvbjogY29sdW1uO1xuICAgIGJvcmRlcjogMXB4IHNvbGlkIHJnYmEoMCwgMCwgMCwgMC4xMjUpO1xuICAgIGJvcmRlci1yYWRpdXM6IDAuNHZ3O1xuICAgIHRyYW5zaXRpb246IGJhY2tncm91bmQtY29sb3IgMTAwbXMgZWFzZS1vdXQgMjAwbXM7XG4gICAgZmlsdGVyOiBkcm9wLXNoYWRvdygwIDAgMC41cmVtIHJnYmEoMTAwLCAxMDAsIDEwMCwgMC4zKSk7XG4gICAgdHJhbnNmb3JtOiByb3RhdGUoMmRlZyk7XG4gICAgdHJhbnNpdGlvbjogdHJhbnNmb3JtIDIwMG1zIGVhc2UtaW4tb3V0IDEwMG1zO1xuICAgIHRyYW5zaXRpb246IG1hcmdpbi10b3AgMjAwbXMgZWFzZS1pbi1vdXQgMTAwbXM7XG59XG5cbi5wbGF5ZXIge1xuICAgIHBvc2l0aW9uOiByZWxhdGl2ZTtcbiAgICBvcGFjaXR5OiAwO1xuICAgIHRvcDogLTUwcHg7XG59XG5cbi52b3RlZCB7XG4gICAgb3BhY2l0eTogMTAwICFpbXBvcnRhbnQ7XG4gICAgdG9wOiAwcHggIWltcG9ydGFudDtcbiAgICB0cmFuc2l0aW9uOiBhbGwgNTI1bXMgY3ViaWMtYmV6aWVyKDAsIDAsIDAsIDEpO1xufVxuPC9zdHlsZT5cbiJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFzQkEseUJBQVcsQ0FDUCxPQUFPLENBQUUsSUFBSSxDQUNiLE9BQU8sQ0FBRSxHQUFHLENBQUMsR0FBRyxDQUNoQixlQUFlLENBQUUsTUFBTSxDQUN2QixhQUFhLENBQUUsTUFBTSxDQUNyQixLQUFLLENBQUUsSUFBSSxDQUNYLE1BQU0sQ0FBRSxHQUFHLENBQUMsR0FBRyxDQUNmLGNBQWMsQ0FBRSxNQUFNLENBQ3RCLE1BQU0sQ0FBRSxHQUFHLENBQUMsS0FBSyxDQUFDLEtBQUssQ0FBQyxDQUFDLENBQUMsQ0FBQyxDQUFDLENBQUMsQ0FBQyxDQUFDLENBQUMsS0FBSyxDQUFDLENBQ3RDLGFBQWEsQ0FBRSxLQUFLLENBQ3BCLFVBQVUsQ0FBRSxnQkFBZ0IsQ0FBQyxLQUFLLENBQUMsUUFBUSxDQUFDLEtBQUssQ0FDakQsTUFBTSxDQUFFLFlBQVksQ0FBQyxDQUFDLENBQUMsQ0FBQyxNQUFNLENBQUMsS0FBSyxHQUFHLENBQUMsQ0FBQyxHQUFHLENBQUMsQ0FBQyxHQUFHLENBQUMsQ0FBQyxHQUFHLENBQUMsQ0FBQyxDQUN4RCxTQUFTLENBQUUsT0FBTyxJQUFJLENBQUMsQ0FDdkIsVUFBVSxDQUFFLFNBQVMsQ0FBQyxLQUFLLENBQUMsV0FBVyxDQUFDLEtBQUssQ0FDN0MsVUFBVSxDQUFFLFVBQVUsQ0FBQyxLQUFLLENBQUMsV0FBVyxDQUFDLEtBQzdDLENBRUEsc0JBQVEsQ0FDSixRQUFRLENBQUUsUUFBUSxDQUNsQixPQUFPLENBQUUsQ0FBQyxDQUNWLEdBQUcsQ0FBRSxLQUNULENBRUEscUJBQU8sQ0FDSCxPQUFPLENBQUUsR0FBRyxDQUFDLFVBQVUsQ0FDdkIsR0FBRyxDQUFFLEdBQUcsQ0FBQyxVQUFVLENBQ25CLFVBQVUsQ0FBRSxHQUFHLENBQUMsS0FBSyxDQUFDLGFBQWEsQ0FBQyxDQUFDLENBQUMsQ0FBQyxDQUFDLENBQUMsQ0FBQyxDQUFDLENBQUMsQ0FBQyxDQUNqRCJ9 */");
 }
 
 function create_fragment$8(ctx) {
@@ -1262,13 +1262,13 @@ function create_fragment$8(ctx) {
 		c: function create() {
 			div = element("div");
 			if (default_slot) default_slot.c();
-			attr_dev(div, "class", div_class_value = "deck-card " + /*player_class*/ ctx[5] + " " + /*voted*/ ctx[6] + " svelte-1g61g5j");
+			attr_dev(div, "class", div_class_value = "deck-card " + /*player_class*/ ctx[5] + " " + /*voted_class*/ ctx[6] + " svelte-1g61g5j");
 			set_style(div, "transform", "rotate(" + /*rotation*/ ctx[1] + "deg)");
 			set_style(div, "background-color", /*color*/ ctx[0] || '#d8f7ec');
 			set_style(div, "height", /*height*/ ctx[4]);
 			set_style(div, "width", /*width*/ ctx[3]);
 			set_style(div, "font-size", /*fontSize*/ ctx[2]);
-			add_location(div, file$7, 14, 0, 370);
+			add_location(div, file$7, 14, 0, 376);
 		},
 		l: function claim(nodes) {
 			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -1298,7 +1298,7 @@ function create_fragment$8(ctx) {
 				}
 			}
 
-			if (!current || dirty & /*player_class, voted*/ 96 && div_class_value !== (div_class_value = "deck-card " + /*player_class*/ ctx[5] + " " + /*voted*/ ctx[6] + " svelte-1g61g5j")) {
+			if (!current || dirty & /*player_class, voted_class*/ 96 && div_class_value !== (div_class_value = "deck-card " + /*player_class*/ ctx[5] + " " + /*voted_class*/ ctx[6] + " svelte-1g61g5j")) {
 				attr_dev(div, "class", div_class_value);
 			}
 
@@ -1352,7 +1352,7 @@ function create_fragment$8(ctx) {
 }
 
 function instance$8($$self, $$props, $$invalidate) {
-	let voted;
+	let voted_class;
 	let player_class;
 	let height;
 	let width;
@@ -1389,7 +1389,7 @@ function instance$8($$self, $$props, $$invalidate) {
 		width,
 		height,
 		player_class,
-		voted
+		voted_class
 	});
 
 	$$self.$inject_state = $$props => {
@@ -1402,7 +1402,7 @@ function instance$8($$self, $$props, $$invalidate) {
 		if ('width' in $$props) $$invalidate(3, width = $$props.width);
 		if ('height' in $$props) $$invalidate(4, height = $$props.height);
 		if ('player_class' in $$props) $$invalidate(5, player_class = $$props.player_class);
-		if ('voted' in $$props) $$invalidate(6, voted = $$props.voted);
+		if ('voted_class' in $$props) $$invalidate(6, voted_class = $$props.voted_class);
 	};
 
 	if ($$props && "$$inject" in $$props) {
@@ -1411,7 +1411,7 @@ function instance$8($$self, $$props, $$invalidate) {
 
 	$$self.$$.update = () => {
 		if ($$self.$$.dirty & /*vote*/ 512) {
-			$$invalidate(6, voted = vote ? "voted" : "");
+			$$invalidate(6, voted_class = vote ? "voted" : "");
 		}
 
 		if ($$self.$$.dirty & /*player*/ 256) {
@@ -1438,7 +1438,7 @@ function instance$8($$self, $$props, $$invalidate) {
 		width,
 		height,
 		player_class,
-		voted,
+		voted_class,
 		size,
 		player,
 		vote,

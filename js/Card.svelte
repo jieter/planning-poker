@@ -5,7 +5,7 @@ export let rotation = 0;
 export let player = false;
 export let vote = false;
 
-$: voted = vote ? "voted" : "";
+$: voted_class = vote ? "voted" : "";
 $: player_class = player == true ? "player" : "";
 $: height = size == 'sm' ? '4.5vw' : '7vw';
 $: width = size == 'sm' ? '2.6vw' : '4vw';
@@ -13,7 +13,7 @@ $: fontSize = size == 'sm' ? '1.4vw' : '1.85vw';
 </script>
 
 <div
-    class="deck-card {player_class} {voted}"
+    class="deck-card {player_class} {voted_class}"
     style="transform: rotate({rotation}deg); background-color: {color ||
         '#d8f7ec'}; height: {height}; width: {width}; font-size: {fontSize}">
     <slot />
