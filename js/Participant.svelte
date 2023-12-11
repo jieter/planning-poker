@@ -55,8 +55,8 @@ $: {
 
 .card-back {
     margin: auto;
-    width: 85%;
-    height: 85%;
+    width: 84%;
+    height: 87%;
 
     /* Background pattern */
     border: 1px solid var(--bgcolor);
