@@ -4739,10 +4739,10 @@ class PlayerCard extends SvelteComponentDev {
 const file$2 = "js/Participant.svelte";
 
 function add_css$2(target) {
-	append_styles(target, "svelte-13f851q", ".participant.svelte-13f851q.svelte-13f851q{display:block;position:absolute;text-align:center;top:95%;left:50%;margin:-4vw}.participant.svelte-13f851q .name.svelte-13f851q{font-size:2vw}.card-back.svelte-13f851q.svelte-13f851q{margin:auto;width:85%;height:85%;border:1px solid var(--bgcolor);border-radius:0.4vw;background-size:0.8vw 0.8vw;background-image:linear-gradient(45deg, transparent 47%, var(--bgcolor) 47%, var(--bgcolor) 53%, transparent 53%),\n        linear-gradient(135deg, transparent 47%, var(--bgcolor) 47%, var(--bgcolor) 53%, transparent 53%)}\n/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiUGFydGljaXBhbnQuc3ZlbHRlIiwic291cmNlcyI6WyJQYXJ0aWNpcGFudC5zdmVsdGUiXSwic291cmNlc0NvbnRlbnQiOlsiPHNjcmlwdD5cbmltcG9ydCBDYXJkIGZyb20gJy4vQ2FyZC5zdmVsdGUnO1xuaW1wb3J0IFBsYXllckNhcmQgZnJvbSAnLi9QbGF5ZXJDYXJkLnN2ZWx0ZSc7XG5cbmV4cG9ydCBsZXQgdXNlcjtcbmV4cG9ydCBsZXQgaXNSZXZlYWxlZDtcbmV4cG9ydCBsZXQgaTtcbmV4cG9ydCBsZXQgY291bnQ7XG5leHBvcnQgbGV0IHJvdGF0aW9uO1xuZXhwb3J0IGxldCByYWRpdXM7XG5cbmNvbnN0IGNhcmRCYWNrQ29sb3IgPSBcIiNjYzYwNjBcIjtcbi8vIEFtb3VudCBvZiBkZWdyZWVzIHRvIHNwcmVhZCB0aGUgcGFydGljaXBhbnRzIG92ZXIgYXQgdGhlIHRhYmxlXG5jb25zdCBtYXhBbmdsZSA9IDE3NDtcbmxldCBhbmdsZTtcbiQ6IHtcbiAgICBhbmdsZSA9IC05MDtcbiAgICBpZiAoY291bnQgPiAxKSB7XG4gICAgICAgIC8vIEEgZml4ZWQgYW1vdW50IG9mIGRlZ3JlZXMsIG9yIGFsbCBwYXJ0aWNpcGFudHMgZXZlbmx5IGRpc3RyaWJ1dGVkLCB3aGF0ZXZlciBpcyBzbWFsbGVyLlxuICAgICAgICBhbmdsZSAtPSBNYXRoLm1pbigyMCwgbWF4QW5nbGUgLyBjb3VudCkgKiAoaSAtIChjb3VudCAtIDEpIC8gMik7XG4gICAgfVxufVxuPC9zY3JpcHQ+XG5cbjxkaXYgY2xhc3M9XCJwYXJ0aWNpcGFudFwiIHN0eWxlPVwidHJhbnNmb3JtOiB0cmFuc2xhdGUoMS4zdncpIHJvdGF0ZSh7YW5nbGV9ZGVnKSB0cmFuc2xhdGUoe3JhZGl1c30pIHJvdGF0ZSg5MGRlZylcIj5cbiAgICA8c3Ryb25nIGNsYXNzPVwibmFtZVwiPnt1c2VyLm5hbWV9PC9zdHJvbmc+XG4gICAgPFBsYXllckNhcmQgdm90ZT17dXNlci52b3RlfT5cbiAgICAgICAgPENhcmQgY29sb3I9XCJsaW5lYXItZ3JhZGllbnQoNDVkZWcsICNjMmMyYzIgMCUsICNGRkYgNjAlKVwiIHtyb3RhdGlvbn0+XG4gICAgICAgICAgICB7I2lmIHVzZXIuaXNfc3BlY3RhdG9yfVxuICAgICAgICAgICAgICAgIPCfkYHvuI9cbiAgICAgICAgICAgIHs6ZWxzZSBpZiB1c2VyLnZvdGV9XG4gICAgICAgICAgICAgICAgeyNpZiBpc1JldmVhbGVkfVxuICAgICAgICAgICAgICAgICAgICB7dXNlci52b3RlfVxuICAgICAgICAgICAgICAgIHs6ZWxzZX1cbiAgICAgICAgICAgICAgICAgICAgPGRpdiBzdHlsZT1cIi0tYmdjb2xvcjoge2NhcmRCYWNrQ29sb3J9XCIgY2xhc3M9XCJjYXJkLWJhY2tcIj48L2Rpdj5cbiAgICAgICAgICAgICAgICB7L2lmfVxuICAgICAgICAgICAgey9pZn1cbiAgICAgICAgPC9DYXJkPlxuICAgIDwvUGxheWVyQ2FyZD5cbjwvZGl2PlxuXG48c3R5bGU+XG4ucGFydGljaXBhbnQge1xuICAgIGRpc3BsYXk6IGJsb2NrO1xuICAgIHBvc2l0aW9uOiBhYnNvbHV0ZTtcbiAgICB0ZXh0LWFsaWduOiBjZW50ZXI7XG5cbiAgICB0b3A6IDk1JTtcbiAgICBsZWZ0OiA1MCU7XG4gICAgbWFyZ2luOiAtNHZ3O1xufVxuXG4ucGFydGljaXBhbnQgLm5hbWUge1xuICAgIGZvbnQtc2l6ZTogMnZ3O1xufVxuXG4uY2FyZC1iYWNrIHtcbiAgICBtYXJnaW46IGF1dG87XG4gICAgd2lkdGg6IDg1JTtcbiAgICBoZWlnaHQ6IDg1JTtcblxuICAgIC8qIEJhY2tncm91bmQgcGF0dGVybiAqL1xuICAgIGJvcmRlcjogMXB4IHNvbGlkIHZhcigtLWJnY29sb3IpO1xuICAgIGJvcmRlci1yYWRpdXM6IDAuNHZ3O1xuICAgIGJhY2tncm91bmQtc2l6ZTogMC44dncgMC44dnc7XG4gICAgYmFja2dyb3VuZC1pbWFnZTpcbiAgICAgICAgbGluZWFyLWdyYWRpZW50KDQ1ZGVnLCB0cmFuc3BhcmVudCA0NyUsIHZhcigtLWJnY29sb3IpIDQ3JSwgdmFyKC0tYmdjb2xvcikgNTMlLCB0cmFuc3BhcmVudCA1MyUpLFxuICAgICAgICBsaW5lYXItZ3JhZGllbnQoMTM1ZGVnLCB0cmFuc3BhcmVudCA0NyUsIHZhcigtLWJnY29sb3IpIDQ3JSwgdmFyKC0tYmdjb2xvcikgNTMlLCB0cmFuc3BhcmVudCA1MyUpO1xufVxuPC9zdHlsZT5cbiJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUEwQ0EsMENBQWEsQ0FDVCxPQUFPLENBQUUsS0FBSyxDQUNkLFFBQVEsQ0FBRSxRQUFRLENBQ2xCLFVBQVUsQ0FBRSxNQUFNLENBRWxCLEdBQUcsQ0FBRSxHQUFHLENBQ1IsSUFBSSxDQUFFLEdBQUcsQ0FDVCxNQUFNLENBQUUsSUFDWixDQUVBLDJCQUFZLENBQUMsb0JBQU0sQ0FDZixTQUFTLENBQUUsR0FDZixDQUVBLHdDQUFXLENBQ1AsTUFBTSxDQUFFLElBQUksQ0FDWixLQUFLLENBQUUsR0FBRyxDQUNWLE1BQU0sQ0FBRSxHQUFHLENBR1gsTUFBTSxDQUFFLEdBQUcsQ0FBQyxLQUFLLENBQUMsSUFBSSxTQUFTLENBQUMsQ0FDaEMsYUFBYSxDQUFFLEtBQUssQ0FDcEIsZUFBZSxDQUFFLEtBQUssQ0FBQyxLQUFLLENBQzVCLGdCQUFnQixDQUNaLGdCQUFnQixLQUFLLENBQUMsQ0FBQyxXQUFXLENBQUMsR0FBRyxDQUFDLENBQUMsSUFBSSxTQUFTLENBQUMsQ0FBQyxHQUFHLENBQUMsQ0FBQyxJQUFJLFNBQVMsQ0FBQyxDQUFDLEdBQUcsQ0FBQyxDQUFDLFdBQVcsQ0FBQyxHQUFHLENBQUMsQ0FBQztBQUN6RyxRQUFRLGdCQUFnQixNQUFNLENBQUMsQ0FBQyxXQUFXLENBQUMsR0FBRyxDQUFDLENBQUMsSUFBSSxTQUFTLENBQUMsQ0FBQyxHQUFHLENBQUMsQ0FBQyxJQUFJLFNBQVMsQ0FBQyxDQUFDLEdBQUcsQ0FBQyxDQUFDLFdBQVcsQ0FBQyxHQUFHLENBQ3hHIn0= */");
+	append_styles(target, "svelte-13f851q", ".participant.svelte-13f851q.svelte-13f851q{display:block;position:absolute;text-align:center;top:95%;left:50%;margin:-4vw}.participant.svelte-13f851q .name.svelte-13f851q{font-size:2vw}.card-back.svelte-13f851q.svelte-13f851q{margin:auto;width:85%;height:85%;border:1px solid var(--bgcolor);border-radius:0.4vw;background-size:0.8vw 0.8vw;background-image:linear-gradient(45deg, transparent 47%, var(--bgcolor) 47%, var(--bgcolor) 53%, transparent 53%),\n        linear-gradient(135deg, transparent 47%, var(--bgcolor) 47%, var(--bgcolor) 53%, transparent 53%)}\n/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiUGFydGljaXBhbnQuc3ZlbHRlIiwic291cmNlcyI6WyJQYXJ0aWNpcGFudC5zdmVsdGUiXSwic291cmNlc0NvbnRlbnQiOlsiPHNjcmlwdD5cbmltcG9ydCBDYXJkIGZyb20gJy4vQ2FyZC5zdmVsdGUnO1xuaW1wb3J0IFBsYXllckNhcmQgZnJvbSAnLi9QbGF5ZXJDYXJkLnN2ZWx0ZSc7XG5cbmV4cG9ydCBsZXQgdXNlcjtcbmV4cG9ydCBsZXQgaXNSZXZlYWxlZDtcbmV4cG9ydCBsZXQgaTtcbmV4cG9ydCBsZXQgY291bnQ7XG5leHBvcnQgbGV0IHJvdGF0aW9uO1xuZXhwb3J0IGxldCByYWRpdXM7XG5cbi8vIEFtb3VudCBvZiBkZWdyZWVzIHRvIHNwcmVhZCB0aGUgcGFydGljaXBhbnRzIG92ZXIgYXQgdGhlIHRhYmxlXG5jb25zdCBtYXhBbmdsZSA9IDE3NDtcbmxldCBhbmdsZTtcbiQ6IHtcbiAgICBhbmdsZSA9IC05MDtcbiAgICBpZiAoY291bnQgPiAxKSB7XG4gICAgICAgIC8vIEEgZml4ZWQgYW1vdW50IG9mIGRlZ3JlZXMsIG9yIGFsbCBwYXJ0aWNpcGFudHMgZXZlbmx5IGRpc3RyaWJ1dGVkLCB3aGF0ZXZlciBpcyBzbWFsbGVyLlxuICAgICAgICBhbmdsZSAtPSBNYXRoLm1pbigyMCwgbWF4QW5nbGUgLyBjb3VudCkgKiAoaSAtIChjb3VudCAtIDEpIC8gMik7XG4gICAgfVxufVxuPC9zY3JpcHQ+XG5cbjxkaXYgY2xhc3M9XCJwYXJ0aWNpcGFudFwiIHN0eWxlPVwidHJhbnNmb3JtOiB0cmFuc2xhdGUoMS4zdncpIHJvdGF0ZSh7YW5nbGV9ZGVnKSB0cmFuc2xhdGUoe3JhZGl1c30pIHJvdGF0ZSg5MGRlZylcIj5cbiAgICA8c3Ryb25nIGNsYXNzPVwibmFtZVwiPnt1c2VyLm5hbWV9PC9zdHJvbmc+XG4gICAgPFBsYXllckNhcmQgdm90ZT17dXNlci52b3RlfT5cbiAgICAgICAgPENhcmQgY29sb3I9XCJsaW5lYXItZ3JhZGllbnQoNDVkZWcsICNjMmMyYzIgMCUsICNGRkYgNjAlKVwiIHtyb3RhdGlvbn0+XG4gICAgICAgICAgICB7I2lmIHVzZXIuaXNfc3BlY3RhdG9yfVxuICAgICAgICAgICAgICAgIPCfkYHvuI9cbiAgICAgICAgICAgIHs6ZWxzZSBpZiB1c2VyLnZvdGV9XG4gICAgICAgICAgICAgICAgeyNpZiBpc1JldmVhbGVkfVxuICAgICAgICAgICAgICAgICAgICB7dXNlci52b3RlfVxuICAgICAgICAgICAgICAgIHs6ZWxzZX1cbiAgICAgICAgICAgICAgICAgICAgPGRpdiBzdHlsZT1cIi0tYmdjb2xvcjogI2NjNjA2MFwiIGNsYXNzPVwiY2FyZC1iYWNrXCI+PC9kaXY+XG4gICAgICAgICAgICAgICAgey9pZn1cbiAgICAgICAgICAgIHsvaWZ9XG4gICAgICAgIDwvQ2FyZD5cbiAgICA8L1BsYXllckNhcmQ+XG48L2Rpdj5cblxuPHN0eWxlPlxuLnBhcnRpY2lwYW50IHtcbiAgICBkaXNwbGF5OiBibG9jaztcbiAgICBwb3NpdGlvbjogYWJzb2x1dGU7XG4gICAgdGV4dC1hbGlnbjogY2VudGVyO1xuXG4gICAgdG9wOiA5NSU7XG4gICAgbGVmdDogNTAlO1xuICAgIG1hcmdpbjogLTR2dztcbn1cblxuLnBhcnRpY2lwYW50IC5uYW1lIHtcbiAgICBmb250LXNpemU6IDJ2dztcbn1cblxuLmNhcmQtYmFjayB7XG4gICAgbWFyZ2luOiBhdXRvO1xuICAgIHdpZHRoOiA4NSU7XG4gICAgaGVpZ2h0OiA4NSU7XG5cbiAgICAvKiBCYWNrZ3JvdW5kIHBhdHRlcm4gKi9cbiAgICBib3JkZXI6IDFweCBzb2xpZCB2YXIoLS1iZ2NvbG9yKTtcbiAgICBib3JkZXItcmFkaXVzOiAwLjR2dztcbiAgICBiYWNrZ3JvdW5kLXNpemU6IDAuOHZ3IDAuOHZ3O1xuICAgIGJhY2tncm91bmQtaW1hZ2U6XG4gICAgICAgIGxpbmVhci1ncmFkaWVudCg0NWRlZywgdHJhbnNwYXJlbnQgNDclLCB2YXIoLS1iZ2NvbG9yKSA0NyUsIHZhcigtLWJnY29sb3IpIDUzJSwgdHJhbnNwYXJlbnQgNTMlKSxcbiAgICAgICAgbGluZWFyLWdyYWRpZW50KDEzNWRlZywgdHJhbnNwYXJlbnQgNDclLCB2YXIoLS1iZ2NvbG9yKSA0NyUsIHZhcigtLWJnY29sb3IpIDUzJSwgdHJhbnNwYXJlbnQgNTMlKTtcbn1cbjwvc3R5bGU+XG4iXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBeUNBLDBDQUFhLENBQ1QsT0FBTyxDQUFFLEtBQUssQ0FDZCxRQUFRLENBQUUsUUFBUSxDQUNsQixVQUFVLENBQUUsTUFBTSxDQUVsQixHQUFHLENBQUUsR0FBRyxDQUNSLElBQUksQ0FBRSxHQUFHLENBQ1QsTUFBTSxDQUFFLElBQ1osQ0FFQSwyQkFBWSxDQUFDLG9CQUFNLENBQ2YsU0FBUyxDQUFFLEdBQ2YsQ0FFQSx3Q0FBVyxDQUNQLE1BQU0sQ0FBRSxJQUFJLENBQ1osS0FBSyxDQUFFLEdBQUcsQ0FDVixNQUFNLENBQUUsR0FBRyxDQUdYLE1BQU0sQ0FBRSxHQUFHLENBQUMsS0FBSyxDQUFDLElBQUksU0FBUyxDQUFDLENBQ2hDLGFBQWEsQ0FBRSxLQUFLLENBQ3BCLGVBQWUsQ0FBRSxLQUFLLENBQUMsS0FBSyxDQUM1QixnQkFBZ0IsQ0FDWixnQkFBZ0IsS0FBSyxDQUFDLENBQUMsV0FBVyxDQUFDLEdBQUcsQ0FBQyxDQUFDLElBQUksU0FBUyxDQUFDLENBQUMsR0FBRyxDQUFDLENBQUMsSUFBSSxTQUFTLENBQUMsQ0FBQyxHQUFHLENBQUMsQ0FBQyxXQUFXLENBQUMsR0FBRyxDQUFDLENBQUM7QUFDekcsUUFBUSxnQkFBZ0IsTUFBTSxDQUFDLENBQUMsV0FBVyxDQUFDLEdBQUcsQ0FBQyxDQUFDLElBQUksU0FBUyxDQUFDLENBQUMsR0FBRyxDQUFDLENBQUMsSUFBSSxTQUFTLENBQUMsQ0FBQyxHQUFHLENBQUMsQ0FBQyxXQUFXLENBQUMsR0FBRyxDQUN4RyJ9 */");
 }
 
-// (31:32) 
+// (30:32) 
 function create_if_block_1$2(ctx) {
 	let if_block_anchor;
 
@@ -4789,14 +4789,14 @@ function create_if_block_1$2(ctx) {
 		block,
 		id: create_if_block_1$2.name,
 		type: "if",
-		source: "(31:32) ",
+		source: "(30:32) ",
 		ctx
 	});
 
 	return block;
 }
 
-// (29:12) {#if user.is_spectator}
+// (28:12) {#if user.is_spectator}
 function create_if_block$3(ctx) {
 	let t;
 
@@ -4819,23 +4819,23 @@ function create_if_block$3(ctx) {
 		block,
 		id: create_if_block$3.name,
 		type: "if",
-		source: "(29:12) {#if user.is_spectator}",
+		source: "(28:12) {#if user.is_spectator}",
 		ctx
 	});
 
 	return block;
 }
 
-// (34:16) {:else}
+// (33:16) {:else}
 function create_else_block$3(ctx) {
 	let div;
 
 	const block = {
 		c: function create() {
 			div = element("div");
-			set_style(div, "--bgcolor", cardBackColor);
+			set_style(div, "--bgcolor", "#cc6060");
 			attr_dev(div, "class", "card-back svelte-13f851q");
-			add_location(div, file$2, 34, 20, 1041);
+			add_location(div, file$2, 33, 20, 1008);
 		},
 		m: function mount(target, anchor) {
 			insert_dev(target, div, anchor);
@@ -4852,14 +4852,14 @@ function create_else_block$3(ctx) {
 		block,
 		id: create_else_block$3.name,
 		type: "else",
-		source: "(34:16) {:else}",
+		source: "(33:16) {:else}",
 		ctx
 	});
 
 	return block;
 }
 
-// (32:16) {#if isRevealed}
+// (31:16) {#if isRevealed}
 function create_if_block_2$2(ctx) {
 	let t_value = /*user*/ ctx[0].vote + "";
 	let t;
@@ -4885,14 +4885,14 @@ function create_if_block_2$2(ctx) {
 		block,
 		id: create_if_block_2$2.name,
 		type: "if",
-		source: "(32:16) {#if isRevealed}",
+		source: "(31:16) {#if isRevealed}",
 		ctx
 	});
 
 	return block;
 }
 
-// (28:8) <Card color="linear-gradient(45deg, #c2c2c2 0%, #FFF 60%)" {rotation}>
+// (27:8) <Card color="linear-gradient(45deg, #c2c2c2 0%, #FFF 60%)" {rotation}>
 function create_default_slot_1(ctx) {
 	let if_block_anchor;
 
@@ -4941,14 +4941,14 @@ function create_default_slot_1(ctx) {
 		block,
 		id: create_default_slot_1.name,
 		type: "slot",
-		source: "(28:8) <Card color=\\\"linear-gradient(45deg, #c2c2c2 0%, #FFF 60%)\\\" {rotation}>",
+		source: "(27:8) <Card color=\\\"linear-gradient(45deg, #c2c2c2 0%, #FFF 60%)\\\" {rotation}>",
 		ctx
 	});
 
 	return block;
 }
 
-// (27:4) <PlayerCard vote={user.vote}>
+// (26:4) <PlayerCard vote={user.vote}>
 function create_default_slot$1(ctx) {
 	let card;
 	let current;
@@ -4999,7 +4999,7 @@ function create_default_slot$1(ctx) {
 		block,
 		id: create_default_slot$1.name,
 		type: "slot",
-		source: "(27:4) <PlayerCard vote={user.vote}>",
+		source: "(26:4) <PlayerCard vote={user.vote}>",
 		ctx
 	});
 
@@ -5032,10 +5032,10 @@ function create_fragment$3(ctx) {
 			t1 = space();
 			create_component(playercard.$$.fragment);
 			attr_dev(strong, "class", "name svelte-13f851q");
-			add_location(strong, file$2, 25, 4, 688);
+			add_location(strong, file$2, 24, 4, 655);
 			attr_dev(div, "class", "participant svelte-13f851q");
 			set_style(div, "transform", "translate(1.3vw) rotate(" + /*angle*/ ctx[4] + "deg) translate(" + /*radius*/ ctx[3] + ") rotate(90deg)");
-			add_location(div, file$2, 24, 0, 569);
+			add_location(div, file$2, 23, 0, 536);
 		},
 		l: function claim(nodes) {
 			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -5092,9 +5092,6 @@ function create_fragment$3(ctx) {
 	return block;
 }
 
-const cardBackColor = "#cc6060";
-
-// Amount of degrees to spread the participants over at the table
 const maxAngle = 174;
 
 function instance$3($$self, $$props, $$invalidate) {
@@ -5158,7 +5155,6 @@ function instance$3($$self, $$props, $$invalidate) {
 		count,
 		rotation,
 		radius,
-		cardBackColor,
 		maxAngle,
 		angle
 	});

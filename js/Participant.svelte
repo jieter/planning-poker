@@ -9,7 +9,6 @@ export let count;
 export let rotation;
 export let radius;
 
-const cardBackColor = "#cc6060";
 // Amount of degrees to spread the participants over at the table
 const maxAngle = 174;
 let angle;
@@ -32,7 +31,7 @@ $: {
                 {#if isRevealed}
                     {user.vote}
                 {:else}
-                    <div style="--bgcolor: {cardBackColor}" class="card-back"></div>
+                    <div style="--bgcolor: #cc6060" class="card-back"></div>
                 {/if}
             {/if}
         </Card>
