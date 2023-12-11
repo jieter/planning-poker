@@ -1,5 +1,6 @@
 <script>
 import Card from './Card.svelte';
+import PlayerCard from './PlayerCard.svelte';
 
 export let user;
 export let isRevealed;
@@ -22,17 +23,19 @@ $: {
 
 <div class="participant" style="transform: translate(1.3vw) rotate({angle}deg) translate({radius}) rotate(90deg)">
     <strong class="name">{user.name}</strong>
-    <Card vote={user.vote} player={true} color={user.is_spectator ? '#effbf7' : undefined} {rotation}>
-        {#if user.is_spectator}
-            👁️
-        {:else if user.vote}
-            {#if isRevealed}
-                {user.vote}
-            {:else}
-                ⌛
+    <PlayerCard vote={user.vote}>
+        <Card color={user.is_spectator ? '#effbf7' : undefined} {rotation}>
+            {#if user.is_spectator}
+                👁️
+            {:else if user.vote}
+                {#if isRevealed}
+                    {user.vote}
+                {:else}
+                    ⌛
+                {/if}
             {/if}
-        {/if}
-    </Card>
+        </Card>
+    </PlayerCard>
 </div>
 
 <style>
