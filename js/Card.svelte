@@ -31,5 +31,4 @@ $: fontSize = size == 'sm' ? '1.4vw' : '1.85vw';
     transform: rotate(2deg);
     transition: transform 200ms ease-in-out 100ms;
 }
-
 </style>
