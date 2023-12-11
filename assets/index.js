@@ -4600,7 +4600,7 @@ class History extends SvelteComponentDev {
 const file$3 = "js/PlayerCard.svelte";
 
 function add_css$3(target) {
-	append_styles(target, "svelte-5np18d", ".player-card.svelte-5np18d{position:relative;opacity:0;top:-50px}.vote.svelte-5np18d{opacity:100 !important;top:0px !important;transition:all 525ms cubic-bezier(0, 0, 0, 1)}\n/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiUGxheWVyQ2FyZC5zdmVsdGUiLCJzb3VyY2VzIjpbIlBsYXllckNhcmQuc3ZlbHRlIl0sInNvdXJjZXNDb250ZW50IjpbIjxzY3JpcHQ+XG5leHBvcnQgbGV0IHZvdGU7XG48L3NjcmlwdD5cblxuPGRpdiBjbGFzcz1cInBsYXllci1jYXJkXCIgY2xhc3M6dm90ZT5cbiAgICA8c2xvdCAvPlxuPC9kaXY+XG5cbjxzdHlsZT5cbi5wbGF5ZXItY2FyZCB7XG4gICAgcG9zaXRpb246IHJlbGF0aXZlO1xuICAgIG9wYWNpdHk6IDA7XG4gICAgdG9wOiAtNTBweDtcbn1cblxuLnZvdGUge1xuICAgIG9wYWNpdHk6IDEwMCAhaW1wb3J0YW50O1xuICAgIHRvcDogMHB4ICFpbXBvcnRhbnQ7XG4gICAgdHJhbnNpdGlvbjogYWxsIDUyNW1zIGN1YmljLWJlemllcigwLCAwLCAwLCAxKTtcbn1cbjwvc3R5bGU+XG4iXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBU0EsMEJBQWEsQ0FDVCxRQUFRLENBQUUsUUFBUSxDQUNsQixPQUFPLENBQUUsQ0FBQyxDQUNWLEdBQUcsQ0FBRSxLQUNULENBRUEsbUJBQU0sQ0FDRixPQUFPLENBQUUsR0FBRyxDQUFDLFVBQVUsQ0FDdkIsR0FBRyxDQUFFLEdBQUcsQ0FBQyxVQUFVLENBQ25CLFVBQVUsQ0FBRSxHQUFHLENBQUMsS0FBSyxDQUFDLGFBQWEsQ0FBQyxDQUFDLENBQUMsQ0FBQyxDQUFDLENBQUMsQ0FBQyxDQUFDLENBQUMsQ0FBQyxDQUNqRCJ9 */");
+	append_styles(target, "svelte-q802sj", ".player-card.svelte-q802sj{position:relative;opacity:0;top:-50px}.vote.svelte-q802sj{opacity:100 !important;top:0px !important;transition:all 525ms cubic-bezier(0, 0.5, 0, 0.9)}\n/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiUGxheWVyQ2FyZC5zdmVsdGUiLCJzb3VyY2VzIjpbIlBsYXllckNhcmQuc3ZlbHRlIl0sInNvdXJjZXNDb250ZW50IjpbIjxzY3JpcHQ+XG5leHBvcnQgbGV0IHZvdGU7XG48L3NjcmlwdD5cblxuPGRpdiBjbGFzcz1cInBsYXllci1jYXJkXCIgY2xhc3M6dm90ZT5cbiAgICA8c2xvdCAvPlxuPC9kaXY+XG5cbjxzdHlsZT5cbi5wbGF5ZXItY2FyZCB7XG4gICAgcG9zaXRpb246IHJlbGF0aXZlO1xuICAgIG9wYWNpdHk6IDA7XG4gICAgdG9wOiAtNTBweDtcbn1cblxuLnZvdGUge1xuICAgIG9wYWNpdHk6IDEwMCAhaW1wb3J0YW50O1xuICAgIHRvcDogMHB4ICFpbXBvcnRhbnQ7XG4gICAgLyogY3ViaWMtYmV6aWVyIGNhbiBiZSB0ZXN0ZWQgd2l0aCBodHRwczovLzEwMDE1LmlvL3Rvb2xzL2Nzcy1jdWJpYy1iZXppZXItZ2VuZXJhdG9yICovXG4gICAgdHJhbnNpdGlvbjogYWxsIDUyNW1zIGN1YmljLWJlemllcigwLCAwLjUsIDAsIDAuOSk7XG59XG48L3N0eWxlPlxuIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQVNBLDBCQUFhLENBQ1QsUUFBUSxDQUFFLFFBQVEsQ0FDbEIsT0FBTyxDQUFFLENBQUMsQ0FDVixHQUFHLENBQUUsS0FDVCxDQUVBLG1CQUFNLENBQ0YsT0FBTyxDQUFFLEdBQUcsQ0FBQyxVQUFVLENBQ3ZCLEdBQUcsQ0FBRSxHQUFHLENBQUMsVUFBVSxDQUVuQixVQUFVLENBQUUsR0FBRyxDQUFDLEtBQUssQ0FBQyxhQUFhLENBQUMsQ0FBQyxDQUFDLEdBQUcsQ0FBQyxDQUFDLENBQUMsQ0FBQyxDQUFDLEdBQUcsQ0FDckQifQ== */");
 }
 
 function create_fragment$4(ctx) {
@@ -4613,7 +4613,7 @@ function create_fragment$4(ctx) {
 		c: function create() {
 			div = element("div");
 			if (default_slot) default_slot.c();
-			attr_dev(div, "class", "player-card svelte-5np18d");
+			attr_dev(div, "class", "player-card svelte-q802sj");
 			toggle_class(div, "vote", /*vote*/ ctx[0]);
 			add_location(div, file$3, 4, 0, 37);
 		},

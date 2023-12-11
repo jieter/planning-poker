@@ -16,6 +16,7 @@ export let vote;
 .vote {
     opacity: 100 !important;
     top: 0px !important;
-    transition: all 525ms cubic-bezier(0, 0, 0, 1);
+    /* cubic-bezier can be tested with https://10015.io/tools/css-cubic-bezier-generator */
+    transition: all 525ms cubic-bezier(0, 0.5, 0, 0.9);
 }
 </style>
