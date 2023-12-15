@@ -75,7 +75,7 @@ $: if (isSpectator != null) {
                 <iframe
                     width="560"
                     height="315"
-                    src="https://www.youtube.com/embed/yTgSQ2AQGAI?si=DlVBJIO-EzP2psVx"
+                    src="https://www.youtube.com/embed/yTgSQ2AQGAI?autoplay=1"
                     title="YouTube video player"
                     frameborder="0"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
