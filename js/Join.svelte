@@ -68,6 +68,21 @@ $: if (isSpectator != null) {
             </form>
         </div>
     </div>
+    <div class="row">
+        <div class="col"></div>
+        <div class="col">
+            {#if name && name.toLowerCase().includes('daniel')}
+                <iframe
+                    width="560"
+                    height="315"
+                    src="https://www.youtube.com/embed/yTgSQ2AQGAI?si=DlVBJIO-EzP2psVx"
+                    title="YouTube video player"
+                    frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowfullscreen></iframe>
+            {/if}
+        </div>
+    </div>
 </div>
 
 <div class="fixed-bottom mb-3">

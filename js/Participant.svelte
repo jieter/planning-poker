@@ -62,8 +62,7 @@ $: {
     border: 1px solid var(--bgcolor);
     border-radius: 0.4vw;
     background-size: 0.8vw 0.8vw;
-    background-image:
-        linear-gradient(45deg, transparent 47%, var(--bgcolor) 47%, var(--bgcolor) 53%, transparent 53%),
+    background-image: linear-gradient(45deg, transparent 47%, var(--bgcolor) 47%, var(--bgcolor) 53%, transparent 53%),
         linear-gradient(135deg, transparent 47%, var(--bgcolor) 47%, var(--bgcolor) 53%, transparent 53%);
 }
 </style>
