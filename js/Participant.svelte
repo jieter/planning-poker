@@ -1,5 +1,6 @@
 <script>
 import Card from './Card.svelte';
+import PlayerCard from './PlayerCard.svelte';
 
 export let user;
 export let isRevealed;
@@ -21,18 +22,20 @@ $: {
 </script>
 
 <div class="participant" style="transform: translate(1.3vw) rotate({angle}deg) translate({radius}) rotate(90deg)">
-    <strong>{user.name}</strong>
-    <Card color={user.is_spectator ? '#effbf7' : undefined} {rotation}>
-        {#if user.is_spectator}
-            👁️
-        {:else if user.vote}
-            {#if isRevealed}
-                {user.vote}
-            {:else}
-                ⌛
+    <strong class="name">{user.name}</strong>
+    <PlayerCard vote={user.vote}>
+        <Card color="linear-gradient(45deg, #c2c2c2 0%, #FFF 60%)" {rotation}>
+            {#if user.is_spectator}
+                👁️
+            {:else if user.vote}
+                {#if isRevealed}
+                    {user.vote}
+                {:else}
+                    <div style="--bgcolor: #cc6060" class="card-back"></div>
+                {/if}
             {/if}
-        {/if}
-    </Card>
+        </Card>
+    </PlayerCard>
 </div>
 
 <style>
@@ -43,6 +46,24 @@ $: {
 
     top: 95%;
     left: 50%;
-    margin: -2em;
+    margin: -4vw;
+}
+
+.participant .name {
+    font-size: 2vw;
+}
+
+.card-back {
+    margin: auto;
+    width: 84%;
+    height: 87%;
+
+    /* Background pattern */
+    border: 1px solid var(--bgcolor);
+    border-radius: 0.4vw;
+    background-size: 0.8vw 0.8vw;
+    background-image:
+        linear-gradient(45deg, transparent 47%, var(--bgcolor) 47%, var(--bgcolor) 53%, transparent 53%),
+        linear-gradient(135deg, transparent 47%, var(--bgcolor) 47%, var(--bgcolor) 53%, transparent 53%);
 }
 </style>
