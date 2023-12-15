@@ -98,3 +98,4 @@ CHANNEL_LAYERS = {
 }
 
 SESSION_COOKIE_HTTPONLY = False
+SECURE_REFERRER_POLICY = "no-referrer-when-downgrade"
