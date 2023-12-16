@@ -12,6 +12,20 @@ let isSpectator = null;
 
 let statistics;
 
+function youtubeMovie(name) {
+    if (!name) {
+        return undefined;
+    }
+    name = name.toLowerCase();
+    if (name.match(/dan.*l/)) {
+        return 'yTgSQ2AQGAI'; // Poker Face
+    } else if (name.match(/arn.*t/)) {
+        return '6p-lDYPR2P8'; // Material girl
+    } else if (name.match(/jonat.*n/)) {
+        return 'N5imM0ftfkQ'; // Stadsduif
+    }
+}
+
 onMount(() => {
     const previousName = localStorage.getItem('name');
     if (previousName) {
@@ -22,7 +36,6 @@ onMount(() => {
         isSpectator = previousIsSpectator === 'true';
     }
     statistics = jsonScriptContents('statistics');
-    console.log(statistics);
 });
 
 const update = () => {
@@ -34,6 +47,8 @@ $: if (name) {
 $: if (isSpectator != null) {
     localStorage.setItem('isSpectator', isSpectator ? 'true' : 'false');
 }
+
+$: youtube = youtubeMovie(name);
 </script>
 
 <div class="container">
@@ -70,16 +85,15 @@ $: if (isSpectator != null) {
     </div>
     <div class="row">
         <div class="col"></div>
-        <div class="col">
-            {#if name && name.toLowerCase().includes('daniel')}
-                <iframe
-                    width="560"
-                    height="315"
-                    src="https://www.youtube.com/embed/yTgSQ2AQGAI?autoplay=1"
-                    title="YouTube video player"
-                    frameborder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    allowfullscreen></iframe>
+        <div class="col-8">
+            {#if youtube}
+                <div class="ratio ratio-16x9">
+                    <iframe
+                        src="https://www.youtube.com/embed/{youtube}?autoplay=1"
+                        title="Youtube video"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowfullscreen></iframe>
+                </div>
             {/if}
         </div>
     </div>
