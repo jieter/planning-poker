@@ -1,17 +1,5 @@
 <script>
-import {
-    deck,
-    decks,
-    choices,
-    error,
-    isRevealed,
-    participants,
-    update,
-    user,
-    autoReveal,
-    votes,
-    log,
-} from './stores.js';
+import { deck, decks, choices, error, isRevealed, participants, update, user, autoReveal, votes, log } from './stores';
 
 $: settings = {
     error: $error,

@@ -1,14 +1,14 @@
 import Cookies from 'js-cookie';
 
-export function jsonScriptContents(id) {
-    let element = document.getElementById(id);
-    if (element) {
+export function jsonScriptContents(id: string): any {
+    const element = document.getElementById(id) as HTMLElement;
+    if (element && element.textContent) {
         return JSON.parse(element.textContent);
     }
     return undefined;
 }
 
-export function csrfToken() {
+export function csrfToken(): string {
     return Cookies.get('csrftoken');
 }
 
@@ -19,7 +19,7 @@ function faviconHref(emoji) {
 
 export function changeFavicon(emoji) {
     const document = window.document;
-    const link = document.querySelector('link[rel*="icon"]') || document.createElement('link');
+    const link = (document.querySelector('link[rel*="icon"]') || document.createElement('link')) as HTMLLinkElement;
     link.type = 'image/svg+xml';
     link.rel = 'shortcut icon';
     link.href = faviconHref(emoji);
@@ -27,19 +27,19 @@ export function changeFavicon(emoji) {
     document.getElementsByTagName('head')[0].appendChild(link);
 }
 
-export function formatNumber(num) {
+export function formatNumber(num: number): str {
     const absNum = Math.abs(num);
     if (absNum > 999) {
-        return Math.sign(num) * (absNum / 1000).toFixed(1) + 'k';
+        return Math.sign(num) * Number((absNum / 1000).toFixed(1)) + 'k';
     } else {
-        return Math.sign(num) * absNum;
+        return Math.sign(num) * absNum + '';
     }
 }
 
 /* Function returning function which returns a pseudo-random number between min and max with a seed.
  */
-export function pseudoRandomGenerator(seed, min, max) {
-    return function random() {
+export function pseudoRandomGenerator(seed: number, min: number, max: number): () => number {
+    return function random(): number {
         const x = Math.sin(seed++) * 10000;
         const n = x - Math.floor(x);
 

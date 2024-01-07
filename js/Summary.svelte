@@ -2,7 +2,7 @@
 import { confetti } from '@neoconfetti/svelte';
 
 import Card from './Card.svelte';
-import { showConfetti, revealCount } from './stores.js';
+import { showConfetti, revealCount } from './stores';
 import { pseudoRandomGenerator } from './utils';
 
 export let votes;

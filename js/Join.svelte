@@ -2,7 +2,7 @@
 import { onMount } from 'svelte';
 
 import Card from './Card.svelte';
-import { csrfToken, formatNumber, jsonScriptContents } from './utils.js';
+import { csrfToken, formatNumber, jsonScriptContents } from './utils';
 
 let error;
 

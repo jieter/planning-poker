@@ -1,4 +1,5 @@
 {% load static %}
+{% load vite %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -14,7 +15,7 @@
         {{ statistics|json_script:'statistics' }}
     {% endif %}
     {{ websocket_url|json_script:"websocket_url" }}
-    <script defer src="{% static 'index.js' %}"></script>
-
+    {% vite_hmr %}
+    {% vite 'js/index.ts' %}
 </body>
 </html>
