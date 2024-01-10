@@ -1,5 +1,5 @@
-import { describe, expect, test } from 'vitest'
-import { pseudoRandomGenerator } from './utils'
+import { describe, expect, test } from 'vitest';
+import { pseudoRandomGenerator } from './utils';
 
 describe('pseudoRandomGenerator', () => {
     test('with the same seed, output is predictable', () => {
@@ -11,4 +11,4 @@ describe('pseudoRandomGenerator', () => {
         expect(generator2()).toBeCloseTo(7.388);
         expect(generator2()).toBeCloseTo(9.768);
     });
-})
+});

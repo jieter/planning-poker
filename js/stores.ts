@@ -96,7 +96,7 @@ export function update(action, extraParams: ExtraParams = undefined) {
 }
 
 export function connect(websocketUrl) {
-    console.log('Connect to', websocketUrl)
+    console.log('Connect to', websocketUrl);
     socket = new WebSocket(websocketUrl);
 
     socket.onclose = () => {

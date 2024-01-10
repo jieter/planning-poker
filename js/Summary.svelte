@@ -1,20 +1,13 @@
 <script>
-import { confetti } from '@neoconfetti/svelte';
-
 import Card from './Card.svelte';
-import { showConfetti, revealCount } from './stores';
+import { revealCount } from './stores';
 import { pseudoRandomGenerator } from './utils';
 
 export let votes;
 export let size = undefined;
-export let emitConfetti = true;
-
-$: random = pseudoRandomGenerator($revealCount, -3, 3);
+export let random = () => 0;
 </script>
 
-{#if emitConfetti && $showConfetti}
-    <div use:confetti />
-{/if}
 <div {...$$restProps}>
     {#each votes as [vote, count] (vote)}
         <div class="d-inline-block text-center">
