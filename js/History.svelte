@@ -1,5 +1,5 @@
 <script>
-import { log, countVotes, revealCount, votes } from './stores.js';
+import { log, countVotes, revealCount, votes } from './stores';
 import Summary from './Summary.svelte';
 
 let collapsed = true;

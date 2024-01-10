@@ -71,6 +71,10 @@ cover/
 *.mo
 
 # Django stuff:
+staticfiles
+
+# created by vite
+assets/
 
 # Flask stuff:
 instance/

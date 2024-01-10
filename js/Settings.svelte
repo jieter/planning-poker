@@ -1,5 +1,5 @@
 <script>
-import { autoReveal, deck, decks, isRevealed, clearVotes, revealVotes, votingComplete } from './stores.js';
+import { autoReveal, deck, decks, isRevealed, clearVotes, revealVotes, votingComplete } from './stores';
 </script>
 
 <div class="d-flex justify-content-center m-3">

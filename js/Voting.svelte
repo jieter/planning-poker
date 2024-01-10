@@ -18,9 +18,9 @@ import {
     votes,
     icon,
     revealCount,
-} from './stores.js';
+} from './stores';
 import Summary from './Summary.svelte';
-import { jsonScriptContents, changeFavicon, pseudoRandomGenerator } from './utils.js';
+import { jsonScriptContents, changeFavicon, pseudoRandomGenerator } from './utils';
 
 let debugOn = false;
 onMount(() => {
