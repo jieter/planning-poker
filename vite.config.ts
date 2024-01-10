@@ -11,6 +11,7 @@ export default defineConfig({
                 poker: 'js/index.ts',
             },
         },
+        sourcemap: true,
     },
     plugins: [
         svelte({
