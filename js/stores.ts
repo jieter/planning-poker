@@ -16,7 +16,7 @@ export const revealCount = writable(0);
 // Count votes in a list of votes, returning a list of (card, votes)-pairs in descending order.
 // [1, 1, 2, 3, 3, 3, 3] => [[3, 3], [1, 2], [2, 1]]
 export function countVotes(votes: Array<string | null>): Array<VoteCount> {
-    const _votes = {};
+    const _votes: {[vote: string]: number} = {};
     votes.forEach((vote: string | null) => {
         if (vote != null) {
             if (!(vote in _votes)) {
@@ -65,7 +65,7 @@ export const icon = derived(
 );
 
 // Set the vote for the current user to `value`
-const setUserVote = (value) => {
+const setUserVote = (value: string | null) => {
     user.update(($user) => {
         $user.vote = value;
         return $user;
@@ -77,8 +77,8 @@ type Params = {
     action: string;
 } & ExtraParams;
 
-let socket;
-export function update(action, extraParams: ExtraParams = undefined) {
+let socket: WebSocket;
+export function update(action: string, extraParams: ExtraParams = undefined) {
     if (!socket || socket.readyState != 1) {
         // wait until socket is open
         console.log('Socket not open yet');
@@ -89,7 +89,7 @@ export function update(action, extraParams: ExtraParams = undefined) {
     socket.send(JSON.stringify(params));
 }
 
-export function connect(websocketUrl) {
+export function connect(websocketUrl: string) {
     console.log('Connect to', websocketUrl);
     socket = new WebSocket(websocketUrl);
 
@@ -103,7 +103,7 @@ export function connect(websocketUrl) {
     socket.onopen = () => {
         // Sometimes the 'init' message is not send from the backend if the page was already open,
         // sending an init message will result in an init response.
-        update({ action: 'init' });
+        update('init');
     };
     socket.onmessage = (e) => {
         const data = JSON.parse(e.data);
@@ -147,7 +147,7 @@ export const clearVotes = () => {
     update('clear');
 };
 
-export function castVote(value) {
+export function castVote(value: string) {
     return () => {
         if (!get(isRevealed)) {
             update('vote', { value: value });
