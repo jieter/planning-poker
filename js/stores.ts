@@ -1,6 +1,6 @@
 import { derived, writable, get } from 'svelte/store';
 
-import { VoteCount, Participant } from './types.d';
+import type { VoteCount, Participant } from './types.d';
 
 export const participants = writable<Array<Participant>>([]);
 export const choices = writable<Array<string>>([]);

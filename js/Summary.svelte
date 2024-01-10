@@ -1,6 +1,6 @@
 <script lang="ts">
 import Card from './Card.svelte';
-import { VoteCount } from './types.d';
+import type { VoteCount } from './types.d';
 
 export let votes: Array<VoteCount>;
 export let size: string | undefined = undefined;
