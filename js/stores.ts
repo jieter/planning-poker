@@ -7,16 +7,16 @@ export const choices = writable<Array<string>>([]);
 export const decks = writable([]);
 export const autoReveal = writable<boolean>(false);
 export const deck = writable<string>('tshirt');
-export const isRevealed = writable(false);
+export const isRevealed = writable<boolean>(false);
 export const user = writable<Participant>({ vote: null, is_spectator: false });
-export const error = writable<string | undefined>(undefined);
+export const error = writable<string | null>(null);
 export const log = writable([]);
 export const revealCount = writable(0);
 
 // Count votes in a list of votes, returning a list of (card, votes)-pairs in descending order.
 // [1, 1, 2, 3, 3, 3, 3] => [[3, 3], [1, 2], [2, 1]]
 export function countVotes(votes: Array<string | null>): Array<VoteCount> {
-    const _votes: {[vote: string]: number} = {};
+    const _votes: { [vote: string]: number } = {};
     votes.forEach((vote: string | null) => {
         if (vote != null) {
             if (!(vote in _votes)) {
@@ -119,7 +119,7 @@ export function connect(websocketUrl: string) {
                 decks.set(data.settings.decks);
                 deck.set(data.settings.deck);
                 log.set(data.log);
-                error.set(undefined);
+                error.set(null);
                 revealCount.set(data.reveal_count);
 
                 break;
