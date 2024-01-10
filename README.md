@@ -15,6 +15,11 @@
 1. Run the server: `./manage.py runserver`
 1. Navigate to http://localhost:8004/ to start a new session
 
+If you want to run in production mode:
+1. `npm run build`
+1. `PRODUCTION=1 ./manage.py collectstatic`
+1. `PRODUCTION=1 HOSTNAME=localhost ./manage.py runserver`
+
 # Running on regular ubuntu 22.04
 1. `sudo apt install redis-server python3.11-venv supervisor`
 1. `python3.11 -m venv virtualenv`
