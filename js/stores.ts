@@ -13,7 +13,7 @@ export const decks = writable([]);
 export const autoReveal = writable<boolean>(false);
 export const deck = writable<string>('tshirt');
 export const isRevealed = writable(false);
-export const user = writable<Participant>({vote: null, is_spectator: false});
+export const user = writable<Participant>({ vote: null, is_spectator: false });
 export const error = writable<string | undefined>(undefined);
 export const log = writable([]);
 export const revealCount = writable(0);
@@ -78,7 +78,7 @@ const setUserVote = (value) => {
     });
 };
 
-type ExtraParams =  Record<string, any> | undefined;
+type ExtraParams = Record<string, any> | undefined;
 type Params = {
     action: string;
 } & ExtraParams;
