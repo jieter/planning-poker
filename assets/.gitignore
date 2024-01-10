@@ -1,0 +1,4 @@
+# Ignore build files
+
+manifest.json
+assets/
