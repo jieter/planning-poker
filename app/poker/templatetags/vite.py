@@ -5,7 +5,7 @@ from django.conf import settings
 from django.utils.html import format_html_join
 from django.utils.safestring import mark_safe
 
-"""Very inimal version of https://github.com/MrBin99/django-vite"""
+"""Very minimal version of https://github.com/MrBin99/django-vite"""
 VITE_MANIFEST = settings.BASE_DIR / "assets/manifest.json"
 VITE_URL = "http://localhost:5173"
 
