@@ -30,10 +30,6 @@ def index_view(request, session_id=None):
     if not context.get("websocket_url"):
         try:
             context["statistics"] = PokerSession.objects.statistics()
-            context["statistics"]["debug"] = {
-                "scheme": request.scheme,
-                "SERVER_NAME": request.META["SERVER_NAME"],
-            }
         except Exception:  # Ignore errors in statistics, since is is not crucial functionality
             if settings.DEBUG:  # But if debug is True, do crash
                 raise
