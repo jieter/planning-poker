@@ -96,7 +96,9 @@ export function update(action, extraParams: ExtraParams = undefined) {
 }
 
 export function connect(websocketUrl) {
+    console.log('Connect to', websocketUrl)
     socket = new WebSocket(websocketUrl);
+
     socket.onclose = () => {
         error.set('WebSocket connection closed unexpectedly. Trying to reconnect in 2s...');
         setTimeout(() => {

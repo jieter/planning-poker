@@ -3,10 +3,10 @@ import Join from './Join.svelte';
 import { jsonScriptContents } from './utils';
 import Voting from './Voting.svelte';
 
-export let websocketUrl = jsonScriptContents('websocket_url');
+export let url = jsonScriptContents('websocket_url');
 </script>
 
-{#if websocketUrl}
+{#if url}
     <Voting />
 {:else}
     <Join />

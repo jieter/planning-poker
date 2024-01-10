@@ -17,7 +17,7 @@
 
 If you want to run in production mode:
 1. `npm run build`
-1. `PRODUCTION=1 ./manage.py collectstatic`
+1. `PRODUCTION=1 ./manage.py collectstatic --noinput`
 1. `PRODUCTION=1 HOSTNAME=localhost ./manage.py runserver`
 
 # Running on regular ubuntu 22.04
