@@ -1,5 +1,6 @@
-<script>
+<script lang="ts">
 import { onMount } from 'svelte';
+import { confetti } from '@neoconfetti/svelte';
 
 import Card from './Card.svelte';
 import Debug from './Debug.svelte';
@@ -18,6 +19,7 @@ import {
     votes,
     icon,
     revealCount,
+    showConfetti,
 } from './stores';
 import Summary from './Summary.svelte';
 import { jsonScriptContents, changeFavicon, pseudoRandomGenerator } from './utils';
@@ -25,14 +27,12 @@ import { jsonScriptContents, changeFavicon, pseudoRandomGenerator } from './util
 let debugOn = false;
 onMount(() => {
     connect(jsonScriptContents('websocket_url'));
-    debugOn = new URLSearchParams(window.location.search).get('debug');
+    debugOn = !!new URLSearchParams(window.location.search).get('debug');
 });
 $: changeFavicon($icon);
 
-let random;
-$: {
-    random = pseudoRandomGenerator($revealCount, -3, 3);
-}
+let random: () => number;
+$: random = pseudoRandomGenerator($revealCount, -3, 3);
 
 const radius = 45;
 </script>
@@ -55,7 +55,10 @@ const radius = 45;
     {/each}
     {#if $isRevealed}
         <div class="controls">
-            <Summary votes={$votes} style="color: white;" class="p-2 mb-2 text-center rounded" />
+            {#if $showConfetti}
+                <div use:confetti />
+            {/if}
+            <Summary votes={$votes} {random} style="color: white;" class="p-2 mb-2 text-center rounded" />
         </div>
     {/if}
 </div>

@@ -1,18 +1,18 @@
-<script>
+<script lang="ts">
 import { onMount } from 'svelte';
 
 import Card from './Card.svelte';
 import { csrfToken, formatNumber, jsonScriptContents } from './utils';
 
-let error;
+let error: string | undefined;
 
 // Screen name in the poker session
-let name = '';
-let isSpectator = null;
+let name: string = '';
+let isSpectator: boolean | null = null;
 
-let statistics;
+let statistics: { [key: string]: any };
 
-function youtubeMovie(name) {
+function youtubeMovie(name: string | undefined) {
     if (!name) {
         return undefined;
     }

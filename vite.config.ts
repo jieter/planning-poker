@@ -1,3 +1,4 @@
+/// <reference types="vitest" />
 import { defineConfig } from 'vite';
 import { svelte } from '@sveltejs/vite-plugin-svelte';
 
@@ -12,6 +13,11 @@ export default defineConfig({
             },
         },
         sourcemap: true,
+    },
+    test: {
+        globals: true,
+        environment: 'jsdom',
+        setupFiles: ['js/testsetup.js'],
     },
     plugins: [
         svelte({

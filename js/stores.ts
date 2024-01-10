@@ -1,28 +1,22 @@
 import { derived, writable, get } from 'svelte/store';
 
-interface Participant {
-    id?: number;
-    name?: string;
-    vote: string | null;
-    is_spectator: boolean;
-}
+import type { VoteCount, Participant } from './types.d';
 
 export const participants = writable<Array<Participant>>([]);
 export const choices = writable<Array<string>>([]);
 export const decks = writable([]);
 export const autoReveal = writable<boolean>(false);
 export const deck = writable<string>('tshirt');
-export const isRevealed = writable(false);
+export const isRevealed = writable<boolean>(false);
 export const user = writable<Participant>({ vote: null, is_spectator: false });
-export const error = writable<string | undefined>(undefined);
+export const error = writable<string | null>(null);
 export const log = writable([]);
 export const revealCount = writable(0);
 
 // Count votes in a list of votes, returning a list of (card, votes)-pairs in descending order.
 // [1, 1, 2, 3, 3, 3, 3] => [[3, 3], [1, 2], [2, 1]]
-type VoteCount = [string, number];
 export function countVotes(votes: Array<string | null>): Array<VoteCount> {
-    const _votes = {};
+    const _votes: { [vote: string]: number } = {};
     votes.forEach((vote: string | null) => {
         if (vote != null) {
             if (!(vote in _votes)) {
@@ -71,7 +65,7 @@ export const icon = derived(
 );
 
 // Set the vote for the current user to `value`
-const setUserVote = (value) => {
+const setUserVote = (value: string | null) => {
     user.update(($user) => {
         $user.vote = value;
         return $user;
@@ -83,8 +77,8 @@ type Params = {
     action: string;
 } & ExtraParams;
 
-let socket;
-export function update(action, extraParams: ExtraParams = undefined) {
+let socket: WebSocket;
+export function update(action: string, extraParams: ExtraParams = undefined) {
     if (!socket || socket.readyState != 1) {
         // wait until socket is open
         console.log('Socket not open yet');
@@ -95,8 +89,8 @@ export function update(action, extraParams: ExtraParams = undefined) {
     socket.send(JSON.stringify(params));
 }
 
-export function connect(websocketUrl) {
-    console.log('Connect to', websocketUrl)
+export function connect(websocketUrl: string) {
+    console.log('Connect to', websocketUrl);
     socket = new WebSocket(websocketUrl);
 
     socket.onclose = () => {
@@ -109,7 +103,7 @@ export function connect(websocketUrl) {
     socket.onopen = () => {
         // Sometimes the 'init' message is not send from the backend if the page was already open,
         // sending an init message will result in an init response.
-        update({ action: 'init' });
+        update('init');
     };
     socket.onmessage = (e) => {
         const data = JSON.parse(e.data);
@@ -125,7 +119,7 @@ export function connect(websocketUrl) {
                 decks.set(data.settings.decks);
                 deck.set(data.settings.deck);
                 log.set(data.log);
-                error.set(undefined);
+                error.set(null);
                 revealCount.set(data.reveal_count);
 
                 break;
@@ -153,7 +147,7 @@ export const clearVotes = () => {
     update('clear');
 };
 
-export function castVote(value) {
+export function castVote(value: string) {
     return () => {
         if (!get(isRevealed)) {
             update('vote', { value: value });

@@ -1,17 +1,18 @@
-<script>
+<script lang="ts">
 import Card from './Card.svelte';
 import PlayerCard from './PlayerCard.svelte';
+import type { Participant } from './types.d';
 
-export let user;
-export let isRevealed;
-export let i;
-export let count;
-export let rotation;
-export let radius;
+export let user: Participant;
+export let isRevealed: boolean;
+export let i: number;
+export let count: number;
+export let rotation: number;
+export let radius: string;
 
 // Amount of degrees to spread the participants over at the table
 const maxAngle = 174;
-let angle;
+let angle: number;
 $: {
     angle = -90;
     if (count > 1) {

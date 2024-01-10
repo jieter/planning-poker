@@ -9,15 +9,15 @@ export function jsonScriptContents(id: string): any {
 }
 
 export function csrfToken(): string {
-    return Cookies.get('csrftoken');
+    return Cookies.get('csrftoken') || '';
 }
 
 // https://formito.com/tools/favicon
-function faviconHref(emoji) {
+function faviconHref(emoji: string): string {
     return `data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22256%22 height=%22256%22 viewBox=%220 0 100 100%22><text x=%2250%%22 y=%2250%%22 dominant-baseline=%22central%22 text-anchor=%22middle%22 font-size=%2280%22>${emoji}</text></svg>`;
 }
 
-export function changeFavicon(emoji) {
+export function changeFavicon(emoji: string) {
     const document = window.document;
     const link = (document.querySelector('link[rel*="icon"]') || document.createElement('link')) as HTMLLinkElement;
     link.type = 'image/svg+xml';
@@ -27,7 +27,7 @@ export function changeFavicon(emoji) {
     document.getElementsByTagName('head')[0].appendChild(link);
 }
 
-export function formatNumber(num: number): str {
+export function formatNumber(num: number): string {
     const absNum = Math.abs(num);
     if (absNum > 999) {
         return Math.sign(num) * Number((absNum / 1000).toFixed(1)) + 'k';

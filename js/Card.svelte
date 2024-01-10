@@ -1,7 +1,7 @@
-<script>
-export let color = null;
-export let size = 'regular';
-export let rotation = 0;
+<script lang="ts">
+export let color: string | null = null;
+export let size: string = 'regular';
+export let rotation: number = 0;
 
 $: height = size == 'sm' ? '4.5vw' : '7vw';
 $: width = size == 'sm' ? '2.6vw' : '4vw';

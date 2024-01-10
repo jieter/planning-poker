@@ -39,7 +39,7 @@ function toggleCollapsed() {
             </small>
             {#if voteSummary.length > 0}
                 <div class="small history-item text-start rounded flex-shrink-0 m-1 p-1">
-                    <Summary votes={voteSummary} emitConfetti={false} size="sm" />
+                    <Summary votes={voteSummary} size="sm" />
                 </div>
             {/if}
         {/each}

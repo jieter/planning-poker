@@ -1,5 +1,5 @@
-<script>
-export let vote;
+<script lang="ts">
+export let vote: string | null;
 </script>
 
 <div class="player-card" class:vote>
