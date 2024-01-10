@@ -1,11 +1,10 @@
-<script>
+<script lang="ts">
 import Card from './Card.svelte';
-import { revealCount } from './stores';
-import { pseudoRandomGenerator } from './utils';
+import { VoteCount } from './types.d';
 
-export let votes;
-export let size = undefined;
-export let random = () => 0;
+export let votes: Array<VoteCount>;
+export let size: string | undefined = undefined;
+export let random: () => number = () => 0;
 </script>
 
 <div {...$$restProps}>

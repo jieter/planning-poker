@@ -1,11 +1,6 @@
 import { derived, writable, get } from 'svelte/store';
 
-interface Participant {
-    id?: number;
-    name?: string;
-    vote: string | null;
-    is_spectator: boolean;
-}
+import { VoteCount, Participant } from './types.d';
 
 export const participants = writable<Array<Participant>>([]);
 export const choices = writable<Array<string>>([]);
@@ -20,7 +15,6 @@ export const revealCount = writable(0);
 
 // Count votes in a list of votes, returning a list of (card, votes)-pairs in descending order.
 // [1, 1, 2, 3, 3, 3, 3] => [[3, 3], [1, 2], [2, 1]]
-type VoteCount = [string, number];
 export function countVotes(votes: Array<string | null>): Array<VoteCount> {
     const _votes = {};
     votes.forEach((vote: string | null) => {
