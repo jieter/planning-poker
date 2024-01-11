@@ -16,5 +16,5 @@ describe('pseudoRandomGenerator', () => {
 describe('countVotes', () => {
     test('no votes', () => {
         expect(countVotes([])).toEqual([]);
-    })
-})
+    });
+});
