@@ -24,19 +24,19 @@ $: {
 
 <div class="participant" style="transform: translate(1.3vw) rotate({angle}deg) translate({radius}) rotate(90deg)">
     <strong class="name">{user.name}</strong>
-    <PlayerCard vote={user.vote}>
-        <Card color="linear-gradient(45deg, #c2c2c2 0%, #FFF 60%)" {rotation}>
-            {#if user.is_spectator}
-                👁️
-            {:else if user.vote}
+    {#if user.is_spectator}
+        <Card color="linear-gradient(45deg, #c2c2c2 0%, #FFF 60%)" {rotation}>👁️</Card>
+    {:else}
+        <PlayerCard vote={user.vote}>
+            <Card color="linear-gradient(45deg, #c2c2c2 0%, #FFF 60%)" {rotation}>
                 {#if isRevealed}
                     {user.vote}
                 {:else}
                     <div style="--bgcolor: #cc6060" class="card-back"></div>
                 {/if}
-            {/if}
-        </Card>
-    </PlayerCard>
+            </Card>
+        </PlayerCard>
+    {/if}
 </div>
 
 <style>
