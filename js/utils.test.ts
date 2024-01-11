@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { pseudoRandomGenerator } from './utils';
+import { countVotes, pseudoRandomGenerator } from './utils';
 
 describe('pseudoRandomGenerator', () => {
     test('with the same seed, output is predictable', () => {
@@ -12,3 +12,9 @@ describe('pseudoRandomGenerator', () => {
         expect(generator2()).toBeCloseTo(9.768);
     });
 });
+
+describe('countVotes', () => {
+    test('no votes', () => {
+        expect(countVotes([])).toEqual([]);
+    })
+})

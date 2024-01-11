@@ -1,6 +1,7 @@
 import { derived, writable, get } from 'svelte/store';
 
-import type { VoteCount, Participant } from './types.d';
+import type { Participant } from './types.d';
+import { countVotes } from './utils';
 
 export const participants = writable<Array<Participant>>([]);
 export const choices = writable<Array<string>>([]);
@@ -12,22 +13,6 @@ export const user = writable<Participant>({ vote: null, is_spectator: false });
 export const error = writable<string | null>(null);
 export const log = writable([]);
 export const revealCount = writable(0);
-
-// Count votes in a list of votes, returning a list of (card, votes)-pairs in descending order.
-// [1, 1, 2, 3, 3, 3, 3] => [[3, 3], [1, 2], [2, 1]]
-export function countVotes(votes: Array<string | null>): Array<VoteCount> {
-    const _votes: { [vote: string]: number } = {};
-    votes.forEach((vote: string | null) => {
-        if (vote != null) {
-            if (!(vote in _votes)) {
-                _votes[vote] = 0;
-            }
-            _votes[vote] += 1;
-        }
-    });
-    const voteCounts: Array<VoteCount> = Object.entries(_votes);
-    return voteCounts.sort((a, b) => b[1] - a[1]);
-}
 
 // Derive a sorted list of (card, votes)-pairs off of the participants store:
 export const votes = derived(participants, ($participants: Array<Participant>) => {

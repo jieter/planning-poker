@@ -1,4 +1,5 @@
 import Cookies from 'js-cookie';
+import type { VoteCount } from './types';
 
 export function jsonScriptContents(id: string): any {
     const element = document.getElementById(id) as HTMLElement;
@@ -45,4 +46,20 @@ export function pseudoRandomGenerator(seed: number, min: number, max: number): (
 
         return n * (max - min) + min;
     };
+}
+
+// Count votes in a list of votes, returning a list of (card, votes)-pairs in descending order.
+// [1, 1, 2, 3, 3, 3, 3] => [[3, 3], [1, 2], [2, 1]]
+export function countVotes(votes: Array<string | null>): Array<VoteCount> {
+    const _votes: { [vote: string]: number } = {};
+    votes.forEach((vote: string | null) => {
+        if (vote != null) {
+            if (!(vote in _votes)) {
+                _votes[vote] = 0;
+            }
+            _votes[vote] += 1;
+        }
+    });
+    const voteCounts: Array<VoteCount> = Object.entries(_votes);
+    return voteCounts.sort((a, b) => b[1] - a[1]);
 }
