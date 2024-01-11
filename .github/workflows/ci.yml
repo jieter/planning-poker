@@ -12,6 +12,7 @@ jobs:
           cache: "pip"
       - run: echo "PY=$(python -VV | sha256sum | cut -d' ' -f1)" >> $GITHUB_ENV
       - run: pip install pre-commit
+      - run: npm install
       - uses: actions/cache@v3
         with:
           path: ~/.cache/pre-commit
