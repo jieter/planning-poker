@@ -32,6 +32,6 @@ repos:
       hooks:
           - id: prettier
             name: prettier
-            entry: npm run format
+            entry: npm run format --
             language: node
-            types: [javascript]
+            types_or: [javascript,svelte,html]

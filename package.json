@@ -9,7 +9,7 @@
     "preview": "vite preview",
     "check": "tsc --noEmit && svelte-check --tsconfig ./tsconfig.json",
     "eslint": "eslint -c package.json --ext .js,.svelte --fix js/",
-    "format": "prettier --write --plugin prettier-plugin-svelte js/ *.ts",
+    "format": "prettier --write --plugin prettier-plugin-svelte",
     "test": "vitest"
   },
   "devDependencies": {
