@@ -34,4 +34,4 @@ repos:
             name: prettier
             entry: npm run format --
             language: node
-            types_or: [javascript,svelte,html,ts]
+            types_or: [javascript,svelte,ts]

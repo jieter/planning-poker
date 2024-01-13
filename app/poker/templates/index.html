@@ -9,7 +9,11 @@
     <body>
         <div id="poker" class="m-1"></div>
 
-        {% if statistics %} {{ statistics|json_script:'statistics' }} {% endif %} {{
-        websocket_url|json_script:"websocket_url" }} {% vite_hmr %} {% vite 'js/index.ts' %}
+        {% if statistics %}
+            {{ statistics|json_script:'statistics' }}
+        {% endif %}
+        {{ websocket_url|json_script:"websocket_url" }}
+        {% vite_hmr %}
+        {% vite 'js/index.ts' %}
     </body>
 </html>
