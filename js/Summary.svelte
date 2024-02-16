@@ -3,14 +3,13 @@ import Card from './Card.svelte';
 import type { VoteCount } from './types.d';
 
 export let votes: Array<VoteCount>;
-export let size: string | undefined = undefined;
 export let random: () => number = () => 0;
 </script>
 
-<div {...$$restProps}>
+<div {...$$restProps} class="summary">
     {#each votes as [vote, count] (vote)}
-        <div class="d-inline-block text-center">
-            <Card {size} rotation={random()}>{vote}</Card>
+        <div class="d-inline-block text-center card-wrapper">
+            <Card rotation={random()}>{vote}</Card>
             <div class="count">{count}x</div>
         </div>
     {:else}
@@ -19,9 +18,11 @@ export let random: () => number = () => 0;
 </div>
 
 <style>
-div {
-    font-size: 1.85vw;
+.card-wrapper {
+    width: 35px;
+    margin: 4px;
 }
+
 .count {
     filter: drop-shadow(0 0 0.5em rgba(1, 1, 1, 0.5));
 }
