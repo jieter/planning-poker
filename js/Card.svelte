@@ -1,6 +1,6 @@
 <script lang="ts">
 export let rotation: number = 0;
-export let background: string = 'linear-gradient(45deg, #c2c2c2 0%, #fff 60%);';
+export let background: string = '';
 </script>
 
 <div class="deck-card" style="transform: rotate({rotation}deg); background: {background};">
@@ -18,10 +18,11 @@ export let background: string = 'linear-gradient(45deg, #c2c2c2 0%, #fff 60%);';
 
     color: #444;
 
-    font-size: 1em;
+    font-size: 1.05rem;
+    font-weight: 500;
     margin: 2px;
     flex-direction: column;
-    background-color: white;
+    background: linear-gradient(45deg, #c2c2c2 0%, #fff 50%);
     border: 1px solid rgba(0, 0, 0, 0.2);
     border-radius: 5%;
     transition:

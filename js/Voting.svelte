@@ -127,7 +127,7 @@ $: if (innerWidth) {
 .vote-button {
     width: 40px;
     border: 0px !important;
-    margin: 0 2px 0px 2px !important;
+    margin: 0 2px !important;
 }
 button.selected {
     font-weight: bold;
