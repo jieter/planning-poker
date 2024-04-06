@@ -34,23 +34,30 @@ $: changeFavicon($icon);
 let random: () => number;
 $: random = pseudoRandomGenerator($revealCount, -3, 3);
 
-const radius = 45;
+let innerWidth: number;
+
+// Radius of the table in pixels, depending on the window width, with a maximum
+let radius = 500;
+$: if (innerWidth) {
+    radius = Math.min(1000, innerWidth) / 2.2;
+}
 </script>
 
+<svelte:window bind:innerWidth />
 {#if $error}
     <div class="fixed-top">
         <div class="alert alert-danger" role="alert">{$error}</div>
     </div>
 {/if}
 
-<div class="participants" style="--radius: {radius}vw">
+<div class="participants mt-5" style="--radius: {radius}px">
     {#each $participants as user, i (user.id)}
         <Participant
             isRevealed={$isRevealed}
             {user}
             {i}
             count={$participants.length}
-            radius="{radius * 0.94}vw"
+            radius={radius * 0.94}
             rotation={random()} />
     {/each}
     {#if $isRevealed}
@@ -78,11 +85,9 @@ const radius = 45;
                             on:click={castVote(choice)}
                             on:keypress={castVote(choice)}
                             disabled={$isRevealed}
-                            class="btn m-0 p-0"
+                            class="vote-button p-0"
                             class:selected={choice == $user.vote}>
-                            <Card color={$isRevealed ? '#eee' : null} rotation={random()}>
-                                {choice}
-                            </Card>
+                            <Card background="#fff">{choice}</Card>
                         </button>
                     {/each}
                 </div>
@@ -108,7 +113,7 @@ const radius = 45;
 .participants {
     width: calc(var(--radius) * 1.98);
     height: var(--radius);
-    border-radius: var(--radius) var(--radius) 0.75vw 0.75vw;
+    border-radius: var(--radius) var(--radius) 10px 10px;
     background: radial-gradient(circle at bottom, #3e803f 0%, #093d15 58%, #743f11 58.5%, #f0a25c);
     position: relative;
     margin: 4vh auto;
@@ -119,9 +124,14 @@ const radius = 45;
     left: 50%;
     transform: translateX(-50%);
 }
+.vote-button {
+    width: 40px;
+    border: 0px !important;
+    margin: 0 2px !important;
+}
 button.selected {
     font-weight: bold;
-    margin: -8px 0 8px 0 !important;
+    margin: -8px 2px 8px 2px !important;
     transition:
         margin 100ms ease-in-out 100ms,
         font-weight 100ms ease-out 100ms;

@@ -122,8 +122,8 @@ $: youtube = youtubeMovie(name);
                         {#each statistics.decks as deck}
                             <div class="d-flex overflow-scroll">
                                 {#each deck as [card, count]}
-                                    <div class="d-inline-block text-center">
-                                        <Card size="sm">{card}</Card>
+                                    <div class="d-inline-block text-center card-wrapper">
+                                        <Card>{card}</Card>
                                         <div class="text-muted">{formatNumber(count)}</div>
                                     </div>
                                 {/each}
@@ -138,3 +138,11 @@ $: youtube = youtubeMovie(name);
         </div>
     </div>
 </div>
+
+<style>
+.card-wrapper {
+    width: 30px;
+    margin: 2px;
+    font-size: 0.9em;
+}
+</style>
