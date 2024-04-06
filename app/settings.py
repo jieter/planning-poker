@@ -82,7 +82,7 @@ USE_TZ = True
 
 # Static files
 STATIC_URL = "static/"
-STATICFILES_DIRS = ["assets/"]
+STATICFILES_DIRS = ["assets/", "images/"]
 if IS_PRODUCTION:
     STATIC_ROOT = BASE_DIR / "staticfiles"
     STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"

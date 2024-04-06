@@ -21,7 +21,10 @@ def index_view(request, session_id=None):
         return redirect("poker", session_id=session_id)
 
     # If the user is known (in the session), add the websocket URL to the context so the voting can begin.
-    context = {}
+    context = {
+        "absolute_url": f"{request.scheme}://{request.get_host()}",
+        "users": ", ".join(poker.users.values_list("name", flat=True)),
+    }
     if user_id := request.session.get("user_id"):
         if user := poker.users.filter(id=user_id).first():
             protocol = "wss" if request.scheme == "https" else "ws"
