@@ -9,8 +9,6 @@ $: settings = {
     isRevealed: $isRevealed,
     autoReveal: $autoReveal,
 };
-
-const isProduction = !window.location.host.includes('localhost');
 </script>
 
 <div class="row bg-light rounded p-2 small mb-5">

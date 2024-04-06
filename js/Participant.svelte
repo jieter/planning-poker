@@ -32,7 +32,7 @@ $: {
                 {#if isRevealed}
                     {user.vote}
                 {:else}
-                    <div style="--bgcolor: #cc6060" class="card-back"></div>
+                    <div class="card-back"></div>
                 {/if}
             </Card>
         </PlayerCard>
@@ -60,11 +60,11 @@ $: {
     width: 84%;
     height: 87%;
 
-    /* Background pattern */
-    border: 1px solid var(--bgcolor);
+    /* cross-hatch background pattern */
+    border: 1px solid #cc6060;
     border-radius: 0.4vw;
     background-size: 0.8vw 0.8vw;
-    background-image: linear-gradient(45deg, transparent 47%, var(--bgcolor) 47%, var(--bgcolor) 53%, transparent 53%),
-        linear-gradient(135deg, transparent 47%, var(--bgcolor) 47%, var(--bgcolor) 53%, transparent 53%);
+    background-image: linear-gradient(45deg, transparent 47%, #cc6060 47%, #cc6060 53%, transparent 53%),
+        linear-gradient(135deg, transparent 47%, #cc6060 47%, #cc6060 53%, transparent 53%);
 }
 </style>
