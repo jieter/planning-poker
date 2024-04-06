@@ -39,7 +39,7 @@ let innerWidth: number;
 // Radius of the table in pixels, depending on the window width, with a maximum
 let radius = 500;
 $: if (innerWidth) {
-    radius = Math.min(1000, innerWidth) / 2.1;
+    radius = Math.min(1000, innerWidth) / 2.2;
 }
 </script>
 
