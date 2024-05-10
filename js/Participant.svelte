@@ -52,7 +52,13 @@ $: {
 }
 
 .participant .name {
+    display: block;
     font-size: 1.2em;
+    text-wrap: nowrap;
+    width: 7em;
+    margin-left: -2.2em;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
 }
 
 .card-back {
