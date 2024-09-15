@@ -53,7 +53,7 @@ class PokerSession(models.Model):
         TSHIRT = "tshirt", "T-shirt"
         FIBONACCI = "fibonacci", "Fibonacci"
 
-    deck = models.CharField(max_length=20, choices=Decks.choices, default=Decks.TSHIRT)
+    deck = models.CharField(max_length=20, choices=Decks.choices, default=Decks.FIBONACCI)
 
     objects = PokerSessionManager()
 
