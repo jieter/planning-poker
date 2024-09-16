@@ -74,8 +74,8 @@ class PokerTestCase(TestCase):
     def test_set_deck(self):
         poker = PokerSession.objects.create()
 
-        self.assertEqual(poker.deck, "tshirt")
-        self.assertEqual(poker.deck_as_list()[0], "XS")
+        self.assertEqual(poker.deck, "fibonacci")
+        self.assertEqual(poker.deck_as_list()[0], "0")
 
         poker.set_deck(PokerSession.Decks.FIBONACCI)
         self.assertEqual(poker.deck, "fibonacci")
@@ -90,20 +90,20 @@ class PokerTestCase(TestCase):
 
     def test_set_deck_preserves_votes_if_not_changed(self):
         poker = PokerSession.objects.create()
-        self.assertEqual(poker.deck, "tshirt")
+        self.assertEqual(poker.deck, "fibonacci")
 
         bob = poker.add_user("Bob")
         bob.vote = "L"
         bob.save()
         poker.add_user("Alice")
 
-        poker.set_deck("tshirt")
+        poker.set_deck("fibonacci")
 
         self.assertCountEqual([user.vote for user in poker.users.all()], ["L", None])
 
     def test_log_as_list(self):
         log_time = datetime.now().strftime("%H:%M:%I")
-        poker = PokerSession.objects.create()
+        poker = PokerSession.objects.create(deck=PokerSession.Decks.TSHIRT)
         bob = poker.add_user("Bob")
         bob.vote = "L"
         bob.save()
@@ -126,7 +126,7 @@ class PokerTestCase(TestCase):
         )
 
     def test_settings_as_dict(self):
-        poker = PokerSession.objects.create()
+        poker = PokerSession.objects.create(deck=PokerSession.Decks.TSHIRT)
         self.assertEqual(
             poker.settings_as_dict(),
             {
