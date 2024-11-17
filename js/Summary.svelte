@@ -2,11 +2,16 @@
 import Card from './Card.svelte';
 import type { VoteCount } from './types.d';
 
-export let votes: Array<VoteCount>;
-export let random: () => number = () => 0;
+interface Props {
+    votes: Array<VoteCount>;
+    random?: () => number;
+    [key: string]: any;
+}
+
+let { votes, random = () => 0, ...rest }: Props = $props();
 </script>
 
-<div {...$$restProps} class="summary">
+<div {...rest} class="summary">
     {#each votes as [vote, count] (vote)}
         <div class="d-inline-block text-center card-wrapper">
             <Card rotation={random()}>{vote}</Card>

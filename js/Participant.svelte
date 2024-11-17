@@ -1,25 +1,31 @@
 <script lang="ts">
+import { run } from 'svelte/legacy';
+
 import Card from './Card.svelte';
 import PlayerCard from './PlayerCard.svelte';
 import type { Participant } from './types.d';
 
-export let user: Participant;
-export let isRevealed: boolean;
-export let i: number;
-export let count: number;
-export let rotation: number;
-export let radius: number;
+interface Props {
+    user: Participant;
+    isRevealed: boolean;
+    i: number;
+    count: number;
+    rotation: number;
+    radius: number;
+}
+
+let { user, isRevealed, i, count, rotation, radius }: Props = $props();
 
 // Amount of degrees to spread the participants over at the table
 const maxAngle = 174;
-let angle: number;
-$: {
+let angle: number = $state();
+run(() => {
     angle = -90;
     if (count > 1) {
         // A fixed amount of degrees, or all participants evenly distributed, whatever is smaller.
         angle -= Math.min(20, maxAngle / count) * (i - (count - 1) / 2);
     }
-}
+});
 </script>
 
 <div class="participant" style="transform: translate(1.3vw) rotate({angle}deg) translate({radius}px) rotate(90deg)">

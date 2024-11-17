@@ -1,16 +1,18 @@
 <script lang="ts">
+import { run } from 'svelte/legacy';
+
 import { onMount } from 'svelte';
 
 import Card from './Card.svelte';
 import { csrfToken, formatNumber, jsonScriptContents } from './utils';
 
-let error: string | undefined;
+let error: string | undefined = $state();
 
 // Screen name in the poker session
-let name: string = '';
-let isSpectator: boolean | null = null;
+let name: string = $state('');
+let isSpectator: boolean | null = $state(null);
 
-let statistics: { [key: string]: any };
+let statistics: { [key: string]: any } = $state();
 
 function youtubeMovie(name: string | undefined) {
     if (!name) {
@@ -43,14 +45,18 @@ onMount(() => {
 const update = () => {
     error = name ? undefined : 'Name cannot be empty';
 };
-$: if (name) {
-    localStorage.setItem('name', name);
-}
-$: if (isSpectator != null) {
-    localStorage.setItem('isSpectator', isSpectator ? 'true' : 'false');
-}
+run(() => {
+    if (name) {
+        localStorage.setItem('name', name);
+    }
+});
+run(() => {
+    if (isSpectator != null) {
+        localStorage.setItem('isSpectator', isSpectator ? 'true' : 'false');
+    }
+});
 
-$: youtube = youtubeMovie(name);
+let youtube = $derived(youtubeMovie(name));
 </script>
 
 <div class="container">
@@ -65,7 +71,7 @@ $: youtube = youtubeMovie(name);
                             type="text"
                             name="name"
                             class="form-control"
-                            on:change={update}
+                            onchange={update}
                             bind:value={name}
                             class:is-invalid={error} />
                         {#if error}

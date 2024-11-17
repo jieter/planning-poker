@@ -1,10 +1,15 @@
 <script lang="ts">
-export let rotation: number = 0;
-export let background: string = '';
+interface Props {
+    rotation?: number;
+    background?: string;
+    children?: import('svelte').Snippet;
+}
+
+let { rotation = 0, background = '', children }: Props = $props();
 </script>
 
 <div class="deck-card" style="transform: rotate({rotation}deg); background: {background};">
-    <slot />
+    {@render children?.()}
 </div>
 
 <style>
