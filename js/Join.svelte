@@ -12,7 +12,7 @@ let error: string | undefined = $state();
 let name: string = $state('');
 let isSpectator: boolean | null = $state(null);
 
-let statistics: { [key: string]: any } = $state();
+let statistics: { [key: string]: any } | undefined = $state();
 
 function youtubeMovie(name: string | undefined) {
     if (!name) {
@@ -45,12 +45,10 @@ onMount(() => {
 const update = () => {
     error = name ? undefined : 'Name cannot be empty';
 };
-run(() => {
+$effect.pre(() => {
     if (name) {
         localStorage.setItem('name', name);
     }
-});
-run(() => {
     if (isSpectator != null) {
         localStorage.setItem('isSpectator', isSpectator ? 'true' : 'false');
     }

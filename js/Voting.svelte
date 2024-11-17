@@ -36,12 +36,11 @@ run(() => {
 });
 
 let random: () => number = $derived(pseudoRandomGenerator($revealCount, -3, 3));
-
-let innerWidth: number = $state();
+let innerWidth: number | undefined = $state();
 
 // Radius of the table in pixels, depending on the window width, with a maximum
 let radius = $state(500);
-run(() => {
+$effect.pre(() => {
     if (innerWidth) {
         radius = Math.min(1000, innerWidth) / 2.2;
     }

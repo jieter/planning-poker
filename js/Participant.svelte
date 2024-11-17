@@ -18,8 +18,8 @@ let { user, isRevealed, i, count, rotation, radius }: Props = $props();
 
 // Amount of degrees to spread the participants over at the table
 const maxAngle = 174;
-let angle: number = $state();
-run(() => {
+let angle: number = $state(-90);
+$effect.pre(() => {
     angle = -90;
     if (count > 1) {
         // A fixed amount of degrees, or all participants evenly distributed, whatever is smaller.
