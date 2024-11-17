@@ -15,14 +15,14 @@ interface Props {
 let { user, isRevealed, i, count, rotation, radius }: Props = $props();
 
 // Amount of degrees to spread the participants over at the table
-const maxAngle = 174;
-let angle: number = $state(-90);
-$effect.pre(() => {
-    angle = -90;
+const MAX_ANGLE = 174;
+let angle: number = $derived.by(() => {
+    let _angle = -90;
     if (count > 1) {
         // A fixed amount of degrees, or all participants evenly distributed, whatever is smaller.
-        angle -= Math.min(20, maxAngle / count) * (i - (count - 1) / 2);
+        _angle -= Math.min(20, MAX_ANGLE / count) * (i - (count - 1) / 2);
     }
+    return _angle;
 });
 </script>
 
