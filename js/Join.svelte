@@ -1,6 +1,4 @@
 <script lang="ts">
-import { run } from 'svelte/legacy';
-
 import { onMount } from 'svelte';
 
 import Card from './Card.svelte';
@@ -49,6 +47,8 @@ $effect.pre(() => {
     if (name) {
         localStorage.setItem('name', name);
     }
+});
+$effect.pre(() => {
     if (isSpectator != null) {
         localStorage.setItem('isSpectator', isSpectator ? 'true' : 'false');
     }

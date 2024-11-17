@@ -1,6 +1,4 @@
 <script lang="ts">
-import { run } from 'svelte/legacy';
-
 import { onMount } from 'svelte';
 import { confetti } from '@neoconfetti/svelte';
 
@@ -31,7 +29,7 @@ onMount(() => {
     connect(jsonScriptContents('websocket_url'));
     debugOn = !!new URLSearchParams(window.location.search).get('debug');
 });
-run(() => {
+$effect.pre(() => {
     changeFavicon($icon);
 });
 

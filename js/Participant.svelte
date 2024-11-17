@@ -1,6 +1,4 @@
 <script lang="ts">
-import { run } from 'svelte/legacy';
-
 import Card from './Card.svelte';
 import PlayerCard from './PlayerCard.svelte';
 import type { Participant } from './types.d';
