@@ -26,9 +26,9 @@ import { autoReveal, deck, decks, isRevealed, clearVotes, revealVotes, votingCom
         {/if}
     {/if}
     {#if $isRevealed}
-        <button class="btn btn-sm btn-warning" on:click={clearVotes}>Clear</button>
+        <button class="btn btn-sm btn-warning" onclick={clearVotes}>Clear</button>
     {:else}
-        <button class="btn btn-sm btn-success" on:click={revealVotes}>Reveal</button>
+        <button class="btn btn-sm btn-success" onclick={revealVotes}>Reveal</button>
     {/if}
 
     <div class="form-check form-switch mt-1 ms-3">

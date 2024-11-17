@@ -24,23 +24,25 @@ import {
 import Summary from './Summary.svelte';
 import { jsonScriptContents, changeFavicon, pseudoRandomGenerator } from './utils';
 
-let debugOn = false;
+let debugOn = $state(false);
 onMount(() => {
     connect(jsonScriptContents('websocket_url'));
     debugOn = !!new URLSearchParams(window.location.search).get('debug');
 });
-$: changeFavicon($icon);
+$effect.pre(() => {
+    changeFavicon($icon);
+});
 
-let random: () => number;
-$: random = pseudoRandomGenerator($revealCount, -3, 3);
-
-let innerWidth: number;
+let random: () => number = $derived(pseudoRandomGenerator($revealCount, -3, 3));
+let innerWidth: number | undefined = $state();
 
 // Radius of the table in pixels, depending on the window width, with a maximum
-let radius = 500;
-$: if (innerWidth) {
-    radius = Math.min(1000, innerWidth) / 2.2;
-}
+let radius = $state(500);
+$effect.pre(() => {
+    if (innerWidth) {
+        radius = Math.min(1000, innerWidth) / 2.2;
+    }
+});
 </script>
 
 <svelte:window bind:innerWidth />
@@ -63,7 +65,7 @@ $: if (innerWidth) {
     {#if $isRevealed}
         <div class="controls">
             {#if $showConfetti}
-                <div use:confetti />
+                <div use:confetti></div>
             {/if}
             <Summary votes={$votes} {random} style="color: white;" class="p-2 mb-2 text-center rounded" />
         </div>
@@ -75,15 +77,15 @@ $: if (innerWidth) {
             {#if $user.is_spectator}
                 You joined as spectator.<br />
                 I want to
-                <button on:click={() => update('settings', { is_spectator: false })} class="btn btn-light btn-sm">
+                <button onclick={() => update('settings', { is_spectator: false })} class="btn btn-light btn-sm">
                     become a voter
                 </button>
             {:else}
                 <div class="d-flex justify-content-center">
                     {#each $choices as choice}
                         <button
-                            on:click={castVote(choice)}
-                            on:keypress={castVote(choice)}
+                            onclick={castVote(choice)}
+                            onkeypress={castVote(choice)}
                             disabled={$isRevealed}
                             class="vote-button p-0"
                             class:selected={choice == $user.vote}>
