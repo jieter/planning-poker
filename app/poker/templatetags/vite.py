@@ -23,7 +23,7 @@ def script_tag(src, **attributes):
 def vite_hmr() -> str:
     """Render a script tag to load the Vite HMR development client, or nothing if nog in DEBUG."""
     if settings.DEBUG:
-        return script_tag(f"{VITE_URL}@vite/client")
+        return script_tag(f"{VITE_URL}/@vite/client")
     else:
         return ""
 
