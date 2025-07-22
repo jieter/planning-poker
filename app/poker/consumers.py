@@ -48,7 +48,7 @@ class PokerConsumer(JsonWebsocketConsumer):
     def receive_json(self, content):
         poker = self.poker
         action = content.get("action")
-        match (action):
+        match action:
             case "settings":
                 if "auto_reveal" in content:
                     new_val = bool(content["auto_reveal"])

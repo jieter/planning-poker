@@ -1,7 +1,8 @@
+#!/bin/bash
 # Install python and JS dependencies, run migrations, collectstatic and restart supervisor
 
-source ~/virtualenv/bin/activate
-cd ~/planning-poker
+source /home/poker/virtualenv/bin/activate
+cd ~/planning-poker || exit
 git pull
 npm ci
 npm install @rollup/rollup-linux-x64-gnu

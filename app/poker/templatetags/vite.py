@@ -36,5 +36,5 @@ def vite(entry: str, **kwargs) -> str:
     else:
         manifest = json.loads(VITE_MANIFEST.read_text())
 
-        url = f'{settings.STATIC_URL}{manifest[entry]["file"]}'
+        url = f"{settings.STATIC_URL}{manifest[entry]['file']}"
         return script_tag(url, **kwargs)
