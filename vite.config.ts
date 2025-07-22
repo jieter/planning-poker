@@ -1,9 +1,11 @@
 /// <reference types="vitest" />
 import { defineConfig } from 'vite';
 import { svelte } from '@sveltejs/vite-plugin-svelte';
+import path from 'path';
 
 export default defineConfig(({ mode }) => ({
     base: '',
+    ssr: false,
     build: {
         manifest: 'manifest.json',
         outDir: './assets/',
@@ -20,7 +22,10 @@ export default defineConfig(({ mode }) => ({
         setupFiles: ['js/testsetup.js'],
     },
     resolve: {
-        conditions: mode === 'test' ? ['browser'] : [],
+        conditions: ['browser'],
+        alias: {
+            '@neoconfetti/svelte': path.resolve(__dirname, 'node_modules/@neoconfetti/svelte/dist/index.js'),
+        },
     },
     plugins: [
         svelte({

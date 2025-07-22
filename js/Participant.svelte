@@ -74,7 +74,8 @@ let angle: number = $derived.by(() => {
     border: 1px solid #cc6060;
     border-radius: 0.4vw;
     background-size: 0.8vw 0.8vw;
-    background-image: linear-gradient(45deg, transparent 47%, #cc6060 47%, #cc6060 53%, transparent 53%),
+    background-image:
+        linear-gradient(45deg, transparent 47%, #cc6060 47%, #cc6060 53%, transparent 53%),
         linear-gradient(135deg, transparent 47%, #cc6060 47%, #cc6060 53%, transparent 53%);
 }
 </style>
