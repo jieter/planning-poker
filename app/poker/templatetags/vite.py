@@ -7,7 +7,7 @@ from django.utils.safestring import mark_safe
 
 """Very minimal version of https://github.com/MrBin99/django-vite"""
 VITE_MANIFEST = settings.BASE_DIR / "assets/manifest.json"
-VITE_URL = "http://localhost:5173"
+VITE_URL = "http://localhost:5174"
 
 register = template.Library()
 
@@ -23,7 +23,7 @@ def script_tag(src, **attributes):
 def vite_hmr() -> str:
     """Render a script tag to load the Vite HMR development client, or nothing if nog in DEBUG."""
     if settings.DEBUG:
-        return script_tag(f"{VITE_URL}@vite/client")
+        return script_tag(f"{VITE_URL}/@vite/client")
     else:
         return ""
 

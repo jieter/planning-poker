@@ -3,23 +3,27 @@ import Card from './Card.svelte';
 import PlayerCard from './PlayerCard.svelte';
 import type { Participant } from './types.d';
 
-export let user: Participant;
-export let isRevealed: boolean;
-export let i: number;
-export let count: number;
-export let rotation: number;
-export let radius: number;
+interface Props {
+    user: Participant;
+    isRevealed: boolean;
+    i: number;
+    count: number;
+    rotation: number;
+    radius: number;
+}
+
+let { user, isRevealed, i, count, rotation, radius }: Props = $props();
 
 // Amount of degrees to spread the participants over at the table
-const maxAngle = 174;
-let angle: number;
-$: {
-    angle = -90;
+const MAX_ANGLE = 174;
+let angle: number = $derived.by(() => {
+    let _angle = -90;
     if (count > 1) {
         // A fixed amount of degrees, or all participants evenly distributed, whatever is smaller.
-        angle -= Math.min(20, maxAngle / count) * (i - (count - 1) / 2);
+        _angle -= Math.min(20, MAX_ANGLE / count) * (i - (count - 1) / 2);
     }
-}
+    return _angle;
+});
 </script>
 
 <div class="participant" style="transform: translate(1.3vw) rotate({angle}deg) translate({radius}px) rotate(90deg)">
@@ -70,7 +74,8 @@ $: {
     border: 1px solid #cc6060;
     border-radius: 0.4vw;
     background-size: 0.8vw 0.8vw;
-    background-image: linear-gradient(45deg, transparent 47%, #cc6060 47%, #cc6060 53%, transparent 53%),
+    background-image:
+        linear-gradient(45deg, transparent 47%, #cc6060 47%, #cc6060 53%, transparent 53%),
         linear-gradient(135deg, transparent 47%, #cc6060 47%, #cc6060 53%, transparent 53%);
 }
 </style>

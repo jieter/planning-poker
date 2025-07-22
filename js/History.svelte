@@ -3,7 +3,7 @@ import { log, revealCount, votes } from './stores';
 import { countVotes } from './utils';
 import Summary from './Summary.svelte';
 
-let collapsed = true;
+let collapsed = $state(true);
 
 function toggleCollapsed() {
     collapsed = !collapsed;
@@ -13,8 +13,8 @@ function toggleCollapsed() {
 <div
     role="button"
     class="text-muted my-1 mx-2 small"
-    on:click={toggleCollapsed}
-    on:keypress={toggleCollapsed}
+    onclick={toggleCollapsed}
+    onkeypress={toggleCollapsed}
     tabindex="0">
     {#if $revealCount == 0}
         No history yet.

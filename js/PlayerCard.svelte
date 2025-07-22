@@ -1,9 +1,14 @@
 <script lang="ts">
-export let vote: string | null;
+interface Props {
+    vote: string | null;
+    children?: import('svelte').Snippet;
+}
+
+let { vote, children }: Props = $props();
 </script>
 
 <div class="player-card" class:vote>
-    <slot />
+    {@render children?.()}
 </div>
 
 <style>
