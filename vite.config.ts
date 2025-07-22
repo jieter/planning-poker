@@ -3,9 +3,13 @@ import { defineConfig } from 'vite';
 import { svelte } from '@sveltejs/vite-plugin-svelte';
 import path from 'path';
 
-export default defineConfig(({ mode }) => ({
+export default defineConfig({
     base: '',
     ssr: false,
+    server: {
+        port: 5174,
+        strictPort: true,
+    },
     build: {
         manifest: 'manifest.json',
         outDir: './assets/',
@@ -36,4 +40,4 @@ export default defineConfig(({ mode }) => ({
             emitCss: false,
         }),
     ],
-}));
+});

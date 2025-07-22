@@ -7,7 +7,7 @@ from django.utils.safestring import mark_safe
 
 """Very minimal version of https://github.com/MrBin99/django-vite"""
 VITE_MANIFEST = settings.BASE_DIR / "assets/manifest.json"
-VITE_URL = "http://localhost:5173"
+VITE_URL = "http://localhost:5174"
 
 register = template.Library()
 
