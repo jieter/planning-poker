@@ -1,11 +1,12 @@
 from datetime import datetime
 
 from django.test import TestCase
+from django.urls import reverse
 
 from .models import PokerSession
 
 
-class PokerTestCase(TestCase):
+class PokerModelsTestCase(TestCase):
     def test_users(self):
         poker = PokerSession.objects.create()
 
@@ -170,3 +171,15 @@ class PokerTestCase(TestCase):
                 ],
             },
         )
+
+
+class ViewTestCase(TestCase):
+    def test_index_view(self):
+        poker = PokerSession.objects.create()
+        poker.add_user("Alice")
+        poker.add_user("Bob", is_spectator=True)
+        poker.users.get_or_create(name="Charlie", is_active=False)
+
+        response = self.client.get(reverse("poker", args=[poker.id]))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Join Alice, Bob in a planning poker session.")

@@ -23,7 +23,7 @@ def index_view(request, session_id=None):
     # If the user is known (in the session), add the websocket URL to the context so the voting can begin.
     context = {
         "absolute_url": f"{request.scheme}://{request.get_host()}",
-        "users": ", ".join(poker.users.values_list("name", flat=True)),
+        "users": ", ".join(poker.users.filter(is_active=True).values_list("name", flat=True)),
     }
     if user_id := request.session.get("user_id"):
         if user := poker.users.filter(id=user_id).first():
