@@ -50,11 +50,11 @@ class PokerSession(models.Model):
     auto_reveal = models.BooleanField(default=True)
     reveal_count = models.IntegerField(default=0)
 
-    class Decks(models.TextChoices):
+    class Deck(models.TextChoices):
         TSHIRT = "tshirt", "T-shirt"
         FIBONACCI = "fibonacci", "Fibonacci"
 
-    deck = models.CharField(max_length=20, choices=Decks.choices, default=Decks.FIBONACCI)
+    deck = models.CharField(max_length=20, choices=Deck.choices, default=Deck.FIBONACCI)
 
     objects = PokerSessionManager()
 
@@ -67,11 +67,11 @@ class PokerSession(models.Model):
 
     @property
     def is_fibonacci(self) -> bool:
-        return self.deck == PokerSession.Decks.FIBONACCI
+        return self.deck == PokerSession.Deck.FIBONACCI
 
     def set_deck(self, deck: str) -> None:
         """Set a new deck if the requested dack is different from the current deck."""
-        if deck in self.Decks and self.deck != deck:
+        if deck in self.Deck.values and self.deck != deck:
             self.deck = deck
             self.logs.create(event="set_deck", data={"deck": deck})
             self.clear()
@@ -112,7 +112,7 @@ class PokerSession(models.Model):
     def deck_as_list(self) -> list[str]:
         return ("0,½,1,2,3,5,8,13,20,?,∞,☕️" if self.is_fibonacci else "XS,S,M,L,XL,?,☕️").split(",")
 
-    def log_as_list(self) -> list[dict[str, str, dict]]:
+    def log_as_list(self) -> list[dict[str, str | dict]]:
         return list(
             {"time": timezone.localtime(created).strftime("%H:%M:%I"), "event": event, "data": data}
             for created, event, data in self.logs.values_list("created", "event", "data")[:20]
@@ -123,7 +123,7 @@ class PokerSession(models.Model):
             "auto_reveal": self.auto_reveal,
             "is_revealed": self.is_revealed,
             "deck": self.deck,
-            "decks": self.Decks.choices,
+            "decks": self.Deck.choices,
             "choices": self.deck_as_list(),
         }
 

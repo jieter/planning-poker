@@ -78,11 +78,11 @@ class PokerModelsTestCase(TestCase):
         self.assertEqual(poker.deck, "fibonacci")
         self.assertEqual(poker.deck_as_list()[0], "0")
 
-        poker.set_deck(PokerSession.Decks.FIBONACCI)
+        poker.set_deck(PokerSession.Deck.FIBONACCI)
         self.assertEqual(poker.deck, "fibonacci")
         self.assertEqual(poker.deck_as_list()[0], "0")
 
-        poker.set_deck(PokerSession.Decks.TSHIRT)
+        poker.set_deck(PokerSession.Deck.TSHIRT)
         self.assertEqual(poker.deck, "tshirt")
         self.assertEqual(poker.deck_as_list()[0], "XS")
 
@@ -104,7 +104,7 @@ class PokerModelsTestCase(TestCase):
 
     def test_log_as_list(self):
         log_time = datetime.now().strftime("%H:%M:%I")
-        poker = PokerSession.objects.create(deck=PokerSession.Decks.TSHIRT)
+        poker = PokerSession.objects.create(deck=PokerSession.Deck.TSHIRT)
         bob = poker.add_user("Bob")
         bob.vote = "L"
         bob.save()
@@ -127,7 +127,7 @@ class PokerModelsTestCase(TestCase):
         )
 
     def test_settings_as_dict(self):
-        poker = PokerSession.objects.create(deck=PokerSession.Decks.TSHIRT)
+        poker = PokerSession.objects.create(deck=PokerSession.Deck.TSHIRT)
         self.assertEqual(
             poker.settings_as_dict(),
             {
@@ -144,17 +144,17 @@ class PokerModelsTestCase(TestCase):
         poker.add_user("Bob")
         poker.add_user("Charlie")
         poker.add_user("George")
-        poker.logs.create(event="reveal", data={"deck": PokerSession.Decks.FIBONACCI, "votes": ["1", "1", "3"]})
+        poker.logs.create(event="reveal", data={"deck": PokerSession.Deck.FIBONACCI, "votes": ["1", "1", "3"]})
 
         poker = PokerSession.objects.create(reveal_count=2)
         poker.add_user("Bob")
         poker.add_user("George")
-        poker.logs.create(event="reveal", data={"deck": PokerSession.Decks.TSHIRT, "votes": ["L", None, "L"]})
+        poker.logs.create(event="reveal", data={"deck": PokerSession.Deck.TSHIRT, "votes": ["L", None, "L"]})
         poker.logs.create(
-            event="reveal", data={"deck": PokerSession.Decks.TSHIRT, "votes": ["L", None, "L", "XL", "XL"]}
+            event="reveal", data={"deck": PokerSession.Deck.TSHIRT, "votes": ["L", None, "L", "XL", "XL"]}
         )
         # Single vote rounds are ignored
-        poker.logs.create(event="reveal", data={"deck": PokerSession.Decks.TSHIRT, "votes": ["L"]})
+        poker.logs.create(event="reveal", data={"deck": PokerSession.Deck.TSHIRT, "votes": ["L"]})
 
         self.assertEqual(
             PokerSession.objects.statistics(),
