@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 import { autoReveal, deck, decks, isRevealed, clearVotes, revealVotes, votingComplete } from './stores';
 </script>
 
