@@ -1,5 +1,6 @@
 import uuid
 from collections import Counter, defaultdict
+from datetime import UTC, datetime
 from typing import Any
 
 from django.db import models
@@ -16,7 +17,7 @@ class PokerSessionManager(models.Manager):
 
         Start at 2023-10-01, because we only started collecting detailed logs after that date.
         """
-        sessions = self.exclude(reveal_count=0).filter(created__gte="2023-10-01")
+        sessions = self.exclude(reveal_count=0).filter(created__gte=datetime(2023, 10, 1, tzinfo=UTC))
         avg_reveal_count = sessions.aggregate(mean=Avg("reveal_count"))["mean"]
         user_count = sessions.values_list(Count("users"), flat=True)
 
