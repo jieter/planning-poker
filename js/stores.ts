@@ -1,17 +1,17 @@
 import { derived, writable, get } from 'svelte/store';
 
-import type { Participant } from './types.d';
+import type { LogEntry, Participant } from './types.d';
 import { countVotes } from './utils';
 
 export const participants = writable<Array<Participant>>([]);
 export const choices = writable<Array<string>>([]);
-export const decks = writable([]);
+export const decks = writable<Array<[string, string]>>([]);
 export const autoReveal = writable<boolean>(false);
 export const deck = writable<string>('tshirt');
 export const isRevealed = writable<boolean>(false);
 export const user = writable<Participant>({ vote: null, is_spectator: false });
 export const error = writable<string | null>(null);
-export const log = writable([]);
+export const log = writable<Array<LogEntry>>([]);
 export const revealCount = writable(0);
 
 // Derive a sorted list of (card, votes)-pairs off of the participants store:

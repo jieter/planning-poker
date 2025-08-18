@@ -5,3 +5,9 @@ export interface Participant {
     is_spectator: boolean;
 }
 export type VoteCount = [string, number];
+
+export interface LogEntry {
+    time: string;
+    event: string;
+    data: any;
+}
