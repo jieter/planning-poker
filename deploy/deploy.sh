@@ -1,7 +1,7 @@
 #!/bin/bash
 # Install python and JS dependencies, run migrations, collectstatic and restart supervisor
 
-source /home/poker/virtualenv/bin/activate
+source /home/deployer/virtualenv/bin/activate
 cd ~/planning-poker || exit
 git reset --hard origin/master
 npm ci
