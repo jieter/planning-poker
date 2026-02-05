@@ -19,15 +19,9 @@ export const votes = derived(participants, ($participants: Array<Participant>) =
     return countVotes($participants.map((p: Participant) => p.vote));
 });
 
-const valueMap: Record<string, number> = {
-    '½': 0.5,
-    '??': NaN,
-    coffee: NaN,
-};
-
 const toNum = (val: string | number): number => {
     if (typeof val === 'number') return val;
-    return valueMap[val] ?? parseFloat(val);
+    return val == '½' ? 0.5 : parseFloat(val);
 };
 
 const allValues = $derived.by(() => {
@@ -62,12 +56,10 @@ const stats = $derived.by(() => {
     return { mean, median, stdDev, closest, isUnanimous };
 });
 
-// 2. Export as functions (the "Svelte 5 way" for modules)
 export const getVotingStats = () => stats;
-export const getAllValues = () => allValues;
 
 // Show confetti if votes are revealed and all participants voted the same and there are more than 1 participants.
-export const isUnanimous = derived([isRevealed, votes], ([$isRevealed, $votes]) => {
+export const showConfetti = derived([isRevealed, votes], ([$isRevealed, $votes]) => {
     return $isRevealed && $votes.length == 1 && $votes[0] && $votes[0][1] > 1;
 });
 
@@ -77,7 +69,7 @@ export const votingComplete = derived(participants, ($participants) => {
 });
 
 export const icon = derived(
-    [participants, user, isUnanimous, isRevealed],
+    [participants, user, showConfetti, isRevealed],
     ([$participants, $user, $showConfetti, $isRevealed]) => {
         if ($showConfetti) {
             return '🎉';

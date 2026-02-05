@@ -1,7 +1,6 @@
 <script lang="ts">
 import Card from './Card.svelte';
 import type { VoteCount } from './types.d';
-
 import { getVotingStats } from './stores.svelte';
 
 interface Props {
