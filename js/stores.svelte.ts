@@ -24,18 +24,14 @@ const toNum = (val: string | number): number => {
     return val == '½' ? 0.5 : parseFloat(val);
 };
 
-const allValues = $derived.by(() => {
-    const data = get(participants).map((p) => p.vote);
-    const rawVotes = countVotes(data);
-
-    return rawVotes.flatMap(([val, count]) => Array(count).fill(toNum(val))).filter((v) => !isNaN(v));
-});
-
 const stats = $derived.by(() => {
-    const data = allValues;
+    const rawVotes = countVotes(get(participants).map((p) => p.vote));
+    const data = rawVotes.flatMap(([val, count]) => Array(count).fill(toNum(val))).filter((v) => !isNaN(v));
     const n = data.length;
 
-    if (n === 0) return null;
+    if (n === 0) {
+        return null;
+    }
 
     const sum = data.reduce((a, b) => a + b, 0);
     const mean = sum / n;
