@@ -11,10 +11,3 @@ export interface LogEntry {
     event: string;
     data: any;
 }
-
-export interface VotingStats {
-    mean: number;
-    stdDev: number;
-    closest: string;
-    isUnanimous: boolean;
-}

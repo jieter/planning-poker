@@ -1,6 +1,6 @@
 import { derived, writable, get } from 'svelte/store';
 
-import type { LogEntry, Participant } from './types';
+import type { LogEntry, Participant } from './types.d';
 import { countVotes } from './utils';
 
 export const participants = writable<Array<Participant>>([]);
@@ -18,51 +18,6 @@ export const revealCount = writable(0);
 export const votes = derived(participants, ($participants: Array<Participant>) => {
     return countVotes($participants.map((p: Participant) => p.vote));
 });
-
-const toNum = (val: string | number): number => {
-    if (typeof val === 'number') return val;
-    return val == '½' ? 0.5 : parseFloat(val);
-};
-
-const stats = $derived.by(() => {
-    const rawVotes = countVotes(get(participants).map((p) => p.vote));
-    const data = rawVotes.flatMap(([val, count]) => Array(count).fill(toNum(val))).filter((v) => !isNaN(v));
-    const n = data.length;
-
-    if (n === 0) {
-        return null;
-    }
-
-    const sum = data.reduce((a, b) => a + b, 0);
-    const mean = sum / n;
-
-    const sorted = [...data].sort((a, b) => a - b);
-    const mid = Math.floor(n / 2);
-
-    const variance = data.reduce((acc, v) => acc + Math.pow(v - mean, 2), 0) / n;
-    const stdDev = Math.sqrt(variance);
-
-    const optionsAtOrAbove = get(choices).filter((c) => toNum(c) >= mean);
-
-    let closest;
-    if (optionsAtOrAbove.length > 0) {
-        // Pick the smallest among those >= mean
-        closest = optionsAtOrAbove.reduce((prev, curr) => {
-            return toNum(curr) < toNum(prev) ? curr : prev;
-        });
-    } else {
-        // If mean is higher than all choices, pick the highest choice
-        closest = get(choices).reduce((prev, curr) => {
-            return toNum(curr) > toNum(prev) ? curr : prev;
-        });
-    }
-
-    const isUnanimous = new Set(data).size === 1;
-
-    return { mean, stdDev, closest, isUnanimous };
-});
-
-export const getVotingStats = () => stats;
 
 // Show confetti if votes are revealed and all participants voted the same and there are more than 1 participants.
 export const showConfetti = derived([isRevealed, votes], ([$isRevealed, $votes]) => {

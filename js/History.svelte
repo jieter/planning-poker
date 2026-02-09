@@ -1,5 +1,5 @@
 <script lang="ts">
-import { log, revealCount, votes } from './stores.svelte';
+import { log, revealCount, votes } from './stores';
 import { countVotes } from './utils';
 import Summary from './Summary.svelte';
 
