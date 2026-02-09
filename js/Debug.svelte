@@ -1,5 +1,17 @@
 <script lang="ts">
-import { deck, decks, choices, error, isRevealed, participants, update, user, autoReveal, votes, log } from './stores';
+import {
+    deck,
+    decks,
+    choices,
+    error,
+    isRevealed,
+    participants,
+    update,
+    user,
+    autoReveal,
+    votes,
+    log,
+} from './stores.svelte';
 
 let settings = $derived({
     error: $error,

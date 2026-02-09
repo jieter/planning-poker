@@ -1,5 +1,5 @@
 <script lang="ts">
-import { autoReveal, deck, decks, isRevealed, clearVotes, revealVotes, votingComplete } from './stores';
+import { autoReveal, deck, decks, isRevealed, clearVotes, revealVotes, votingComplete } from './stores.svelte';
 </script>
 
 <div class="d-flex justify-content-center m-3">
