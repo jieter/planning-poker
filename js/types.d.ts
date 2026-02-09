@@ -14,7 +14,6 @@ export interface LogEntry {
 
 export interface VotingStats {
     mean: number;
-    median: any;
     stdDev: number;
     closest: string;
     isUnanimous: boolean;

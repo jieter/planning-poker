@@ -4,7 +4,7 @@ import type { VoteCount, VotingStats } from './types.d';
 
 interface Props {
     votes: Array<VoteCount>;
-    stats: VotingStats | null;
+    stats?: VotingStats | null;
     random?: () => number;
     [key: string]: any;
 }
