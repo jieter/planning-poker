@@ -1,17 +1,15 @@
 <script lang="ts">
 import Card from './Card.svelte';
-import type { VoteCount } from './types.d';
-import { getVotingStats } from './stores.svelte';
+import type { VoteCount, VotingStats } from './types.d';
 
 interface Props {
     votes: Array<VoteCount>;
+    stats: VotingStats | null;
     random?: () => number;
     [key: string]: any;
 }
 
-let { votes, random = () => 0, ...rest }: Props = $props();
-
-let stats = getVotingStats();
+let { votes, stats, random = () => 0, ...rest }: Props = $props();
 </script>
 
 <div {...rest} class="summvary text-center">
@@ -27,7 +25,7 @@ let stats = getVotingStats();
     </div>
 
     {#if stats && !stats.isUnanimous}
-        μ: {stats.mean.toFixed(1)}, median: {stats.median}, σ: {stats.stdDev.toFixed(2)}, Suggested:
+        μ: {stats.mean.toFixed(1)}, σ: {stats.stdDev.toFixed(2)}, Suggested:
         <div class="d-inline-block text-center card-wrapper" style="width: 24px;">
             <Card>{stats.closest}</Card>
         </div>

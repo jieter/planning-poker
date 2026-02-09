@@ -20,6 +20,7 @@ import {
     icon,
     revealCount,
     showConfetti,
+    getVotingStats,
 } from './stores.svelte';
 import Summary from './Summary.svelte';
 import { jsonScriptContents, changeFavicon, pseudoRandomGenerator } from './utils';
@@ -67,7 +68,12 @@ $effect.pre(() => {
             {#if $showConfetti}
                 <div use:confetti></div>
             {/if}
-            <Summary votes={$votes} {random} style="color: white;" class="p-2 mb-2 text-center rounded" />
+            <Summary
+                votes={$votes}
+                stats={getVotingStats()}
+                {random}
+                style="color: white;"
+                class="p-2 mb-2 text-center rounded" />
         </div>
     {/if}
 </div>

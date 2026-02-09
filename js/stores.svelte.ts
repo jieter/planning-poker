@@ -38,18 +38,28 @@ const stats = $derived.by(() => {
 
     const sorted = [...data].sort((a, b) => a - b);
     const mid = Math.floor(n / 2);
-    const median = n % 2 !== 0 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2;
 
     const variance = data.reduce((acc, v) => acc + Math.pow(v - mean, 2), 0) / n;
     const stdDev = Math.sqrt(variance);
 
-    const closest = get(choices).reduce((prev, curr) => {
-        return Math.abs(toNum(curr) - mean) < Math.abs(toNum(prev) - mean) ? curr : prev;
-    });
+    const optionsAtOrAbove = get(choices).filter((c) => toNum(c) >= mean);
+
+    let closest;
+    if (optionsAtOrAbove.length > 0) {
+        // Pick the smallest among those >= mean
+        closest = optionsAtOrAbove.reduce((prev, curr) => {
+            return toNum(curr) < toNum(prev) ? curr : prev;
+        });
+    } else {
+        // If mean is higher than all choices, pick the highest choice
+        closest = get(choices).reduce((prev, curr) => {
+            return toNum(curr) > toNum(prev) ? curr : prev;
+        });
+    }
 
     const isUnanimous = new Set(data).size === 1;
 
-    return { mean, median, stdDev, closest, isUnanimous };
+    return { mean, stdDev, closest, isUnanimous };
 });
 
 export const getVotingStats = () => stats;
