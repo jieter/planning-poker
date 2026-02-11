@@ -76,12 +76,10 @@ const voteToNum = (val: string | number | null): number => {
 };
 
 export function voteStats(votes: Array<string | null>, choices: Array<string> | null = null): VotingStats | null {
-    const data = votes.map(voteToNum).filter((v) => !isNaN(v));
+    const data = votes.map(voteToNum).filter((v): v is number => !isNaN(v));
     const n = data.length;
 
-    if (n === 0) {
-        return null;
-    }
+    if (n === 0) return null;
 
     const sum = data.reduce((a, b) => a + b, 0);
     const mean = sum / n;
@@ -89,17 +87,15 @@ export function voteStats(votes: Array<string | null>, choices: Array<string> | 
     const variance = data.reduce((acc, v) => acc + Math.pow(v - mean, 2), 0) / n;
     const stdDev = Math.sqrt(variance);
 
-    const options = choices ?? Array.from(new Set(votes));
-    const optionsAtOrAbove = options.filter((c) => voteToNum(c) >= mean);
+    const options = choices ?? Array.from(new Set(votes.filter((v): v is string => v !== null)));
 
-    let closest;
+    const optionsAtOrAbove = options.filter((c) => voteToNum(c) >= mean);
+    let closest: string;
     if (optionsAtOrAbove.length > 0) {
-        // Pick the smallest among those >= mean
         closest = optionsAtOrAbove.reduce((prev, curr) => {
             return voteToNum(curr) < voteToNum(prev) ? curr : prev;
         });
     } else {
-        // If mean is higher than all choices, pick the highest choice
         closest = options.reduce((prev, curr) => {
             return voteToNum(curr) > voteToNum(prev) ? curr : prev;
         });
