@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { countVotes, formatNumber, pseudoRandomGenerator } from './utils';
+import { countVotes, formatNumber, pseudoRandomGenerator, voteStats } from './utils';
 
 describe('formatNumber', () => {
     test('less than 1000', () => {
@@ -40,5 +40,31 @@ describe('countVotes', () => {
             ['XL', 3],
             ['L', 1],
         ]);
+    });
+});
+
+describe('voteStats', () => {
+    test('no votes', () => {
+        expect(voteStats([])).toEqual(null);
+        expect(voteStats(['S', 'XL'])).toEqual(null);
+    });
+    test('halves and non-numbers', () => {
+        expect(voteStats(['½', '½'])?.mean).toEqual(0.5);
+        expect(voteStats(['1', '☕️'])?.mean).toEqual(1);
+    });
+    test('unanimous votes', () => {});
+    test('not unanimous', () => {
+        expect(voteStats(['1', '2', '3'])).toEqual({
+            mean: 2,
+            stdDev: 0.816496580927726,
+            closest: '2',
+            isUnanimous: false,
+        });
+        expect(voteStats(['4', '8', '20'])).toEqual({
+            mean: 10.666666666666666,
+            stdDev: 6.79869268479038,
+            closest: '20',
+            isUnanimous: false,
+        });
     });
 });
