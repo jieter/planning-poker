@@ -8,7 +8,7 @@ export const room = $state({
     choices: [] as string[],
     decks: [] as Array<[string, string]>,
     autoReveal: false,
-    deck: 'tshirt',
+    deck: 'fibonacci',
     isRevealed: false,
     user: { vote: null, is_spectator: false } as Participant,
     error: null as string | null,
@@ -19,14 +19,12 @@ export const room = $state({
     get votes() {
         return countVotes(this.participants.map((p) => p.vote));
     },
-
     get votingStats() {
         return voteStats(
             this.participants.map((p) => p.vote),
             this.choices,
         );
     },
-
     get showConfetti() {
         return this.isRevealed && this.votes.length === 1 && this.votes[0] && this.votes[0][1] > 1;
     },
@@ -119,3 +117,11 @@ export const setAutoReveal = (val: boolean) => {
     room.autoReveal = val;
     update('settings', { auto_reveal: val });
 };
+$effect.root(() => {
+    $effect(() => {
+        update('settings', {
+            deck: room.deck,
+            auto_reveal: room.autoReveal,
+        });
+    });
+});
