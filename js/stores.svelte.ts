@@ -1,9 +1,7 @@
 import type { LogEntry, Participant } from './types';
 import { countVotes, voteStats } from './utils';
 
-// --- The Room State ---
 export const room = $state({
-    // Raw State
     participants: [] as Participant[],
     choices: [] as string[],
     decks: [] as Array<[string, string]>,
@@ -47,9 +45,7 @@ export const room = $state({
     },
 });
 
-// --- Communication Logic ---
 let socket: WebSocket;
-
 export function update(action: string, extraParams: Record<string, any> = {}) {
     if (!socket || socket.readyState !== 1) return;
     const params = { action, ...extraParams };
