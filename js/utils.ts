@@ -1,5 +1,5 @@
 import Cookies from 'js-cookie';
-import type { VoteCount } from './types';
+import type { VoteCount, VotingStats } from './types';
 
 export function jsonScriptContents(id: string): any {
     const element = document.getElementById(id) as HTMLElement;
@@ -62,4 +62,47 @@ export function countVotes(votes: Array<string | null>): Array<VoteCount> {
     });
     const voteCounts: Array<VoteCount> = Object.entries(_votes);
     return voteCounts.sort((a, b) => b[1] - a[1]);
+}
+
+const voteToNum = (val: string | number | null): number => {
+    if (val === null) {
+        return NaN;
+    }
+    if (typeof val === 'number') {
+        return val;
+    }
+
+    return val == '½' ? 0.5 : parseFloat(val);
+};
+
+export function voteStats(votes: Array<string | null>, choices: Array<string> | null = null): VotingStats | null {
+    const data = votes.map(voteToNum).filter((v): v is number => !isNaN(v));
+    const n = data.length;
+
+    if (n === 0) return null;
+
+    const sum = data.reduce((a, b) => a + b, 0);
+    const mean = sum / n;
+
+    const variance = data.reduce((acc, v) => acc + Math.pow(v - mean, 2), 0) / n;
+    const stdDev = Math.sqrt(variance);
+
+    const options = choices ?? Array.from(new Set(votes.filter((v): v is string => v !== null)));
+    const sortedOptions = options.sort((a, b) => voteToNum(a) - voteToNum(b));
+
+    // Find the choice with the smallest absolute distance to the mean
+    const closest = sortedOptions.reduce((prev, curr) => {
+        const prevDiff = Math.abs(voteToNum(prev) - mean);
+        const currDiff = Math.abs(voteToNum(curr) - mean);
+
+        if (currDiff < prevDiff) {
+            return curr;
+        } else if (currDiff === prevDiff) {
+            // Tie-breaker: If distance is equal, pick the higher value (standard for 'closest')
+            return voteToNum(curr) > voteToNum(prev) ? curr : prev;
+        }
+        return prev;
+    });
+    const isUnanimous = new Set(data).size === 1;
+    return { mean, stdDev, closest, isUnanimous };
 }

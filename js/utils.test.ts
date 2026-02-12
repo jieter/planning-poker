@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { countVotes, formatNumber, pseudoRandomGenerator } from './utils';
+import { countVotes, formatNumber, pseudoRandomGenerator, voteStats } from './utils';
 
 describe('formatNumber', () => {
     test('less than 1000', () => {
@@ -40,5 +40,29 @@ describe('countVotes', () => {
             ['XL', 3],
             ['L', 1],
         ]);
+    });
+});
+
+describe('voteStats', () => {
+    test('no votes', () => {
+        expect(voteStats([])).toEqual(null);
+        expect(voteStats(['S', 'XL'])).toEqual(null);
+    });
+    test('mean', () => {
+        expect(voteStats(['½', '½'])?.mean).toEqual(0.5);
+        expect(voteStats(['1', '☕️'])?.mean).toEqual(1);
+        expect(voteStats(['2', '2', '2'])?.mean).toEqual(2);
+    });
+    test('isUnanimous', () => {
+        expect(voteStats(['1', '2', '3'])?.isUnanimous).toEqual(false);
+        expect(voteStats(['4', '8', '20'])?.isUnanimous).toEqual(false);
+        expect(voteStats(['1', '1', '1'])?.isUnanimous).toEqual(true);
+        expect(voteStats(['1'])?.isUnanimous).toEqual(true);
+        expect(voteStats(['1', '☕️'])?.isUnanimous).toEqual(true);
+    });
+    test('closest', () => {
+        expect(voteStats(['1', '2'])?.closest).toEqual('2');
+        expect(voteStats(['1', '1', '2'])?.closest).toEqual('1');
+        expect(voteStats(['1', '1', '1', '1', '1', '1', '1', '2'])?.closest).toEqual('1');
     });
 });
