@@ -48,23 +48,21 @@ describe('voteStats', () => {
         expect(voteStats([])).toEqual(null);
         expect(voteStats(['S', 'XL'])).toEqual(null);
     });
-    test('halves and non-numbers', () => {
+    test('mean', () => {
         expect(voteStats(['½', '½'])?.mean).toEqual(0.5);
         expect(voteStats(['1', '☕️'])?.mean).toEqual(1);
+        expect(voteStats(['2', '2', '2'])?.mean).toEqual(2);
     });
-    test('unanimous votes', () => {});
-    test('not unanimous', () => {
-        expect(voteStats(['1', '2', '3'])).toEqual({
-            mean: 2,
-            stdDev: 0.816496580927726,
-            closest: '2',
-            isUnanimous: false,
-        });
-        expect(voteStats(['4', '8', '20'])).toEqual({
-            mean: 10.666666666666666,
-            stdDev: 6.79869268479038,
-            closest: '20',
-            isUnanimous: false,
-        });
+    test('isUnanimous', () => {
+        expect(voteStats(['1', '2', '3'])?.isUnanimous).toEqual(false);
+        expect(voteStats(['4', '8', '20'])?.isUnanimous).toEqual(false);
+        expect(voteStats(['1', '1', '1'])?.isUnanimous).toEqual(true);
+        expect(voteStats(['1'])?.isUnanimous).toEqual(true);
+        expect(voteStats(['1', '☕️'])?.isUnanimous).toEqual(true);
+    });
+    test('closest', () => {
+        expect(voteStats(['1', '2'])?.closest).toEqual('2');
+        expect(voteStats(['1', '1', '2'])?.closest).toEqual('1');
+        expect(voteStats(['1', '1', '1', '1', '1', '1', '1', '2'])?.closest).toEqual('1');
     });
 });

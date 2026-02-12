@@ -88,19 +88,21 @@ export function voteStats(votes: Array<string | null>, choices: Array<string> | 
     const stdDev = Math.sqrt(variance);
 
     const options = choices ?? Array.from(new Set(votes.filter((v): v is string => v !== null)));
+    const sortedOptions = options.sort((a, b) => voteToNum(a) - voteToNum(b));
 
-    const optionsAtOrAbove = options.filter((c) => voteToNum(c) >= mean);
-    let closest: string;
-    if (optionsAtOrAbove.length > 0) {
-        closest = optionsAtOrAbove.reduce((prev, curr) => {
-            return voteToNum(curr) < voteToNum(prev) ? curr : prev;
-        });
-    } else {
-        closest = options.reduce((prev, curr) => {
+    // Find the choice with the smallest absolute distance to the mean
+    const closest = sortedOptions.reduce((prev, curr) => {
+        const prevDiff = Math.abs(voteToNum(prev) - mean);
+        const currDiff = Math.abs(voteToNum(curr) - mean);
+
+        if (currDiff < prevDiff) {
+            return curr;
+        } else if (currDiff === prevDiff) {
+            // Tie-breaker: If distance is equal, pick the higher value (standard for 'closest')
             return voteToNum(curr) > voteToNum(prev) ? curr : prev;
-        });
-    }
-
+        }
+        return prev;
+    });
     const isUnanimous = new Set(data).size === 1;
     return { mean, stdDev, closest, isUnanimous };
 }
