@@ -7,21 +7,7 @@ import Debug from './Debug.svelte';
 import History from './History.svelte';
 import Participant from './Participant.svelte';
 import Settings from './Settings.svelte';
-import {
-    choices,
-    connect,
-    error,
-    isRevealed,
-    participants,
-    update,
-    user,
-    castVote,
-    votes,
-    icon,
-    revealCount,
-    showConfetti,
-    getVotingStats,
-} from './stores.svelte';
+import { castVote, connect, room, update } from './stores.svelte';
 import Summary from './Summary.svelte';
 import { jsonScriptContents, changeFavicon, pseudoRandomGenerator } from './utils';
 
@@ -31,10 +17,10 @@ onMount(() => {
     debugOn = !!new URLSearchParams(window.location.search).get('debug');
 });
 $effect.pre(() => {
-    changeFavicon($icon);
+    changeFavicon(room.icon);
 });
 
-let random: () => number = $derived(pseudoRandomGenerator($revealCount, -3, 3));
+let random: () => number = $derived(pseudoRandomGenerator(room.revealCount, -3, 3));
 let innerWidth: number | undefined = $state();
 
 // Radius of the table in pixels, depending on the window width, with a maximum
@@ -47,30 +33,30 @@ $effect.pre(() => {
 </script>
 
 <svelte:window bind:innerWidth />
-{#if $error}
+{#if room.error}
     <div class="fixed-top">
-        <div class="alert alert-danger" role="alert">{$error}</div>
+        <div class="alert alert-danger" role="alert">{room.error}</div>
     </div>
 {/if}
 
 <div class="participants mt-5" style="--radius: {radius}px">
-    {#each $participants as user, i (user.id)}
+    {#each room.participants as user, i (user.id)}
         <Participant
-            isRevealed={$isRevealed}
+            isRevealed={room.isRevealed}
             {user}
             {i}
-            count={$participants.length}
+            count={room.participants.length}
             radius={radius * 0.94}
             rotation={random()} />
     {/each}
-    {#if $isRevealed}
+    {#if room.isRevealed}
         <div class="controls">
-            {#if $showConfetti}
+            {#if room.showConfetti}
                 <div use:confetti></div>
             {/if}
             <Summary
-                votes={$votes}
-                stats={getVotingStats()}
+                votes={room.votes}
+                stats={room.votingStats}
                 {random}
                 style="color: white;"
                 class="p-2 mb-2 text-center rounded" />
@@ -80,7 +66,7 @@ $effect.pre(() => {
 <div class="container text-center">
     <div class="row">
         <div class="col">
-            {#if $user.is_spectator}
+            {#if room.user.is_spectator}
                 You joined as spectator.<br />
                 I want to
                 <button onclick={() => update('settings', { is_spectator: false })} class="btn btn-light btn-sm">
@@ -88,13 +74,13 @@ $effect.pre(() => {
                 </button>
             {:else}
                 <div class="d-flex justify-content-center">
-                    {#each $choices as choice}
+                    {#each room.choices as choice}
                         <button
                             onclick={castVote(choice)}
                             onkeypress={castVote(choice)}
-                            disabled={$isRevealed}
+                            disabled={room.isRevealed}
                             class="vote-button p-0"
-                            class:selected={choice == $user.vote}>
+                            class:selected={choice == room.user.vote}>
                             <Card background="#fff">{choice}</Card>
                         </button>
                     {/each}

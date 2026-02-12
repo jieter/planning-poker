@@ -88,7 +88,7 @@ export function voteStats(votes: Array<string | null>, choices: Array<string> | 
     const stdDev = Math.sqrt(variance);
 
     const options = choices ?? Array.from(new Set(votes.filter((v): v is string => v !== null)));
-    const sortedOptions = options.sort((a, b) => voteToNum(a) - voteToNum(b));
+    const sortedOptions = options.toSorted((a, b) => voteToNum(a) - voteToNum(b));
 
     // Find the choice with the smallest absolute distance to the mean
     const closest = sortedOptions.reduce((prev, curr) => {
