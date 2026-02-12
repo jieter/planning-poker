@@ -13,7 +13,7 @@ export const room = $state({
     log: [] as LogEntry[],
     revealCount: 0,
 
-    // Derived State (Calculated automatically when dependencies change)
+    // Derive a sorted list of (card, votes)-pairs off of the participants store:
     get votes() {
         return countVotes(this.participants.map((p) => p.vote));
     },
@@ -23,10 +23,11 @@ export const room = $state({
             this.choices,
         );
     },
+    // Show confetti if votes are revealed and all participants voted the same and there are more than 1 participants.
     get showConfetti() {
         return this.isRevealed && this.votes.length === 1 && this.votes[0] && this.votes[0][1] > 1;
     },
-
+    // Voting is considered complete if all active non-spectators voted:
     get votingComplete() {
         return this.participants.every((p) => p.is_spectator || p.vote);
     },
