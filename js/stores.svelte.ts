@@ -1,152 +1,124 @@
-import { derived, writable, get } from 'svelte/store';
-
 import type { LogEntry, Participant } from './types';
 import { countVotes, voteStats } from './utils';
 
-export const participants = writable<Array<Participant>>([]);
-export const choices = writable<Array<string>>([]);
-export const decks = writable<Array<[string, string]>>([]);
-export const autoReveal = writable<boolean>(false);
-export const deck = writable<string>('tshirt');
-export const isRevealed = writable<boolean>(false);
-export const user = writable<Participant>({ vote: null, is_spectator: false });
-export const error = writable<string | null>(null);
-export const log = writable<Array<LogEntry>>([]);
-export const revealCount = writable(0);
+export const room = $state({
+    participants: [] as Participant[],
+    choices: [] as string[],
+    decks: [] as Array<[string, string]>,
+    autoReveal: false,
+    deck: 'fibonacci',
+    isRevealed: false,
+    user: { vote: null, is_spectator: false } as Participant,
+    error: null as string | null,
+    log: [] as LogEntry[],
+    revealCount: 0,
 
-// Derive a sorted list of (card, votes)-pairs off of the participants store:
-export const votes = derived(participants, ($participants: Array<Participant>) => {
-    return countVotes($participants.map((p: Participant) => p.vote));
-});
+    // Derive a sorted list of (card, votes)-pairs off of the participants store:
+    get votes() {
+        return countVotes(this.participants.map((p) => p.vote));
+    },
+    get votingStats() {
+        return voteStats(
+            this.participants.map((p) => p.vote),
+            this.choices,
+        );
+    },
+    // Show confetti if votes are revealed and all participants voted the same and there are more than 1 participants.
+    get showConfetti() {
+        return this.isRevealed && this.votes.length === 1 && this.votes[0] && this.votes[0][1] > 1;
+    },
+    // Voting is considered complete if all active non-spectators voted:
+    get votingComplete() {
+        return this.participants.every((p) => p.is_spectator || p.vote);
+    },
 
-const stats = $derived.by(() => {
-    const rawVotes = get(participants).map((p) => p.vote);
-    return voteStats(rawVotes, get(choices));
-});
+    get icon() {
+        if (this.showConfetti) return '🎉';
+        if (this.isRevealed) return '🃏';
 
-export const getVotingStats = () => stats;
-
-// Show confetti if votes are revealed and all participants voted the same and there are more than 1 participants.
-export const showConfetti = derived([isRevealed, votes], ([$isRevealed, $votes]) => {
-    return $isRevealed && $votes.length == 1 && $votes[0] && $votes[0][1] > 1;
-});
-
-// Voting is considered complete if all active non-spectators voted:
-export const votingComplete = derived(participants, ($participants) => {
-    return $participants.every((p: Participant) => p.is_spectator || p.vote);
-});
-
-export const icon = derived(
-    [participants, user, showConfetti, isRevealed],
-    ([$participants, $user, $showConfetti, $isRevealed]) => {
-        if ($showConfetti) {
-            return '🎉';
-        } else if ($isRevealed) {
-            return '🃏';
-        }
-
-        const voters = $participants.filter((p) => !p.is_spectator);
+        const voters = this.participants.filter((p) => !p.is_spectator);
         const totalVotes = voters.filter((p) => p.vote);
-        const almostComplete = voters.length - totalVotes.length == 1;
-        // Your vote is the last vote missing; others are waiting for you!
-        if (voters.length > 1 && !$user.vote && almostComplete) {
+        const almostComplete = voters.length - totalVotes.length === 1;
+        if (voters.length > 1 && !this.user.vote && almostComplete) {
             return '🚨';
         }
         return '🕶️';
     },
-);
-
-// Set the vote for the current user to `value`
-const setUserVote = (value: string | null) => {
-    user.update(($user) => {
-        $user.vote = value;
-        return $user;
-    });
-};
-
-type ExtraParams = Record<string, any> | undefined;
-type Params = {
-    action: string;
-} & ExtraParams;
+});
 
 let socket: WebSocket;
-export function update(action: string, extraParams: ExtraParams = undefined) {
-    if (!socket || socket.readyState != 1) {
-        // wait until socket is open
-        console.log('Socket not open yet');
-        return;
-    }
-    const params: Params = { action: action, ...extraParams };
-    console.log('update', params);
+export function update(action: string, extraParams: Record<string, any> = {}) {
+    if (!socket || socket.readyState !== 1) return;
+    const params = { action, ...extraParams };
     socket.send(JSON.stringify(params));
 }
 
 export function connect(websocketUrl: string) {
-    console.log('Connect to', websocketUrl);
     socket = new WebSocket(websocketUrl);
 
     socket.onclose = () => {
-        error.set('WebSocket connection closed unexpectedly. Trying to reconnect in 2s...');
-        setTimeout(() => {
-            console.log('Reconnecting...');
-            connect(websocketUrl);
-        }, 2000);
+        room.error = 'WebSocket connection closed. Reconnecting...';
+        setTimeout(() => connect(websocketUrl), 2000);
     };
-    socket.onopen = () => {
-        // Sometimes the 'init' message is not send from the backend if the page was already open,
-        // sending an init message will result in an init response.
-        update('init');
-    };
+
+    socket.onopen = () => update('init');
+
     socket.onmessage = (e) => {
         const data = JSON.parse(e.data);
-        console.log('message', data);
-
         switch (data.type) {
             case 'init':
-                participants.set(data.users);
-                user.set(data.user);
-                choices.set(data.settings.choices);
-                autoReveal.set(data.settings.auto_reveal);
-                isRevealed.set(data.settings.is_revealed);
-                decks.set(data.settings.decks);
-                deck.set(data.settings.deck);
-                log.set(data.log);
-                error.set(null);
-                revealCount.set(data.reveal_count);
-
+                room.participants = data.users;
+                room.user = data.user;
+                room.choices = data.settings.choices;
+                room.autoReveal = data.settings.auto_reveal;
+                room.isRevealed = data.settings.is_revealed;
+                room.decks = data.settings.decks;
+                room.deck = data.settings.deck;
+                room.log = data.log;
+                room.error = null;
+                room.revealCount = data.reveal_count;
                 break;
             case 'vote':
-                participants.update(($participants) => {
-                    $participants.forEach((p: Participant) => {
-                        if (p.id == data.user_id) {
-                            p.vote = data.value;
-                        }
-                    });
-
-                    return [...$participants];
-                });
+                const p = room.participants.find((u) => u.id === data.user_id);
+                if (p) p.vote = data.value;
                 break;
             case 'error':
-                error.set(data.message);
+                room.error = data.message;
                 break;
         }
     };
 }
 
 export const revealVotes = () => update('reveal');
+
 export const clearVotes = () => {
-    setUserVote(null);
+    room.user.vote = null;
     update('clear');
 };
 
 export function castVote(value: string) {
     return () => {
-        if (!get(isRevealed)) {
-            update('vote', { value: value });
-            setUserVote(value);
+        if (!room.isRevealed) {
+            update('vote', { value });
+            room.user.vote = value;
         }
     };
 }
 
-deck.subscribe(($deck) => update('settings', { deck: $deck }));
-autoReveal.subscribe(($autoReveal) => update('settings', { auto_reveal: $autoReveal }));
+export const setDeck = (val: string) => {
+    room.deck = val;
+    update('settings', { deck: val });
+};
+
+export const setAutoReveal = (val: boolean) => {
+    room.autoReveal = val;
+    update('settings', { auto_reveal: val });
+};
+$effect.root(() => {
+    $effect(() => {
+        update('settings', {
+            deck: room.deck,
+            auto_reveal: room.autoReveal,
+        });
+    });
+});

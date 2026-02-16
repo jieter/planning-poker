@@ -25,7 +25,7 @@ let { votes, stats, random = () => 0, ...rest }: Props = $props();
     </div>
     {#if stats && !stats.isUnanimous}
         <div data-testid="suggestion">
-            μ: {stats.mean.toFixed(1)}, σ: {stats.stdDev.toFixed(2)}, Suggested:
+            μ: {stats.mean.toFixed(1)}, σ: {stats.stdDev.toFixed(2)}, suggestion:
             <div class="d-inline-block text-center card-wrapper" style="width: 24px;">
                 <Card>{stats.closest}</Card>
             </div>

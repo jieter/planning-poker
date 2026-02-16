@@ -1,5 +1,5 @@
 <script lang="ts">
-import { log, revealCount } from './stores.svelte';
+import { room } from './stores.svelte';
 import { countVotes } from './utils';
 import Summary from './Summary.svelte';
 
@@ -16,21 +16,21 @@ function toggleCollapsed() {
     onclick={toggleCollapsed}
     onkeypress={toggleCollapsed}
     tabindex="0">
-    {#if $revealCount == 0}
+    {#if room.revealCount == 0}
         No history yet.
-    {:else if $revealCount == 1}
+    {:else if room.revealCount == 1}
         {#if collapsed}Show{:else}Hide{/if} previous votes
     {:else}
-        {#if collapsed}Show{:else}Hide{/if} previous {$revealCount} rounds
+        {#if collapsed}Show{:else}Hide{/if} previous {room.revealCount} rounds
     {/if}
 
-    {#if $revealCount > 0}
+    {#if room.revealCount > 0}
         {#if collapsed}▲{:else}▼{/if}
     {/if}
 </div>
 {#if !collapsed}
     <div class="d-flex overflow-scroll mb-2 text-muted">
-        {#each $log.filter((x) => x.event == 'reveal') as { data }}
+        {#each room.log.filter((x) => x.event == 'reveal') as { data }}
             {@const voteSummary = countVotes(data.votes)}
             <small class="voting-round ms-1 text-center">
                 Round {data.round}

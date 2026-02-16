@@ -28,6 +28,6 @@ describe('Summary.svelte', () => {
 
         expect(suggestionEl.textContent).toContain('μ: 1.3');
         expect(suggestionEl.textContent).toContain('σ: 0.47');
-        expect(suggestionEl.textContent).toContain('Suggested: 1');
+        expect(suggestionEl.textContent).toContain('suggestion: 1');
     });
 });
