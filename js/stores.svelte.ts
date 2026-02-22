@@ -79,13 +79,8 @@ export function connect(websocketUrl: string) {
                 room.revealCount = data.reveal_count;
                 break;
             case 'vote':
-                room.participants = room.participants.map((p) =>
-                    p.id === data.user_id ? { ...p, vote: data.value } : p,
-                );
-                break;
-            case 'clear':
-                room.isRevealed = false;
-                room.participants = room.participants.map((p) => ({ ...p, vote: null }));
+                const p = room.participants.find((u) => u.id === data.user_id);
+                if (p) p.vote = data.value;
                 break;
             case 'error':
                 room.error = data.message;
@@ -98,7 +93,6 @@ export const revealVotes = () => update('reveal');
 
 export const clearVotes = () => {
     room.user.vote = null;
-    room.isRevealed = false;
     update('clear');
 };
 
