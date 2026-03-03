@@ -17,9 +17,7 @@ function youtubeMovie(name: string | undefined) {
         return undefined;
     }
     name = name.toLowerCase();
-    if (name.match(/dan.*l/)) {
-        return 'yTgSQ2AQGAI'; // Poker Face
-    } else if (name.match(/arn.*t/)) {
+    if (name.match(/arn.*t/)) {
         return '6p-lDYPR2P8'; // Material girl
     } else if (name.match(/jonat.*n/)) {
         return 'N5imM0ftfkQ'; // Stadsduif
