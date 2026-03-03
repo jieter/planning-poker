@@ -3,6 +3,7 @@
 
 source /home/deployer/virtualenv/bin/activate
 cd ~/planning-poker || exit
+git fetch
 git reset --hard origin/master
 npm ci
 npm install @rollup/rollup-linux-x64-gnu
