@@ -69,7 +69,7 @@ ASGI_APPLICATION = "app.asgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "NAME": env("DATABASE_PATH", BASE_DIR / "db.sqlite3"),
     }
 }
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"

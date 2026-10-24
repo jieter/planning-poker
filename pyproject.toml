@@ -1,6 +1,6 @@
 [tool.black]
 line-length = 120
-target-version = ["py311"]
+target-version = ["py314"]
 
 [tool.ruff]
 fix = false
@@ -23,7 +23,7 @@ select = [
   "I", # isort
   "UP", # pyupgrade
 ]
-target-version = "py311"
+target-version = "py314"
 unfixable = [
   "F8", # names in flake8, such as defined but unused variables
 ]

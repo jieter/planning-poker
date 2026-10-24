@@ -98,7 +98,7 @@ class PokerSession(models.Model):
         self.save()
         self.logs.create(event="clear")
 
-    def add_user(self, name, is_spectator=False) -> "User":
+    def add_user(self, name, is_spectator=False) -> User:
         user, created = self.users.get_or_create(name=name, is_spectator=is_spectator, is_active=True)
         self.logs.create(event="add_user", data=dict(name=name, is_spectator=is_spectator))
         return user
