@@ -1,0 +1,15 @@
+.git
+.github
+.vscode
+.idea
+.mypy_cache
+.ruff_cache
+.coverage
+htmlcov
+node_modules
+assets
+staticfiles
+db.sqlite3*
+**/__pycache__
+Dockerfile
+.dockerignore

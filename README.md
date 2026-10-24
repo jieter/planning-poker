@@ -20,6 +20,17 @@ If you want to run in production mode:
 1. `PRODUCTION=1 ./manage.py collectstatic --noinput`
 1. `PRODUCTION=1 HOSTNAME=localhost ./manage.py runserver`
 
+# Running with Docker
+The image builds the JavaScript bundle, runs migrations on start and serves on port 8000 with `daphne`.
+It needs a Redis server and a volume for the SQLite database in `/data`:
+
+```
+docker build -t poker .
+docker run -p 8000:8000 -v poker-data:/data -e REDIS_HOST=<redis> -e HOSTNAME=localhost -e SECRET_KEY=<secret> poker
+```
+
+Set `HOSTNAME` explicitly: docker sets it to the container id by default.
+
 # Running on regular ubuntu 22.04
 1. `sudo apt install redis-server python3.11-venv supervisor`
 1. `python3.11 -m venv virtualenv`
