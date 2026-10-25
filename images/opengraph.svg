@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <!-- Felt and wood, the same colours as the table in js/Voting.svelte -->
+    <radialGradient id="felt" cx="78%" cy="100%" r="95%">
+      <stop offset="0" stop-color="#3e803f"/>
+      <stop offset="1" stop-color="#093d15"/>
+    </radialGradient>
+    <linearGradient id="wood" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#743f11"/>
+      <stop offset="1" stop-color="#f0a25c"/>
+    </linearGradient>
+    <!-- Card face, as .deck-card in js/Card.svelte -->
+    <linearGradient id="face" x1="0" y1="1" x2="1" y2="0">
+      <stop offset="0" stop-color="#c2c2c2"/>
+      <stop offset="0.5" stop-color="#fff"/>
+    </linearGradient>
+    <!-- Card back, the cross-hatch from js/Participant.svelte -->
+    <pattern id="hatch" width="14" height="14" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <rect width="14" height="14" fill="#fff"/>
+      <rect x="6" width="2.5" height="14" fill="#cc6060"/>
+      <rect y="6" width="14" height="2.5" fill="#cc6060"/>
+    </pattern>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#000" flood-opacity="0.35"/>
+    </filter>
+    <g id="card">
+      <rect x="-75" y="-128" width="150" height="256" rx="10" fill="url(#face)" stroke="#000" stroke-opacity="0.2" stroke-width="1.5"/>
+    </g>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#felt)"/>
+  <!-- Wooden table edge along the bottom -->
+  <rect y="606" width="1200" height="24" fill="url(#wood)"/>
+
+  <!-- Title -->
+  <g font-family="Avenir Next" fill="#fff">
+    <text x="72" y="320" font-size="92" font-weight="700" letter-spacing="-1">Planning</text>
+    <text x="72" y="420" font-size="92" font-weight="700" letter-spacing="-1">poker</text>
+  </g>
+
+  <!-- A hand of cards, fanned from a point below the table -->
+  <g font-family="Avenir Next" font-weight="600" font-size="64" fill="#444" text-anchor="middle" filter="url(#shadow)">
+    <g transform="translate(830 900) rotate(-26) translate(0 -520)">
+      <use href="#card"/><text y="22">1</text>
+    </g>
+    <g transform="translate(830 900) rotate(-13) translate(0 -520)">
+      <use href="#card"/><text y="22">3</text>
+    </g>
+    <g transform="translate(830 900) rotate(0) translate(0 -520)">
+      <use href="#card"/><text y="22">5</text>
+    </g>
+    <g transform="translate(830 900) rotate(13) translate(0 -520)">
+      <use href="#card"/><text y="22">8</text>
+    </g>
+    <!-- Face down, not revealed yet -->
+    <g transform="translate(830 900) rotate(26) translate(0 -520)">
+      <rect x="-75" y="-128" width="150" height="256" rx="10" fill="#fff" stroke="#000" stroke-opacity="0.2" stroke-width="1.5"/>
+      <rect x="-63" y="-112" width="126" height="224" rx="6" fill="url(#hatch)" stroke="#cc6060" stroke-width="1.5"/>
+    </g>
+  </g>
+</svg>
