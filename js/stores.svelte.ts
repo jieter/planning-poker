@@ -27,9 +27,10 @@ export const room = $state({
     get showConfetti() {
         return this.isRevealed && this.votes.length === 1 && this.votes[0] && this.votes[0][1] > 1;
     },
-    // Voting is considered complete if all active non-spectators voted:
+    // Voting is considered complete if there is at least one active non-spectator, and all of them voted:
     get votingComplete() {
-        return this.participants.every((p) => p.is_spectator || p.vote);
+        const voters = this.participants.filter((p) => !p.is_spectator);
+        return voters.length > 0 && voters.every((p) => p.vote);
     },
 
     get icon() {
