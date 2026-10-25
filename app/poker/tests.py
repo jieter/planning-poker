@@ -45,6 +45,14 @@ class PokerModelsTestCase(TestCase):
             self.assertEqual(poker.add_user("Jan").name, f"Jan {suffix}")
         self.assertEqual(poker.add_user("Jan").name, "Jan 2")
 
+    def test_add_user_name_length(self):
+        poker = PokerSession.objects.create()
+        long_name = "x" * 100_000
+        self.assertEqual(poker.add_user(f"  {long_name}  ").name, "x" * 30)
+
+        # Suffixes for duplicate names fit too
+        self.assertEqual(poker.add_user(long_name).name, "x" * 28 + " 🦊")
+
     def test_join_after_other_user_voted(self):
         poker = PokerSession.objects.create()
 
@@ -266,6 +274,18 @@ class ViewTestCase(TestCase):
         poker = PokerSession.objects.create()
         response = self.client.get(reverse("poker", args=[poker.id]))
         self.assertEqual(response["Referrer-Policy"], "same-origin")
+
+    def test_join(self):
+        poker = PokerSession.objects.create()
+        url = reverse("poker", args=[poker.id])
+
+        response = self.client.post(url, {"name": "   "})
+        self.assertEqual(response.status_code, 200)
+        self.assertFalse(poker.users.exists())
+
+        response = self.client.post(url, {"name": "x" * 100_000})
+        self.assertRedirects(response, url)
+        self.assertEqual(poker.users.get().name, "x" * 30)
 
     def test_index_view_invalid_session_id(self):
         response = self.client.get("/poker/not-a-uuid/")

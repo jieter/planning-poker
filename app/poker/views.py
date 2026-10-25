@@ -15,7 +15,7 @@ def index_view(request, session_id=None):
     poker = get_object_or_404(PokerSession, id=session_id)
 
     # Handle a user join request
-    if name := request.POST.get("name"):
+    if name := request.POST.get("name", "").strip():
         user = poker.add_user(name=name, is_spectator=request.POST.get("is_spectator") == "on")
         request.session["user_id"] = user.id
         return redirect("poker", session_id=session_id)

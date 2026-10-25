@@ -51,6 +51,7 @@ $effect.pre(() => {
                         <input
                             type="text"
                             name="name"
+                            maxlength="30"
                             class="form-control"
                             onchange={update}
                             bind:value={name}
