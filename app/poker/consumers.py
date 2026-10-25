@@ -9,7 +9,7 @@ from .models import PokerSession
 
 class PokerConsumer(JsonWebsocketConsumer):
     def __init__(self, *args, **kwargs):
-        super().__init__(args, kwargs)
+        super().__init__(*args, **kwargs)
         self.poker_id = None
         self.poker = None
         self.user = None
