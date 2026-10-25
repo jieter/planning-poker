@@ -79,7 +79,6 @@ $effect.pre(() => {
                     {#each room.choices as choice (choice)}
                         <button
                             onclick={castVote(choice)}
-                            onkeypress={castVote(choice)}
                             disabled={room.isRevealed}
                             class="vote-button p-0"
                             class:selected={choice == room.user.vote}>
