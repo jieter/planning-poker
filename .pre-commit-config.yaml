@@ -38,3 +38,8 @@ repos:
         entry: npm run format --
         language: system
         types_or: [javascript,svelte,ts]
+      - id: eslint
+        name: eslint
+        entry: npx eslint --fix
+        language: system
+        types_or: [javascript,svelte,ts]

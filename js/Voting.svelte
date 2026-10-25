@@ -1,6 +1,6 @@
 <script lang="ts">
-import { onMount } from 'svelte';
 import { confetti } from '@neoconfetti/svelte';
+import { onMount } from 'svelte';
 
 import Card from './Card.svelte';
 import Debug from './Debug.svelte';
@@ -13,7 +13,7 @@ import { jsonScriptContents, changeFavicon, pseudoRandomGenerator } from './util
 
 let debugOn = $state(false);
 onMount(() => {
-    connect(jsonScriptContents('websocket_url'));
+    connect(jsonScriptContents('websocket_url')!);
     debugOn = !!new URLSearchParams(window.location.search).get('debug');
 });
 $effect.pre(() => {
@@ -76,7 +76,7 @@ $effect.pre(() => {
                 </button>
             {:else}
                 <div class="d-flex justify-content-center">
-                    {#each room.choices as choice}
+                    {#each room.choices as choice (choice)}
                         <button
                             onclick={castVote(choice)}
                             onkeypress={castVote(choice)}

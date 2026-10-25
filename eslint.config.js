@@ -1,3 +1,4 @@
+import js from '@eslint/js';
 import importX from 'eslint-plugin-import-x';
 import svelte from 'eslint-plugin-svelte';
 import globals from 'globals';
@@ -7,6 +8,9 @@ export default ts.config(
     {
         ignores: ['assets/', 'staticfiles/', 'htmlcov/'],
     },
+    js.configs.recommended,
+    ...ts.configs.recommended,
+    ...svelte.configs.recommended,
     ...svelte.configs.prettier,
     {
         files: ['**/*.svelte', '**/*.svelte.ts'],

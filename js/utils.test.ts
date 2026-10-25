@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, test } from 'vitest';
+
 import { stubColorScheme } from './testutils';
 import { applyTheme, countVotes, formatNumber, pseudoRandomGenerator, voteStats } from './utils';
 
