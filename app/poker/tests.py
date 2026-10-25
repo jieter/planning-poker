@@ -45,6 +45,12 @@ class PokerModelsTestCase(TestCase):
             self.assertEqual(poker.add_user("Jan").name, f"Jan {suffix}")
         self.assertEqual(poker.add_user("Jan").name, "Jan 2")
 
+    def test_add_user_with_duplicate_name_different_case(self):
+        poker = PokerSession.objects.create()
+        poker.add_user("Jan")
+        self.assertEqual(poker.add_user("jan").name, "jan 🦊")
+        self.assertEqual(poker.add_user("JAN").name, "JAN 🐼")
+
     def test_add_user_name_length(self):
         poker = PokerSession.objects.create()
         long_name = "x" * 100_000
