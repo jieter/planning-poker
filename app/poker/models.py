@@ -76,6 +76,7 @@ class PokerSession(models.Model):
         """Set a new deck if the requested dack is different from the current deck."""
         if deck in self.Deck.values and self.deck != deck:
             self.deck = deck
+            self.save(update_fields=["deck"])
             self.logs.create(event="set_deck", data={"deck": deck})
             self.clear()
 
@@ -99,7 +100,7 @@ class PokerSession(models.Model):
         """Clear all votes and return to voting state."""
         self.users.all().update(vote=None)
         self.is_revealed = False
-        self.save()
+        self.save(update_fields=["is_revealed"])
         self.logs.create(event="clear")
 
     def add_user(self, name, is_spectator=False) -> User:
@@ -170,8 +171,8 @@ class User(models.Model):
 
     def activate(self) -> None:
         self.is_active = True
-        self.save()
+        self.save(update_fields=["is_active"])
 
     def deactivate(self) -> None:
         self.is_active = False
-        self.save()
+        self.save(update_fields=["is_active"])

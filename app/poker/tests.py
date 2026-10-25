@@ -75,6 +75,30 @@ class PokerModelsTestCase(TestCase):
         self.assertEqual(stale.reveal_count, 1)
         self.assertEqual(poker.logs.filter(event="reveal").count(), 1)
 
+    def test_saves_do_not_overwrite_concurrent_changes(self):
+        poker = PokerSession.objects.create()
+        alice = poker.add_user("Alice")
+        alice.vote = "5"
+        alice.save()
+        stale_poker = PokerSession.objects.get(pk=poker.pk)
+        stale_alice = poker.users.get(pk=alice.pk)
+
+        poker.auto_reveal = False
+        poker.save()
+        poker.reveal()
+        poker.clear()
+
+        stale_poker.set_deck(PokerSession.Deck.TSHIRT)
+        stale_alice.deactivate()
+
+        poker.refresh_from_db()
+        self.assertFalse(poker.auto_reveal)
+        self.assertEqual(poker.reveal_count, 1)
+        self.assertEqual(poker.deck, PokerSession.Deck.TSHIRT)
+        alice.refresh_from_db()
+        self.assertIsNone(alice.vote)
+        self.assertFalse(alice.is_active)
+
     def test_is_voting_complete(self):
         poker = PokerSession.objects.create()
 

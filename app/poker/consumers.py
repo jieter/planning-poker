@@ -56,19 +56,18 @@ class PokerConsumer(JsonWebsocketConsumer):
 
     def receive_json(self, content):
         poker = self.poker
+        poker.refresh_from_db()
         action = content.get("action")
         match action:
             case "settings":
                 if "auto_reveal" in content:
-                    new_val = bool(content["auto_reveal"])
-                    if poker.auto_reveal != new_val:
-                        poker.auto_reveal = new_val
-                        poker.save()
+                    poker.auto_reveal = bool(content["auto_reveal"])
+                    poker.save(update_fields=["auto_reveal"])
                 if "deck" in content:
                     poker.set_deck(content["deck"])
                 if "is_spectator" in content:
                     self.user.is_spectator = bool(content["is_spectator"])
-                    self.user.save()
+                    self.user.save(update_fields=["is_spectator"])
 
             case "vote":
                 if self.user:
@@ -76,7 +75,7 @@ class PokerConsumer(JsonWebsocketConsumer):
                     vote = vote if vote in poker.deck_as_list() else "🍗"
 
                     self.user.vote = vote
-                    self.user.save()
+                    self.user.save(update_fields=["vote"])
 
                     if not poker.is_voting_complete:
                         message = {"type": "vote", "user_id": self.user_id, "value": vote}
@@ -100,7 +99,7 @@ class PokerConsumer(JsonWebsocketConsumer):
                     deck.extend([deck[0]] * 3)
                     for user in poker.users.all():
                         user.vote = random.choice(deck)
-                        user.save()
+                        user.save(update_fields=["vote"])
 
         self.auto_reveal()
         self.channel_send_init(f"{action=}")
