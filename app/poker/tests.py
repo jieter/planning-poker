@@ -1,3 +1,4 @@
+import asyncio
 import uuid
 from datetime import UTC, datetime
 from unittest.mock import patch
@@ -5,12 +6,13 @@ from unittest.mock import patch
 from asgiref.sync import sync_to_async
 from channels.routing import URLRouter
 from channels.testing import WebsocketCommunicator
-from django.test import TestCase, override_settings
+from django.test import TestCase, TransactionTestCase, override_settings
 from django.urls import reverse
 
 from app.asgi import application
 
 from . import models
+from .consumers import PokerConsumer
 from .models import PokerSession
 from .routing import websocket_urlpatterns
 
@@ -66,6 +68,33 @@ class PokerModelsTestCase(TestCase):
 
         # Suffixes for duplicate names fit too
         self.assertEqual(poker.add_user(long_name).name, "x" * 28 + " 🦊")
+
+    def test_deactivate_connection(self):
+        poker = PokerSession.objects.create()
+        user = poker.add_user("Alice")
+
+        user.activate("first")
+        user.activate("second")
+        self.assertFalse(user.deactivate_connection("first"))
+        self.assertEqual(poker.users_as_list(), [user.as_dict()])
+
+        self.assertTrue(user.deactivate_connection("second"))
+        self.assertEqual(poker.users_as_list(), [])
+
+    def test_replace_connection(self):
+        poker = PokerSession.objects.create()
+        user = poker.add_user("Alice")
+        user.activate("first")
+        user.activate("second")
+
+        # A newer connection replaced "first", so this is ignored.
+        user.replace_connection("first", "third")
+        user.refresh_from_db()
+        self.assertEqual(user.channel_name, "second")
+
+        user.replace_connection("second", "first")
+        user.refresh_from_db()
+        self.assertEqual(user.channel_name, "first")
 
     def test_join_after_other_user_voted(self):
         poker = PokerSession.objects.create()
@@ -307,7 +336,7 @@ class ViewTestCase(TestCase):
 
 
 @override_settings(CHANNEL_LAYERS={"default": {"BACKEND": "channels.layers.InMemoryChannelLayer"}})
-class ConsumerTestCase(TestCase):
+class ConsumerTestCase(TransactionTestCase):
     def setUp(self):
         self.poker = PokerSession.objects.create()
         self.alice = self.poker.add_user("Alice")
@@ -317,6 +346,13 @@ class ConsumerTestCase(TestCase):
         communicator = WebsocketCommunicator(URLRouter(websocket_urlpatterns), f"/ws/poker/{poker_id}/")
         communicator.scope["session"] = {"user_id": user_id}
         return communicator
+
+    async def wait_for_delayed_disconnect(self):
+        await asyncio.sleep(PokerConsumer.disconnect_delay + PokerConsumer.presence_timeout + 0.5)
+
+    async def is_active(self, user):
+        await sync_to_async(user.refresh_from_db)()
+        return user.is_active
 
     async def test_connect_and_disconnect(self):
         communicator = self.communicator(self.poker.id, self.alice.id)
@@ -329,8 +365,9 @@ class ConsumerTestCase(TestCase):
         self.assertEqual([user["name"] for user in message["users"]], ["Alice"])
 
         await communicator.disconnect()
-        await sync_to_async(self.alice.refresh_from_db)()
-        self.assertFalse(self.alice.is_active)
+        self.assertTrue(await self.is_active(self.alice))
+        await self.wait_for_delayed_disconnect()
+        self.assertFalse(await self.is_active(self.alice))
 
     async def test_vote(self):
         communicator = self.communicator(self.poker.id, self.alice.id)
@@ -355,6 +392,7 @@ class ConsumerTestCase(TestCase):
 
         await alice_communicator.send_json_to({"action": "vote", "value": "5"})
         await bob_communicator.disconnect()
+        await self.wait_for_delayed_disconnect()
 
         # Drain the init messages, the last one contains the state after Bob left.
         while not await alice_communicator.receive_nothing():
@@ -406,3 +444,38 @@ class ConsumerTestCase(TestCase):
         await communicator.disconnect()
         await sync_to_async(bob.refresh_from_db)()
         self.assertTrue(bob.is_active, "Disconnecting from another session must not deactivate Bob")
+
+    async def test_reconnect_within_delay_keeps_user_active(self):
+        communicator = self.communicator(self.poker.id, self.alice.id)
+        await communicator.connect()
+        await communicator.disconnect()
+
+        reconnected = self.communicator(self.poker.id, self.alice.id)
+        await reconnected.connect()
+
+        await self.wait_for_delayed_disconnect()
+        is_active = await self.is_active(self.alice)
+        await reconnected.disconnect()
+        self.assertTrue(is_active)
+
+    async def assert_user_active_until_all_tabs_closed(self, close_newest_first):
+        tabs = [self.communicator(self.poker.id, self.alice.id) for _ in range(2)]
+        for tab in tabs:
+            await tab.connect()
+        if close_newest_first:
+            tabs.reverse()
+
+        await tabs[0].disconnect()
+        await self.wait_for_delayed_disconnect()
+        is_active = await self.is_active(self.alice)
+
+        await tabs[1].disconnect()
+        await self.wait_for_delayed_disconnect()
+        self.assertTrue(is_active)
+        self.assertFalse(await self.is_active(self.alice))
+
+    async def test_close_newest_tab_first(self):
+        await self.assert_user_active_until_all_tabs_closed(close_newest_first=True)
+
+    async def test_close_oldest_tab_first(self):
+        await self.assert_user_active_until_all_tabs_closed(close_newest_first=False)

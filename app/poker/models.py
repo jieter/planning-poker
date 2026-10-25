@@ -167,6 +167,9 @@ class User(models.Model):
     session = models.ForeignKey(PokerSession, on_delete=models.CASCADE, related_name="users")
 
     vote = models.CharField(max_length=10, null=True)
+    channel_name = models.CharField(
+        max_length=100, blank=True, default="", help_text="Name of the most recent websocket connection"
+    )
 
     class Meta:
         ordering = ["pk"]
@@ -177,9 +180,18 @@ class User(models.Model):
     def as_dict(self) -> dict:
         return {field: getattr(self, field) for field in USER_FIELDS}
 
-    def activate(self) -> None:
+    def activate(self, channel_name: str = "") -> None:
         self.is_active = True
-        self.save(update_fields=["is_active"])
+        self.channel_name = channel_name
+        self.save(update_fields=["is_active", "channel_name"])
+
+    def deactivate_connection(self, channel_name: str) -> bool:
+        """Deactivate this user, unless a newer connection replaced `channel_name`."""
+        return bool(User.objects.filter(pk=self.pk, channel_name=channel_name).update(is_active=False))
+
+    def replace_connection(self, channel_name: str, other_channel_name: str) -> None:
+        """Make `other_channel_name` the most recent connection, unless a newer connection replaced `channel_name`."""
+        User.objects.filter(pk=self.pk, channel_name=channel_name).update(channel_name=other_channel_name)
 
     def deactivate(self) -> None:
         self.is_active = False

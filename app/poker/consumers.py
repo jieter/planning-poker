@@ -1,13 +1,23 @@
+import asyncio
+import contextvars
 import random
 
 from asgiref.sync import async_to_sync
+from channels.db import database_sync_to_async
 from channels.generic.websocket import JsonWebsocketConsumer
 from django.conf import settings
 
 from .models import PokerSession
 
+_background_tasks = set()
+
 
 class PokerConsumer(JsonWebsocketConsumer):
+    # Seconds to wait before removing a disconnected user from the board, allowing a page refresh to reconnect.
+    disconnect_delay = 2.5
+    # Seconds to wait for other connections of the same user to respond to a presence ping.
+    presence_timeout = 0.5
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.poker_id = None
@@ -28,7 +38,8 @@ class PokerConsumer(JsonWebsocketConsumer):
         self.user = self.poker.users.filter(id=self.user_id).first()
         if self.user:
             async_to_sync(self.channel_layer.group_add)(self.poker_id, self.channel_name)
-            self.user.activate()
+            async_to_sync(self.channel_layer.group_add)(self.user_group, self.channel_name)
+            self.user.activate(self.channel_name)
             self.channel_send_init("connect")
         else:
             self.send_json({"type": "error", "message": "User not found"})
@@ -36,11 +47,44 @@ class PokerConsumer(JsonWebsocketConsumer):
     def disconnect(self, close_code):
         async_to_sync(self.channel_layer.group_discard)(self.poker_id, self.channel_name)
         if self.user:
-            self.user.deactivate()
+            async_to_sync(self.channel_layer.group_discard)(self.user_group, self.channel_name)
+            # Called from the consumer's worker thread, this runs on the main event loop.
+            async_to_sync(self.schedule_delayed_disconnect)(self.user)
             self.user = None
 
-            self.auto_reveal()
-            self.channel_send_init("disconnect")
+    @property
+    def user_group(self):
+        return f"user-{self.user_id}"
+
+    async def schedule_delayed_disconnect(self, user):
+        # Use a fresh context: the current one refers to the consumer's worker thread, which is gone by then.
+        task = asyncio.create_task(self.delayed_disconnect(user), context=contextvars.Context())
+        # Keep a reference, the consumer itself is gone once the task runs.
+        _background_tasks.add(task)
+        task.add_done_callback(_background_tasks.discard)
+
+    async def delayed_disconnect(self, user):
+        """Deactivate the user, unless the user reconnected or still has other connections (e.g. another tab)."""
+        await asyncio.sleep(self.disconnect_delay)
+        if other_channel_name := await self.other_connection():
+            await database_sync_to_async(user.replace_connection)(self.channel_name, other_channel_name)
+        elif await database_sync_to_async(user.deactivate_connection)(self.channel_name):
+            await database_sync_to_async(self.auto_reveal)()
+            await self.channel_layer.group_send(self.poker_id, {"type": "init", "origin": "disconnect"})
+
+    async def other_connection(self) -> str | None:
+        """Return the channel name of another open connection of this user, if any."""
+        reply_channel = await self.channel_layer.new_channel()
+        await self.channel_layer.group_send(self.user_group, {"type": "presence.ping", "reply_channel": reply_channel})
+        try:
+            reply = await asyncio.wait_for(self.channel_layer.receive(reply_channel), self.presence_timeout)
+            return reply["channel_name"]
+        except TimeoutError:
+            return None
+
+    def presence_ping(self, event):
+        message = {"type": "presence.pong", "channel_name": self.channel_name}
+        async_to_sync(self.channel_layer.send)(event["reply_channel"], message)
 
     def auto_reveal(self):
         """Reveal if voting is complete. Called by the consumer handling an event, not by every consumer."""
