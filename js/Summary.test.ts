@@ -30,4 +30,10 @@ describe('Summary.svelte', () => {
         expect(suggestionEl.textContent).toContain('σ: 0.47');
         expect(suggestionEl.textContent).toContain('suggestion: 1');
     });
+
+    test('merges passed class with its own classes', () => {
+        const { container } = render(Summary, { props: { votes: [], class: 'p-2 rounded' } });
+
+        expect(container.firstElementChild).toHaveClass('summary', 'text-center', 'p-2', 'rounded');
+    });
 });

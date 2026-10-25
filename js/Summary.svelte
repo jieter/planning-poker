@@ -10,10 +10,10 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
     random?: () => number;
 }
 
-let { votes, stats, random = () => 0, ...rest }: Props = $props();
+let { votes, stats, random = () => 0, class: className, ...rest }: Props = $props();
 </script>
 
-<div {...rest} class="summary text-center">
+<div {...rest} class={['summary text-center', className]}>
     <div class="cards-row">
         {#each votes as [vote, count] (vote)}
             <div class="d-inline-block text-center card-wrapper">
