@@ -8,6 +8,7 @@ from channels.testing import WebsocketCommunicator
 from django.test import TestCase, override_settings
 from django.urls import reverse
 
+from . import models
 from .models import PokerSession
 from .routing import websocket_urlpatterns
 
@@ -23,6 +24,24 @@ class PokerModelsTestCase(TestCase):
 
         poker.deactivate_user(user.pk)
         self.assertEqual(poker.users_as_list(), [])
+
+    def test_add_user_with_duplicate_name(self):
+        poker = PokerSession.objects.create()
+        poker.add_user("Jan", is_spectator=True)
+        poker.add_user("Jan")
+        self.assertEqual([user["name"] for user in poker.users_as_list()], ["Jan", "Jan 🦊"])
+
+        # The scenario that used to raise MultipleObjectsReturned
+        poker.users.filter(name="Jan").update(is_spectator=False)
+        poker.add_user("Jan")
+        self.assertEqual([user["name"] for user in poker.users_as_list()], ["Jan", "Jan 🦊", "Jan 🐼"])
+
+        # Names of users who left are free again, suffixes fall back to numbers when exhausted
+        poker.users.filter(name="Jan").first().deactivate()
+        self.assertEqual(poker.add_user("Jan").name, "Jan")
+        for suffix in models.NAME_SUFFIXES[2:]:
+            self.assertEqual(poker.add_user("Jan").name, f"Jan {suffix}")
+        self.assertEqual(poker.add_user("Jan").name, "Jan 2")
 
     def test_join_after_other_user_voted(self):
         poker = PokerSession.objects.create()

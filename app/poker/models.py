@@ -1,6 +1,7 @@
 import uuid
 from collections import Counter, defaultdict
 from datetime import UTC, datetime
+from itertools import chain, count
 from typing import Any
 
 from django.db import models
@@ -8,6 +9,8 @@ from django.db.models import Avg, Count
 from django.utils import timezone
 
 USER_FIELDS = ("id", "name", "is_spectator", "is_active", "vote")
+# Appended to the name of a user joining with the same name as an active user, falling back to numbers.
+NAME_SUFFIXES = ("🦊", "🐼", "🐸", "🐙", "🦉", "🐢", "🦔", "🐝")
 
 
 class PokerSessionManager(models.Manager):
@@ -99,7 +102,12 @@ class PokerSession(models.Model):
         self.logs.create(event="clear")
 
     def add_user(self, name, is_spectator=False) -> User:
-        user, created = self.users.get_or_create(name=name, is_spectator=is_spectator, is_active=True)
+        """Add a user, adding a suffix to the name if an active user already has that name."""
+        taken = set(self.active_users.values_list("name", flat=True))
+        suffixes = chain(NAME_SUFFIXES, count(2))
+        name = next(n for n in chain([name], (f"{name} {suffix}" for suffix in suffixes)) if n not in taken)
+
+        user = self.users.create(name=name, is_spectator=is_spectator, is_active=True)
         self.logs.create(event="add_user", data=dict(name=name, is_spectator=is_spectator))
         return user
 
