@@ -52,6 +52,6 @@ function toggleCollapsed() {
     writing-mode: vertical-lr;
 }
 .history-item {
-    background-color: #efefef;
+    background-color: var(--bs-tertiary-bg);
 }
 </style>

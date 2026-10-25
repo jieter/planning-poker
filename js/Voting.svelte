@@ -69,7 +69,9 @@ $effect.pre(() => {
             {#if room.user.is_spectator}
                 You joined as spectator.<br />
                 I want to
-                <button onclick={() => update('settings', { is_spectator: false })} class="btn btn-light btn-sm">
+                <button
+                    onclick={() => update('settings', { is_spectator: false })}
+                    class="btn btn-outline-secondary btn-sm">
                     become a voter
                 </button>
             {:else}
@@ -99,7 +101,7 @@ $effect.pre(() => {
 
 <div class="my-5">&nbsp;</div>
 
-<div class="fixed-bottom bg-white" style="border-top: 1px solid rgba(0, 0, 0, 0.125);">
+<div class="fixed-bottom bg-body border-top">
     <History />
 </div>
 

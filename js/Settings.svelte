@@ -46,6 +46,6 @@ label {
 }
 .voting-status {
     width: 1.5em;
-    color: green;
+    color: var(--bs-success);
 }
 </style>

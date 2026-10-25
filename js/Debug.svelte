@@ -11,7 +11,7 @@ let settings = $derived({
 });
 </script>
 
-<div class="row bg-light rounded p-2 small mb-5">
+<div class="row bg-body-tertiary rounded p-2 small mb-5">
     <div class="col">
         {#if true}
             <button onclick={() => update('add_fakes')} class="btn btn-xs btn-warning">Add fake users</button>

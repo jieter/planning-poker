@@ -1,5 +1,6 @@
-import { describe, expect, test } from 'vitest';
-import { countVotes, formatNumber, pseudoRandomGenerator, voteStats } from './utils';
+import { beforeEach, describe, expect, test } from 'vitest';
+import { stubColorScheme } from './testutils';
+import { applyTheme, countVotes, formatNumber, pseudoRandomGenerator, voteStats } from './utils';
 
 describe('formatNumber', () => {
     test('less than 1000', () => {
@@ -64,5 +65,34 @@ describe('voteStats', () => {
         expect(voteStats(['1', '2'])?.closest).toEqual('2');
         expect(voteStats(['1', '1', '2'])?.closest).toEqual('1');
         expect(voteStats(['1', '1', '1', '1', '1', '1', '1', '2'])?.closest).toEqual('1');
+    });
+});
+
+describe('applyTheme', () => {
+    beforeEach(() => {
+        localStorage.clear();
+        stubColorScheme(false);
+    });
+    const currentTheme = () => document.documentElement.getAttribute('data-bs-theme');
+
+    test('light and dark ignore the OS color scheme', () => {
+        stubColorScheme(true);
+        applyTheme('light');
+        expect(currentTheme()).toEqual('light');
+        expect(localStorage.getItem('theme')).toEqual('light');
+
+        stubColorScheme(false);
+        applyTheme('dark');
+        expect(currentTheme()).toEqual('dark');
+        expect(localStorage.getItem('theme')).toEqual('dark');
+    });
+    test('auto follows the OS color scheme', () => {
+        applyTheme('auto');
+        expect(currentTheme()).toEqual('light');
+
+        stubColorScheme(true);
+        applyTheme('auto');
+        expect(currentTheme()).toEqual('dark');
+        expect(localStorage.getItem('theme')).toEqual('auto');
     });
 });

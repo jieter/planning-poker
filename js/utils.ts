@@ -106,3 +106,12 @@ export function voteStats(votes: Array<string | null>, choices: Array<string> | 
     const isUnanimous = new Set(data).size === 1;
     return { mean, stdDev, closest, isUnanimous };
 }
+
+export type Theme = 'auto' | 'light' | 'dark';
+
+// Store and apply the theme. The initial theme is applied by an inline script in index.html.
+export function applyTheme(theme: Theme) {
+    localStorage.setItem('theme', theme);
+    const dark = theme == 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : theme == 'dark';
+    document.documentElement.setAttribute('data-bs-theme', dark ? 'dark' : 'light');
+}
