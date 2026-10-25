@@ -115,7 +115,7 @@ let youtube = $derived(youtubeMovie(name));
                             <span class="badge bg-primary rounded-pill">{value}</span>
                         </div>
                     {/each}
-                    <div class="light p-1" style="font-size: 10px">
+                    <div class="text-muted p-1" style="font-size: 10px">
                         Starting at 2023-10-01, ignoring single-vote rounds.
                     </div>
                 </div>
