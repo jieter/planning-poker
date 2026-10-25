@@ -55,6 +55,10 @@ class PokerConsumer(JsonWebsocketConsumer):
         async_to_sync(self.channel_layer.group_send)(self.poker_id, message)
 
     def receive_json(self, content):
+        # Ignore messages from connections without a (valid) user, they received an error in connect().
+        if not self.user:
+            return
+
         poker = self.poker
         poker.refresh_from_db()
         action = content.get("action")
@@ -70,17 +74,16 @@ class PokerConsumer(JsonWebsocketConsumer):
                     self.user.save(update_fields=["is_spectator"])
 
             case "vote":
-                if self.user:
-                    vote = content.get("value")
-                    vote = vote if vote in poker.deck_as_list() else "🍗"
+                vote = content.get("value")
+                vote = vote if vote in poker.deck_as_list() else "🍗"
 
-                    self.user.vote = vote
-                    self.user.save(update_fields=["vote"])
+                self.user.vote = vote
+                self.user.save(update_fields=["vote"])
 
-                    if not poker.is_voting_complete:
-                        message = {"type": "vote", "user_id": self.user_id, "value": vote}
-                        self.channel_send_message(message)
-                        return
+                if not poker.is_voting_complete:
+                    message = {"type": "vote", "user_id": self.user_id, "value": vote}
+                    self.channel_send_message(message)
+                    return
 
             case "reveal":
                 poker.reveal()

@@ -317,6 +317,9 @@ class ConsumerTestCase(TestCase):
         message = await communicator.receive_json_from()
         self.assertEqual(message, {"type": "error", "message": "Poker session not found"})
 
+        await communicator.send_json_to({"action": "vote", "value": "5"})
+        self.assertTrue(await communicator.receive_nothing())
+
         await communicator.disconnect()
 
     async def test_user_of_another_poker_session(self):
@@ -327,6 +330,13 @@ class ConsumerTestCase(TestCase):
         await communicator.connect()
         message = await communicator.receive_json_from()
         self.assertEqual(message, {"type": "error", "message": "User not found"})
+
+        # Actions are ignored, and don't crash the consumer
+        await communicator.send_json_to({"action": "settings", "is_spectator": True})
+        await communicator.send_json_to({"action": "reveal"})
+        self.assertTrue(await communicator.receive_nothing())
+        await sync_to_async(self.poker.refresh_from_db)()
+        self.assertFalse(self.poker.is_revealed)
 
         await communicator.disconnect()
         await sync_to_async(bob.refresh_from_db)()
