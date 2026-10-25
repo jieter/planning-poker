@@ -1,4 +1,4 @@
-import '@testing-library/jest-dom';
+import '@testing-library/jest-dom/vitest';
 
 // Node >= 25 defines its own localStorage global, which shadows jsdom's and is unusable without --localstorage-file.
 if (!globalThis.localStorage) {
