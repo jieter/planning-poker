@@ -12,6 +12,7 @@ class PokerConsumer(JsonWebsocketConsumer):
         super().__init__(args, kwargs)
         self.poker_id = None
         self.poker = None
+        self.user = None
 
     def connect(self):
         self.user_id = self.scope["session"].get("user_id")
@@ -22,6 +23,7 @@ class PokerConsumer(JsonWebsocketConsumer):
             self.poker = PokerSession.objects.get(id=self.poker_id)
         except PokerSession.DoesNotExist:
             self.send_json({"type": "error", "message": "Poker session not found"})
+            return
 
         self.user = self.poker.users.filter(id=self.user_id).first()
         if self.user:
@@ -33,9 +35,9 @@ class PokerConsumer(JsonWebsocketConsumer):
 
     def disconnect(self, close_code):
         async_to_sync(self.channel_layer.group_discard)(self.poker_id, self.channel_name)
-        if self.user_id:
+        if self.user:
             self.user.deactivate()
-            self.user_id = None
+            self.user = None
 
             self.channel_send_init("disconnect")
 

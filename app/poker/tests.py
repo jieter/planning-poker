@@ -1,10 +1,15 @@
+import uuid
 from datetime import UTC, datetime
 from unittest.mock import patch
 
-from django.test import TestCase
+from asgiref.sync import sync_to_async
+from channels.routing import URLRouter
+from channels.testing import WebsocketCommunicator
+from django.test import TestCase, override_settings
 from django.urls import reverse
 
 from .models import PokerSession
+from .routing import websocket_urlpatterns
 
 
 class PokerModelsTestCase(TestCase):
@@ -192,3 +197,65 @@ class ViewTestCase(TestCase):
     def test_index_view_invalid_session_id(self):
         response = self.client.get("/poker/not-a-uuid/")
         self.assertEqual(response.status_code, 404)
+
+
+@override_settings(CHANNEL_LAYERS={"default": {"BACKEND": "channels.layers.InMemoryChannelLayer"}})
+class ConsumerTestCase(TestCase):
+    def setUp(self):
+        self.poker = PokerSession.objects.create()
+        self.alice = self.poker.add_user("Alice")
+        self.alice.deactivate()
+
+    def communicator(self, poker_id, user_id):
+        communicator = WebsocketCommunicator(URLRouter(websocket_urlpatterns), f"/ws/poker/{poker_id}/")
+        communicator.scope["session"] = {"user_id": user_id}
+        return communicator
+
+    async def test_connect_and_disconnect(self):
+        communicator = self.communicator(self.poker.id, self.alice.id)
+        connected, _ = await communicator.connect()
+        self.assertTrue(connected)
+
+        message = await communicator.receive_json_from()
+        self.assertEqual(message["type"], "init")
+        self.assertEqual(message["user"]["name"], "Alice")
+        self.assertEqual([user["name"] for user in message["users"]], ["Alice"])
+
+        await communicator.disconnect()
+        await sync_to_async(self.alice.refresh_from_db)()
+        self.assertFalse(self.alice.is_active)
+
+    async def test_vote(self):
+        communicator = self.communicator(self.poker.id, self.alice.id)
+        await communicator.connect()
+        await communicator.receive_json_from()
+
+        await communicator.send_json_to({"action": "vote", "value": "5"})
+        message = await communicator.receive_json_from()
+        # Alice is the only voter, so her vote completes the round and it is auto-revealed.
+        self.assertEqual(message["type"], "init")
+        self.assertEqual(message["users"][0]["vote"], "5")
+        self.assertTrue(message["settings"]["is_revealed"])
+
+        await communicator.disconnect()
+
+    async def test_unknown_poker_session(self):
+        communicator = self.communicator(uuid.uuid4(), self.alice.id)
+        await communicator.connect()
+        message = await communicator.receive_json_from()
+        self.assertEqual(message, {"type": "error", "message": "Poker session not found"})
+
+        await communicator.disconnect()
+
+    async def test_user_of_another_poker_session(self):
+        other = await sync_to_async(PokerSession.objects.create)()
+        bob = await sync_to_async(other.add_user)("Bob")
+
+        communicator = self.communicator(self.poker.id, bob.id)
+        await communicator.connect()
+        message = await communicator.receive_json_from()
+        self.assertEqual(message, {"type": "error", "message": "User not found"})
+
+        await communicator.disconnect()
+        await sync_to_async(bob.refresh_from_db)()
+        self.assertTrue(bob.is_active, "Disconnecting from another session must not deactivate Bob")
