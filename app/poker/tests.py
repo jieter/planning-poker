@@ -261,6 +261,12 @@ class ViewTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Join Alice, Bob in a planning poker session.")
 
+    def test_referrer_policy(self):
+        # Other sites (like the CDN) must not get the session URL as referrer.
+        poker = PokerSession.objects.create()
+        response = self.client.get(reverse("poker", args=[poker.id]))
+        self.assertEqual(response["Referrer-Policy"], "same-origin")
+
     def test_index_view_invalid_session_id(self):
         response = self.client.get("/poker/not-a-uuid/")
         self.assertEqual(response.status_code, 404)

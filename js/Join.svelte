@@ -13,20 +13,6 @@ let isSpectator: boolean | null = $state(null);
 
 let statistics: Statistics | undefined = $state();
 
-function youtubeMovie(name: string | undefined) {
-    if (!name) {
-        return undefined;
-    }
-    name = name.toLowerCase();
-    if (name.match(/arn.*t/)) {
-        return '6p-lDYPR2P8'; // Material girl
-    } else if (name.match(/jonat.*n/)) {
-        return 'N5imM0ftfkQ'; // Stadsduif
-    } else if (name.match(/lonnie/)) {
-        return 'AVQ8byG2mY8'; // Say hello to my little friend
-    }
-}
-
 onMount(() => {
     const previousName = localStorage.getItem('name');
     if (previousName) {
@@ -52,8 +38,6 @@ $effect.pre(() => {
         localStorage.setItem('isSpectator', isSpectator ? 'true' : 'false');
     }
 });
-
-let youtube = $derived(youtubeMovie(name));
 </script>
 
 <div class="container">
@@ -86,20 +70,6 @@ let youtube = $derived(youtubeMovie(name));
                     <span class="text-muted">You can always enable voting later</span>
                 </div>
             </form>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col"></div>
-        <div class="col-8">
-            {#if youtube}
-                <div class="ratio ratio-16x9">
-                    <iframe
-                        src="https://www.youtube.com/embed/{youtube}?autoplay=1"
-                        title="Youtube video"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                        allowfullscreen></iframe>
-                </div>
-            {/if}
         </div>
     </div>
 </div>
