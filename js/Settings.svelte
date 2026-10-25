@@ -1,5 +1,5 @@
 <script lang="ts">
-import { room, clearVotes, revealVotes } from './stores.svelte';
+import { room, clearVotes, revealVotes, setAutoReveal, setDeck } from './stores.svelte';
 </script>
 
 <div class="d-flex justify-content-center m-3">
@@ -9,7 +9,8 @@ import { room, clearVotes, revealVotes } from './stores.svelte';
                 type="radio"
                 class="btn-check"
                 {value}
-                bind:group={room.deck}
+                checked={room.deck == value}
+                onchange={() => setDeck(value)}
                 autocomplete="off"
                 id="deck-{value}"
                 disabled={!room.isRevealed} />
@@ -33,7 +34,12 @@ import { room, clearVotes, revealVotes } from './stores.svelte';
 
     <div class="form-check form-switch mt-1 ms-3">
         <label for="autoReveal">Auto reveal</label>
-        <input type="checkbox" bind:checked={room.autoReveal} class="form-check-input" id="autoReveal" />
+        <input
+            type="checkbox"
+            checked={room.autoReveal}
+            onchange={(e) => setAutoReveal(e.currentTarget.checked)}
+            class="form-check-input"
+            id="autoReveal" />
     </div>
 </div>
 

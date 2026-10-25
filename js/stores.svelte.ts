@@ -115,11 +115,3 @@ export const setAutoReveal = (val: boolean) => {
     room.autoReveal = val;
     update('settings', { auto_reveal: val });
 };
-$effect.root(() => {
-    $effect(() => {
-        update('settings', {
-            deck: room.deck,
-            auto_reveal: room.autoReveal,
-        });
-    });
-});
