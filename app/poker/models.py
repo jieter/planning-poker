@@ -5,7 +5,7 @@ from itertools import chain, count
 from typing import Any
 
 from django.db import models
-from django.db.models import Avg, Count
+from django.db.models import Avg, Count, F
 from django.utils import timezone
 
 USER_FIELDS = ("id", "name", "is_spectator", "is_active", "vote")
@@ -80,11 +80,12 @@ class PokerSession(models.Model):
             self.clear()
 
     def reveal(self) -> None:
-        if not self.is_revealed:
-            self.is_revealed = True
-            self.reveal_count += 1
-            self.save()
-
+        # Update conditionally in the database, so concurrent calls reveal (and count/log the round) only once.
+        revealed = PokerSession.objects.filter(pk=self.pk, is_revealed=False).update(
+            is_revealed=True, reveal_count=F("reveal_count") + 1
+        )
+        self.refresh_from_db(fields=["is_revealed", "reveal_count"])
+        if revealed:
             votes = list(self.active_users.values_list("vote", flat=True))
             self.logs.create(event="reveal", data=dict(round=self.reveal_count, deck=self.deck, votes=votes))
 

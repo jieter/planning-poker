@@ -65,6 +65,16 @@ class PokerModelsTestCase(TestCase):
         poker.reveal()
         self.assertEqual(poker.reveal_count, 2)
 
+    def test_reveal_concurrently(self):
+        poker = PokerSession.objects.create()
+        stale = PokerSession.objects.get(pk=poker.pk)
+
+        poker.reveal()
+        stale.reveal()
+        self.assertTrue(stale.is_revealed)
+        self.assertEqual(stale.reveal_count, 1)
+        self.assertEqual(poker.logs.filter(event="reveal").count(), 1)
+
     def test_is_voting_complete(self):
         poker = PokerSession.objects.create()
 
@@ -257,6 +267,25 @@ class ConsumerTestCase(TestCase):
         self.assertTrue(message["settings"]["is_revealed"])
 
         await communicator.disconnect()
+
+    async def test_auto_reveal_when_last_voter_leaves(self):
+        bob = await sync_to_async(self.poker.add_user)("Bob")
+        alice_communicator = self.communicator(self.poker.id, self.alice.id)
+        await alice_communicator.connect()
+        bob_communicator = self.communicator(self.poker.id, bob.id)
+        await bob_communicator.connect()
+
+        await alice_communicator.send_json_to({"action": "vote", "value": "5"})
+        await bob_communicator.disconnect()
+
+        # Drain the init messages, the last one contains the state after Bob left.
+        while not await alice_communicator.receive_nothing():
+            message = await alice_communicator.receive_json_from()
+        self.assertEqual([user["name"] for user in message["users"]], ["Alice"])
+        self.assertTrue(message["settings"]["is_revealed"])
+        self.assertEqual(message["reveal_count"], 1)
+
+        await alice_communicator.disconnect()
 
     async def test_unknown_poker_session(self):
         communicator = self.communicator(uuid.uuid4(), self.alice.id)

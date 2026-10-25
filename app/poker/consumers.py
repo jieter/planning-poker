@@ -39,7 +39,14 @@ class PokerConsumer(JsonWebsocketConsumer):
             self.user.deactivate()
             self.user = None
 
+            self.auto_reveal()
             self.channel_send_init("disconnect")
+
+    def auto_reveal(self):
+        """Reveal if voting is complete. Called by the consumer handling an event, not by every consumer."""
+        self.poker.refresh_from_db()
+        if self.poker.auto_reveal and self.poker.is_voting_complete:
+            self.poker.reveal()
 
     def channel_send_init(self, origin=None):
         self.channel_send_message({"type": "init", "origin": origin})
@@ -95,6 +102,7 @@ class PokerConsumer(JsonWebsocketConsumer):
                         user.vote = random.choice(deck)
                         user.save()
 
+        self.auto_reveal()
         self.channel_send_init(f"{action=}")
 
     def init(self, event=None):
@@ -105,8 +113,6 @@ class PokerConsumer(JsonWebsocketConsumer):
             user = self.user.as_dict()
 
         self.poker = poker = PokerSession.objects.get(pk=self.poker.pk)
-        if poker.is_voting_complete and poker.auto_reveal:
-            poker.reveal()
 
         message = {
             "type": "init",
