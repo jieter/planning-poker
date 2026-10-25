@@ -15,7 +15,7 @@ class PokerConsumer(JsonWebsocketConsumer):
 
     def connect(self):
         self.user_id = self.scope["session"].get("user_id")
-        self.poker_id = self.scope["url_route"]["kwargs"]["poker_id"]
+        self.poker_id = str(self.scope["url_route"]["kwargs"]["poker_id"])
         self.accept()
 
         try:

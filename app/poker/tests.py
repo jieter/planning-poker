@@ -188,3 +188,7 @@ class ViewTestCase(TestCase):
         response = self.client.get(reverse("poker", args=[poker.id]))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Join Alice, Bob in a planning poker session.")
+
+    def test_index_view_invalid_session_id(self):
+        response = self.client.get("/poker/not-a-uuid/")
+        self.assertEqual(response.status_code, 404)
