@@ -8,6 +8,8 @@ from channels.testing import WebsocketCommunicator
 from django.test import TestCase, override_settings
 from django.urls import reverse
 
+from app.asgi import application
+
 from . import models
 from .models import PokerSession
 from .routing import websocket_urlpatterns
@@ -322,6 +324,17 @@ class ConsumerTestCase(TestCase):
         self.assertEqual(message["reveal_count"], 1)
 
         await alice_communicator.disconnect()
+
+    async def test_websocket_origin(self):
+        # The full ASGI application, including the origin check. The test runner adds testserver to ALLOWED_HOSTS.
+        path = f"/ws/poker/{self.poker.id}/"
+        for origin, allowed in [(b"http://testserver", True), (b"https://evil.example", False), (None, False)]:
+            with self.subTest(origin=origin):
+                headers = [(b"origin", origin)] if origin else []
+                communicator = WebsocketCommunicator(application, path, headers=headers)
+                connected, _ = await communicator.connect()
+                self.assertEqual(connected, allowed)
+                await communicator.disconnect()
 
     async def test_unknown_poker_session(self):
         communicator = self.communicator(uuid.uuid4(), self.alice.id)
