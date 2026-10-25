@@ -1,4 +1,5 @@
-from datetime import datetime
+from datetime import UTC, datetime
+from unittest.mock import patch
 
 from django.test import TestCase
 from django.urls import reverse
@@ -103,17 +104,21 @@ class PokerModelsTestCase(TestCase):
         self.assertCountEqual([user.vote for user in poker.users.all()], ["L", None])
 
     def test_log_as_list(self):
-        log_time = datetime.now().strftime("%H:%M:%I")
-        poker = PokerSession.objects.create(deck=PokerSession.Deck.TSHIRT)
-        bob = poker.add_user("Bob")
-        bob.vote = "L"
-        bob.save()
+        # 14:05:37 in Europe/Amsterdam, so a 12-hour clock or a wrong field would show up in the output
+        log_time = "14:05:37"
+        # Tick a microsecond per call to keep the log ordering (by created) deterministic
+        ticks = (datetime(2026, 7, 1, 12, 5, 37, i, tzinfo=UTC) for i in range(1000))
+        with patch("django.utils.timezone.now", side_effect=ticks):
+            poker = PokerSession.objects.create(deck=PokerSession.Deck.TSHIRT)
+            bob = poker.add_user("Bob")
+            bob.vote = "L"
+            bob.save()
 
-        george = poker.add_user("George")
-        george.vote = "XL"
-        george.save()
-        poker.reveal()
-        poker.set_deck("fibonacci")
+            george = poker.add_user("George")
+            george.vote = "XL"
+            george.save()
+            poker.reveal()
+            poker.set_deck("fibonacci")
 
         self.assertEqual(
             poker.log_as_list(),
