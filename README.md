@@ -31,16 +31,9 @@ docker run -p 8000:8000 -v poker-data:/data -e REDIS_HOST=<redis> -e HOSTNAME=lo
 
 Set `HOSTNAME` explicitly: docker sets it to the container id by default.
 
-# Running on regular ubuntu 22.04
-1. `sudo apt install redis-server python3.11-venv supervisor`
-1. `python3.11 -m venv virtualenv`
-1. `source virtualenv/bin/activate`
-1. `git clone https://github.com/jieter/planning-poker.git`
-1. Run `deploy/deploy.sh`
+# Deployment
+CI builds and publishes `ghcr.io/jieter/planning-poker:latest` for every push to `master`. poker.datala.nl runs that
+image with the compose setup in the `datala` repository (`compose/poker`), behind Caddy.
 
-Then use
-- `deploy/supervisor.conf` as a template with `supervisor` to run `daphne`, taking care to add correct environment for
-  - `SECRET_KEY`
-  - `HOSTNAME`
-  - `PRODUCTION=1`
-- `deploy/nginx-site.conf` as a template with `nginx` to act as a reverse proxy.
+After pushing to `master`, run `./deploy.sh`: it waits for CI to succeed, pulls the new image and restarts the
+stack on the server over SSH, and checks the site answers.
