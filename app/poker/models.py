@@ -114,7 +114,7 @@ class PokerSession(models.Model):
 
     def log_as_list(self) -> list[dict[str, str | dict]]:
         return list(
-            {"time": timezone.localtime(created).strftime("%H:%M:%I"), "event": event, "data": data}
+            {"time": timezone.localtime(created).strftime("%H:%M:%S"), "event": event, "data": data}
             for created, event, data in self.logs.values_list("created", "event", "data")[:20]
         )
 
