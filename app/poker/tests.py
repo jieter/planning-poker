@@ -189,6 +189,18 @@ class PokerModelsTestCase(TestCase):
             ],
         )
 
+    def test_log_as_list_reveal_history(self):
+        poker = PokerSession.objects.create()
+        poker.add_user("Alice")
+        for _ in range(15):
+            poker.reveal()
+            poker.clear()
+
+        self.assertEqual(len(poker.log_as_list()), 20)
+        history = poker.log_as_list(event="reveal", limit=None)
+        expected = [15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1]
+        self.assertEqual([entry["data"]["round"] for entry in history], expected)
+
     def test_settings_as_dict(self):
         poker = PokerSession.objects.create(deck=PokerSession.Deck.TSHIRT)
         self.assertEqual(

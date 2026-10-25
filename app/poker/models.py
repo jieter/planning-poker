@@ -122,10 +122,11 @@ class PokerSession(models.Model):
     def deck_as_list(self) -> list[str]:
         return ("0,½,1,2,3,5,8,13,20,?,∞,☕️" if self.is_fibonacci else "XS,S,M,L,XL,?,☕️").split(",")
 
-    def log_as_list(self) -> list[dict[str, str | dict]]:
+    def log_as_list(self, event: str | None = None, limit: int | None = 20) -> list[dict[str, str | dict]]:
+        logs = self.logs.filter(event=event) if event else self.logs.all()
         return list(
-            {"time": timezone.localtime(created).strftime("%H:%M:%S"), "event": event, "data": data}
-            for created, event, data in self.logs.values_list("created", "event", "data")[:20]
+            {"time": timezone.localtime(created).strftime("%H:%M:%S"), "event": log_event, "data": data}
+            for created, log_event, data in logs.values_list("created", "event", "data")[:limit]
         )
 
     def settings_as_dict(self) -> dict[str, Any]:

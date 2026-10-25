@@ -124,6 +124,7 @@ class PokerConsumer(JsonWebsocketConsumer):
             "settings": poker.settings_as_dict(),
             "reveal_count": poker.reveal_count,
             "log": poker.log_as_list(),
+            "history": poker.log_as_list(event="reveal", limit=None),
         }
         self.send_json(message)
 

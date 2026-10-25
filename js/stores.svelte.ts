@@ -1,4 +1,4 @@
-import type { LogEntry, Participant } from './types';
+import type { LogEntry, Participant, RevealLogEntry } from './types';
 import { countVotes, voteStats } from './utils';
 
 export const room = $state({
@@ -11,6 +11,7 @@ export const room = $state({
     user: { vote: null, is_spectator: false } as Participant,
     error: null as string | null,
     log: [] as LogEntry[],
+    history: [] as RevealLogEntry[],
     revealCount: 0,
 
     // Derive a sorted list of (card, votes)-pairs off of the participants store:
@@ -76,6 +77,7 @@ export function connect(websocketUrl: string) {
                 room.decks = data.settings.decks;
                 room.deck = data.settings.deck;
                 room.log = data.log;
+                room.history = data.history;
                 room.error = null;
                 room.revealCount = data.reveal_count;
                 break;
