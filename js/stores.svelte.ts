@@ -47,7 +47,7 @@ export const room = $state({
 });
 
 let socket: WebSocket;
-export function update(action: string, extraParams: Record<string, any> = {}) {
+export function update(action: string, extraParams: Record<string, unknown> = {}) {
     if (!socket || socket.readyState !== 1) return;
     const params = { action, ...extraParams };
     socket.send(JSON.stringify(params));
@@ -78,10 +78,11 @@ export function connect(websocketUrl: string) {
                 room.error = null;
                 room.revealCount = data.reveal_count;
                 break;
-            case 'vote':
+            case 'vote': {
                 const p = room.participants.find((u) => u.id === data.user_id);
                 if (p) p.vote = data.value;
                 break;
+            }
             case 'error':
                 room.error = data.message;
                 break;

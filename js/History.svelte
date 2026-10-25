@@ -1,7 +1,8 @@
 <script lang="ts">
 import { room } from './stores.svelte';
-import { countVotes } from './utils';
 import Summary from './Summary.svelte';
+import type { RevealLogEntry } from './types';
+import { countVotes } from './utils';
 
 let collapsed = $state(true);
 
@@ -30,7 +31,7 @@ function toggleCollapsed() {
 </div>
 {#if !collapsed}
     <div class="d-flex overflow-scroll mb-2 text-muted">
-        {#each room.log.filter((x) => x.event == 'reveal') as { data }}
+        {#each room.log.filter((x): x is RevealLogEntry => x.event == 'reveal') as { data } (data)}
             {@const voteSummary = countVotes(data.votes)}
             <small class="voting-round ms-1 text-center">
                 Round {data.round}
@@ -40,7 +41,7 @@ function toggleCollapsed() {
             </small>
             {#if voteSummary.length > 0}
                 <div class="small history-item text-start rounded flex-shrink-0 m-1 p-1">
-                    <Summary votes={voteSummary} size="sm" />
+                    <Summary votes={voteSummary} />
                 </div>
             {/if}
         {/each}

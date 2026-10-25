@@ -2,6 +2,7 @@
 import { onMount } from 'svelte';
 
 import Card from './Card.svelte';
+import type { Statistics } from './types';
 import { csrfToken, formatNumber, jsonScriptContents } from './utils';
 
 let error: string | undefined = $state();
@@ -10,7 +11,7 @@ let error: string | undefined = $state();
 let name: string = $state('');
 let isSpectator: boolean | null = $state(null);
 
-let statistics: { [key: string]: any } | undefined = $state();
+let statistics: Statistics | undefined = $state();
 
 function youtubeMovie(name: string | undefined) {
     if (!name) {
@@ -35,7 +36,7 @@ onMount(() => {
     if (previousIsSpectator !== null) {
         isSpectator = previousIsSpectator === 'true';
     }
-    statistics = jsonScriptContents('statistics');
+    statistics = jsonScriptContents<Statistics>('statistics');
 });
 
 const update = () => {
@@ -109,7 +110,7 @@ let youtube = $derived(youtubeMovie(name));
         <div class="row">
             {#if statistics}
                 <div class="col-md-3">
-                    {#each statistics['basic'] as [label, value]}
+                    {#each statistics.basic as [label, value] (label)}
                         <div class="d-flex justify-content-between align-items-center p-1">
                             {label}
                             <span class="badge bg-primary rounded-pill">{value}</span>
@@ -121,9 +122,9 @@ let youtube = $derived(youtubeMovie(name));
                 </div>
                 <div class="col-md-6">
                     <div class="m-1">
-                        {#each statistics.decks as deck}
+                        {#each statistics.decks as deck (deck)}
                             <div class="d-flex overflow-scroll">
-                                {#each deck as [card, count]}
+                                {#each deck as [card, count] (card)}
                                     <div class="d-inline-block text-center card-wrapper">
                                         <Card>{card}</Card>
                                         <div class="text-muted">{formatNumber(count)}</div>

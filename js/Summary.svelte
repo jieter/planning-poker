@@ -1,12 +1,13 @@
 <script lang="ts">
+import type { HTMLAttributes } from 'svelte/elements';
+
 import Card from './Card.svelte';
 import type { VoteCount, VotingStats } from './types.d';
 
-interface Props {
+interface Props extends HTMLAttributes<HTMLDivElement> {
     votes: Array<VoteCount>;
     stats?: VotingStats | null;
     random?: () => number;
-    [key: string]: any;
 }
 
 let { votes, stats, random = () => 0, ...rest }: Props = $props();

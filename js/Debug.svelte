@@ -23,7 +23,7 @@ let settings = $derived({
         <div>participants: <code>{JSON.stringify(room.participants)}</code></div>
     </div>
     <div class="col">
-        {#each room.log as item}
+        {#each room.log as item (item)}
             <div>
                 <span>{item.time}</span>
                 {item.event}

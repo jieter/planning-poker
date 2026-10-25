@@ -1,7 +1,8 @@
 import Cookies from 'js-cookie';
+
 import type { VoteCount, VotingStats } from './types';
 
-export function jsonScriptContents(id: string): any {
+export function jsonScriptContents<T = string>(id: string): T | undefined {
     const element = document.getElementById(id) as HTMLElement;
     if (element && element.textContent) {
         return JSON.parse(element.textContent);

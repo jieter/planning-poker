@@ -4,7 +4,7 @@ import { room, clearVotes, revealVotes } from './stores.svelte';
 
 <div class="d-flex justify-content-center m-3">
     <div class="btn-group btn-group-sm" role="group" aria-label="Change deck">
-        {#each room.decks as [value, label]}
+        {#each room.decks as [value, label] (value)}
             <input
                 type="radio"
                 class="btn-check"

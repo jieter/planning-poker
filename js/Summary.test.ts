@@ -1,8 +1,8 @@
 import { render, screen } from '@testing-library/svelte';
 import { describe, expect, test } from 'vitest';
-import type { VoteCount } from './types';
 
 import Summary from './Summary.svelte';
+import type { VoteCount } from './types';
 import { countVotes, voteStats } from './utils';
 
 describe('Summary.svelte', () => {

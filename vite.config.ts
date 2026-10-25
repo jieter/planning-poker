@@ -1,7 +1,7 @@
-/// <reference types="vitest" />
-import { defineConfig } from 'vite';
-import { svelte } from '@sveltejs/vite-plugin-svelte';
 import path from 'path';
+
+import { svelte } from '@sveltejs/vite-plugin-svelte';
+import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
     base: '',
@@ -13,7 +13,7 @@ export default defineConfig({
     build: {
         manifest: 'manifest.json',
         outDir: './assets/',
-        rollupOptions: {
+        rolldownOptions: {
             input: {
                 poker: 'js/index.ts',
             },
@@ -28,15 +28,11 @@ export default defineConfig({
     resolve: {
         conditions: ['browser'],
         alias: {
-            '@neoconfetti/svelte': path.resolve(__dirname, 'node_modules/@neoconfetti/svelte/dist/index.js'),
+            '@neoconfetti/svelte': path.resolve(import.meta.dirname, 'node_modules/@neoconfetti/svelte/dist/index.js'),
         },
     },
     plugins: [
         svelte({
-            // enable run-time checks when not in production
-            compilerOptions: {
-                dev: true,
-            },
             emitCss: false,
         }),
     ],

@@ -1,5 +1,5 @@
 # Build the JavaScript bundle
-FROM node:22-slim AS assets
+FROM node:26-slim AS assets
 WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci
