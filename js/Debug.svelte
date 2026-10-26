@@ -9,11 +9,14 @@ let settings = $derived({
     isRevealed: room.isRevealed,
     autoReveal: room.autoReveal,
 });
+
+// The server ignores the fake users/votes actions in production, so only show the buttons in development
+const showFakeButtons = import.meta.env.DEV;
 </script>
 
 <div class="row bg-body-tertiary rounded p-2 small mb-5">
     <div class="col">
-        {#if true}
+        {#if showFakeButtons}
             <button onclick={() => update('add_fakes')} class="btn btn-xs btn-warning">Add fake users</button>
             <button onclick={() => update('fake_votes')} class="btn btn-xs btn-warning">Add fake votes</button>
         {/if}
