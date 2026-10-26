@@ -46,7 +46,7 @@ $effect.pre(() => {
             {user}
             {i}
             count={room.participants.length}
-            radius={radius * 0.94}
+            radius={radius * 0.9}
             rotation={random()} />
     {/each}
     {#if room.isRevealed}
@@ -106,10 +106,17 @@ $effect.pre(() => {
 
 <style>
 .participants {
-    width: calc(var(--radius) * 1.98);
-    height: var(--radius);
+    /* A half circle centered at (50%, var(--radius)), with a little extra height for the rounded bottom corners */
+    width: calc(var(--radius) * 2);
+    height: calc(var(--radius) + 10px);
     border-radius: var(--radius) var(--radius) 10px 10px;
-    background: radial-gradient(circle at bottom, #3e803f 0%, #093d15 58%, #743f11 58.5%, #f0a25c);
+    background: radial-gradient(
+        circle var(--radius) at 50% var(--radius),
+        #3e803f 0%,
+        #093d15 80%,
+        #743f11 80.5%,
+        #f0a25c 140%
+    );
     position: relative;
     margin: 4vh auto;
 }

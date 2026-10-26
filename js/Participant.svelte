@@ -26,7 +26,9 @@ let angle: number = $derived.by(() => {
 });
 </script>
 
-<div class="participant" style="transform: translate(1.3vw) rotate({angle}deg) translate({radius}px) rotate(90deg)">
+<div
+    class="participant"
+    style="transform: translate(-50%, -50%) rotate({angle}deg) translate({radius}px) rotate(90deg)">
     <strong class="name">{user.name}</strong>
     {#if user.is_spectator}
         <Card {rotation}>👁️</Card>
@@ -49,18 +51,21 @@ let angle: number = $derived.by(() => {
     position: absolute;
     text-align: center;
 
-    top: 95%;
+    /* Start at the center of the table, the transform moves the center of the card onto the circle */
+    top: var(--radius);
     left: 50%;
-    margin: -40px;
     width: 5%;
 }
 
 .participant .name {
-    display: block;
+    position: absolute;
+    bottom: 100%;
+    margin-bottom: 0.4em;
+    left: 50%;
+    transform: translateX(-50%);
     font-size: 1.2em;
     text-wrap: nowrap;
     width: 7em;
-    margin-left: -2.2em;
     overflow-x: hidden;
     text-overflow: ellipsis;
 }
