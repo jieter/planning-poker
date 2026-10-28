@@ -38,9 +38,7 @@ class PokerModelsTestCase(TestCase):
         poker.add_user("Jan")
         self.assertEqual([user["name"] for user in poker.users_as_list()], ["Jan", "Jan 🦊", "Jan 🐼"])
 
-        # Names of users who left are free again, suffixes fall back to numbers when exhausted
-        poker.users.filter(name="Jan").first().deactivate()
-        self.assertEqual(poker.add_user("Jan").name, "Jan")
+        # Suffixes fall back to numbers when exhausted
         for suffix in models.NAME_SUFFIXES[2:]:
             self.assertEqual(poker.add_user("Jan").name, f"Jan {suffix}")
         self.assertEqual(poker.add_user("Jan").name, "Jan 2")
@@ -50,6 +48,16 @@ class PokerModelsTestCase(TestCase):
         poker.add_user("Jan")
         self.assertEqual(poker.add_user("jan").name, "jan 🦊")
         self.assertEqual(poker.add_user("JAN").name, "JAN 🐼")
+
+    def test_add_user_with_name_of_user_who_left(self):
+        poker = PokerSession.objects.create()
+        bob = poker.add_user("bob")
+        poker.add_user("charlie")
+        bob.deactivate()
+        poker.add_user("Bob")
+
+        bob.activate()
+        self.assertEqual([user["name"] for user in poker.users_as_list()], ["bob", "charlie", "Bob 🦊"])
 
     def test_add_user_name_length(self):
         poker = PokerSession.objects.create()
