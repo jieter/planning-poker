@@ -115,6 +115,7 @@ $effect.pre(() => {
 
 <style>
 .card-wrapper {
+    flex-shrink: 0;
     width: 30px;
     margin: 2px;
     font-size: 0.9em;
