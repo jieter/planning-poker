@@ -104,11 +104,15 @@ class PokerSession(models.Model):
         self.logs.create(event="clear")
 
     def add_user(self, name, is_spectator=False) -> User:
-        """Add a user, adding a suffix to the name if an active user already has that name (ignoring case)."""
+        """
+        Add a user, adding a suffix to the name if a user already has that name (ignoring case).
+
+        Users who left are included, so they cannot share a name with a newcomer when they reconnect.
+        """
         max_length = User._meta.get_field("name").max_length
         name = name.strip()[:max_length]
 
-        taken = {n.casefold() for n in self.active_users.values_list("name", flat=True)}
+        taken = {n.casefold() for n in self.users.values_list("name", flat=True)}
         suffixed = (f"{name[: max_length - len(str(s)) - 1].rstrip()} {s}" for s in chain(NAME_SUFFIXES, count(2)))
         name = next(n for n in chain([name], suffixed) if n.casefold() not in taken)
 
