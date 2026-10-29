@@ -338,6 +338,11 @@ class ViewTestCase(TestCase):
 @override_settings(CHANNEL_LAYERS={"default": {"BACKEND": "channels.layers.InMemoryChannelLayer"}})
 class ConsumerTestCase(TransactionTestCase):
     def setUp(self):
+        # Keep the tests fast, they wait for delayed disconnects.
+        patcher = patch.object(PokerConsumer, "disconnect_delay", 1)
+        patcher.start()
+        self.addCleanup(patcher.stop)
+
         self.poker = PokerSession.objects.create()
         self.alice = self.poker.add_user("Alice")
         self.alice.deactivate()
@@ -445,6 +450,43 @@ class ConsumerTestCase(TransactionTestCase):
         await sync_to_async(bob.refresh_from_db)()
         self.assertTrue(bob.is_active, "Disconnecting from another session must not deactivate Bob")
 
+    async def test_disconnected_user_is_stale_until_removed(self):
+        bob = await sync_to_async(self.poker.add_user)("Bob")
+        alice_communicator = self.communicator(self.poker.id, self.alice.id)
+        await alice_communicator.connect()
+        bob_communicator = self.communicator(self.poker.id, bob.id)
+        await bob_communicator.connect()
+        while not await alice_communicator.receive_nothing():
+            await alice_communicator.receive_json_from()
+
+        await bob_communicator.disconnect()
+        message = await alice_communicator.receive_json_from(timeout=PokerConsumer.presence_timeout + 0.5)
+        self.assertEqual(message["event"]["origin"], "stale")
+        self.assertEqual(
+            [(user["name"], user["is_stale"]) for user in message["users"]], [("Alice", False), ("Bob", True)]
+        )
+
+        message = await alice_communicator.receive_json_from(timeout=PokerConsumer.disconnect_delay + 0.5)
+        self.assertEqual(message["event"]["origin"], "disconnect")
+        self.assertEqual([user["name"] for user in message["users"]], ["Alice"])
+
+        await alice_communicator.disconnect()
+
+    async def test_reconnect_clears_stale(self):
+        communicator = self.communicator(self.poker.id, self.alice.id)
+        await communicator.connect()
+        await communicator.disconnect()
+        await asyncio.sleep(PokerConsumer.presence_timeout + 0.1)
+        await sync_to_async(self.alice.refresh_from_db)()
+        self.assertTrue(self.alice.is_stale)
+
+        reconnected = self.communicator(self.poker.id, self.alice.id)
+        await reconnected.connect()
+        await sync_to_async(self.alice.refresh_from_db)()
+        is_stale = self.alice.is_stale
+        await reconnected.disconnect()
+        self.assertFalse(is_stale)
+
     async def test_reconnect_within_delay_keeps_user_active(self):
         communicator = self.communicator(self.poker.id, self.alice.id)
         await communicator.connect()
@@ -468,10 +510,12 @@ class ConsumerTestCase(TransactionTestCase):
         await tabs[0].disconnect()
         await self.wait_for_delayed_disconnect()
         is_active = await self.is_active(self.alice)
+        is_stale = self.alice.is_stale
 
         await tabs[1].disconnect()
         await self.wait_for_delayed_disconnect()
         self.assertTrue(is_active)
+        self.assertFalse(is_stale, "The other tab is still open, so the user must not be stale")
         self.assertFalse(await self.is_active(self.alice))
 
     async def test_close_newest_tab_first(self):

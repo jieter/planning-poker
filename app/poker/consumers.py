@@ -13,8 +13,8 @@ _background_tasks = set()
 
 
 class PokerConsumer(JsonWebsocketConsumer):
-    # Seconds to wait before removing a disconnected user from the board, allowing a page refresh to reconnect.
-    disconnect_delay = 2.5
+    # Seconds to wait before removing a disconnected user from the board, allowing them to reconnect.
+    disconnect_delay = 10
     # Seconds to wait for other connections of the same user to respond to a presence ping.
     presence_timeout = 0.5
 
@@ -64,11 +64,17 @@ class PokerConsumer(JsonWebsocketConsumer):
         task.add_done_callback(_background_tasks.discard)
 
     async def delayed_disconnect(self, user):
-        """Deactivate the user, unless the user reconnected or still has other connections (e.g. another tab)."""
-        await asyncio.sleep(self.disconnect_delay)
+        """Deactivate the user, unless the user still has other connections (e.g. another tab) or reconnects."""
         if other_channel_name := await self.other_connection():
             await database_sync_to_async(user.replace_connection)(self.channel_name, other_channel_name)
-        elif await database_sync_to_async(user.deactivate_connection)(self.channel_name):
+            return
+
+        if not await database_sync_to_async(user.mark_stale)(self.channel_name):
+            return
+        await self.channel_layer.group_send(self.poker_id, {"type": "init", "origin": "stale"})
+
+        await asyncio.sleep(self.disconnect_delay)
+        if await database_sync_to_async(user.deactivate_connection)(self.channel_name):
             await database_sync_to_async(self.auto_reveal)()
             await self.channel_layer.group_send(self.poker_id, {"type": "init", "origin": "disconnect"})
 

@@ -8,7 +8,7 @@ from django.db import models
 from django.db.models import Avg, Count, F
 from django.utils import timezone
 
-USER_FIELDS = ("id", "name", "is_spectator", "is_active", "vote")
+USER_FIELDS = ("id", "name", "is_spectator", "is_active", "is_stale", "vote")
 # Appended to the name of a user joining with the same name as an active user, falling back to numbers.
 NAME_SUFFIXES = ("🦊", "🐼", "🐸", "🐙", "🦉", "🐢", "🦔", "🐝")
 
@@ -163,6 +163,9 @@ class User(models.Model):
     is_active = models.BooleanField(
         default=False, help_text="Users are active if they have an active websocket connection"
     )
+    is_stale = models.BooleanField(
+        default=False, help_text="Stale users lost their connection, and are removed unless they reconnect"
+    )
     created = models.DateTimeField(auto_now_add=True)
     session = models.ForeignKey(PokerSession, on_delete=models.CASCADE, related_name="users")
 
@@ -182,8 +185,13 @@ class User(models.Model):
 
     def activate(self, channel_name: str = "") -> None:
         self.is_active = True
+        self.is_stale = False
         self.channel_name = channel_name
-        self.save(update_fields=["is_active", "channel_name"])
+        self.save(update_fields=["is_active", "is_stale", "channel_name"])
+
+    def mark_stale(self, channel_name: str) -> bool:
+        """Mark this user as stale, unless a newer connection replaced `channel_name`."""
+        return bool(User.objects.filter(pk=self.pk, channel_name=channel_name).update(is_stale=True))
 
     def deactivate_connection(self, channel_name: str) -> bool:
         """Deactivate this user, unless a newer connection replaced `channel_name`."""
