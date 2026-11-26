@@ -8,7 +8,7 @@ from django.db import models
 from django.db.models import Avg, Count, F
 from django.utils import timezone
 
-USER_FIELDS = ("id", "name", "is_spectator", "is_active", "is_stale", "vote")
+USER_FIELDS = ("id", "name", "is_spectator", "is_active", "is_stale", "vote", "drink")
 # Appended to the name of a user joining with the same name as an active user, falling back to numbers.
 NAME_SUFFIXES = ("🦊", "🐼", "🐸", "🐙", "🦉", "🐢", "🦔", "🐝")
 
@@ -158,6 +158,11 @@ class Log(models.Model):
 
 
 class User(models.Model):
+    class Drink(models.TextChoices):
+        COFFEE = "coffee", "Coffee"
+        TEA = "tea", "Tea"
+        SODA = "soda", "Soft drink"
+
     name = models.CharField(max_length=30)
     is_spectator = models.BooleanField(default=False, help_text="Spectators cannot vote themselves")
     is_active = models.BooleanField(
@@ -170,6 +175,9 @@ class User(models.Model):
     session = models.ForeignKey(PokerSession, on_delete=models.CASCADE, related_name="users")
 
     vote = models.CharField(max_length=10, null=True)
+    drink = models.CharField(
+        max_length=10, choices=Drink.choices, default=Drink.COFFEE, help_text="Served every 10th round"
+    )
     channel_name = models.CharField(
         max_length=100, blank=True, default="", help_text="Name of the most recent websocket connection"
     )

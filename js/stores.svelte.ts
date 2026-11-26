@@ -1,6 +1,8 @@
 import type { LogEntry, Participant, RevealLogEntry } from './types';
 import { countVotes, voteStats } from './utils';
 
+export const DRINKS = { coffee: '☕️', tea: '🫖', soda: '🥤' } as const;
+
 export const room = $state({
     participants: [] as Participant[],
     choices: [] as string[],
@@ -29,7 +31,7 @@ export const room = $state({
         return this.isRevealed && this.votes.length === 1 && this.votes[0] && this.votes[0][1] > 1;
     },
     // Easter egg: every 10th round, coffee is served.
-    get coffeeServed() {
+    get drinkServed() {
         return this.isRevealed && this.revealCount > 0 && this.revealCount % 10 === 0;
     },
     // Voting is considered complete if there is at least one active non-spectator, and all of them voted:
@@ -121,4 +123,9 @@ export const setDeck = (val: string) => {
 export const setAutoReveal = (val: boolean) => {
     room.autoReveal = val;
     update('settings', { auto_reveal: val });
+};
+
+export const setDrink = (val: keyof typeof DRINKS) => {
+    room.user.drink = val;
+    update('settings', { drink: val });
 };

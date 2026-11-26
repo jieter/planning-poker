@@ -1,19 +1,20 @@
 <script lang="ts">
 import Card from './Card.svelte';
 import PlayerCard from './PlayerCard.svelte';
+import { DRINKS } from './stores.svelte';
 import type { Participant } from './types.d';
 
 interface Props {
     user: Participant;
     isRevealed: boolean;
-    coffeeServed: boolean;
+    drinkServed: boolean;
     i: number;
     count: number;
     rotation: number;
     radius: number;
 }
 
-let { user, isRevealed, coffeeServed, i, count, rotation, radius }: Props = $props();
+let { user, isRevealed, drinkServed, i, count, rotation, radius }: Props = $props();
 
 // Amount of degrees to spread the participants over at the table
 const MAX_ANGLE = 174;
@@ -44,8 +45,8 @@ let angle: number = $derived.by(() => {
             </Card>
         </PlayerCard>
     {/if}
-    {#if coffeeServed}
-        <span class="coffee">☕️</span>
+    {#if drinkServed}
+        <span class="coffee">{DRINKS[user.drink ?? 'coffee']}</span>
     {/if}
 </div>
 

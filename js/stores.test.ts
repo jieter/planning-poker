@@ -2,7 +2,7 @@ import { describe, expect, test } from 'vitest';
 
 import { room } from './stores.svelte';
 
-describe('room.coffeeServed', () => {
+describe('room.drinkServed', () => {
     test('coffee is served when every 10th round is revealed', () => {
         room.isRevealed = true;
         for (const [revealCount, expected] of [
@@ -13,12 +13,12 @@ describe('room.coffeeServed', () => {
             [20, true],
         ] as const) {
             room.revealCount = revealCount;
-            expect(room.coffeeServed).toBe(expected);
+            expect(room.drinkServed).toBe(expected);
         }
 
         room.revealCount = 10;
         room.isRevealed = false;
-        expect(room.coffeeServed).toBe(false);
+        expect(room.drinkServed).toBe(false);
     });
 });
 

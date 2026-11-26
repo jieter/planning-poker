@@ -7,7 +7,7 @@ from channels.db import database_sync_to_async
 from channels.generic.websocket import JsonWebsocketConsumer
 from django.conf import settings
 
-from .models import PokerSession
+from .models import PokerSession, User
 
 _background_tasks = set()
 
@@ -122,6 +122,9 @@ class PokerConsumer(JsonWebsocketConsumer):
                 if "is_spectator" in content:
                     self.user.is_spectator = bool(content["is_spectator"])
                     self.user.save(update_fields=["is_spectator"])
+                if content.get("drink") in User.Drink.values:
+                    self.user.drink = content["drink"]
+                    self.user.save(update_fields=["drink"])
 
             case "vote":
                 vote = content.get("value")
