@@ -29,7 +29,7 @@ let angle: number = $derived.by(() => {
 <div
     class="participant"
     style="transform: translate(-50%, -50%) rotate({angle}deg) translate({radius}px) rotate(90deg)">
-    <strong class="name">{user.name}</strong>
+    <strong class="name" class:stale={user.is_stale}>{user.name}</strong>
     {#if user.is_spectator}
         <Card {rotation}>👁️</Card>
     {:else}
@@ -68,6 +68,10 @@ let angle: number = $derived.by(() => {
     width: 7em;
     overflow-x: hidden;
     text-overflow: ellipsis;
+}
+
+.participant .name.stale {
+    opacity: 0.4;
 }
 
 .card-back {

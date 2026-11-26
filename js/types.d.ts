@@ -3,6 +3,7 @@ export interface Participant {
     name?: string;
     vote: string | null;
     is_spectator: boolean;
+    is_stale?: boolean;
 }
 export type VoteCount = [string, number];
 
