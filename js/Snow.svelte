@@ -14,8 +14,9 @@ const flakes = Array.from({ length: FLAKE_COUNT }, () => ({
     {#each flakes as flake, i (i)}
         <span
             class="flake"
-            style="left: {flake.left}%; font-size: {flake.size}em; animation-duration: {flake.duration}s; animation-delay: {flake.delay}s; --sway: {flake.sway}px"
-            >❄</span>
+            style="left: {flake.left}%; font-size: {flake.size}em; animation-duration: {flake.duration}s; animation-delay: {flake.delay}s; --sway: {flake.sway}px">
+            ❄
+        </span>
     {/each}
 </div>
 
