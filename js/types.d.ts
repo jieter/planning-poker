@@ -4,6 +4,7 @@ export interface Participant {
     vote: string | null;
     is_spectator: boolean;
     is_stale?: boolean;
+    drink?: 'coffee' | 'tea' | 'soda';
 }
 export type VoteCount = [string, number];
 

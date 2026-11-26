@@ -374,6 +374,22 @@ class ConsumerTestCase(TransactionTestCase):
         await self.wait_for_delayed_disconnect()
         self.assertFalse(await self.is_active(self.alice))
 
+    async def test_drink(self):
+        communicator = self.communicator(self.poker.id, self.alice.id)
+        await communicator.connect()
+        await communicator.receive_json_from()
+
+        await communicator.send_json_to({"action": "settings", "drink": "tea"})
+        message = await communicator.receive_json_from()
+        self.assertEqual(message["user"]["drink"], "tea")
+        self.assertEqual(message["users"][0]["drink"], "tea")
+
+        await communicator.send_json_to({"action": "settings", "drink": "beer"})
+        message = await communicator.receive_json_from()
+        self.assertEqual(message["user"]["drink"], "tea")
+
+        await communicator.disconnect()
+
     async def test_vote(self):
         communicator = self.communicator(self.poker.id, self.alice.id)
         await communicator.connect()
