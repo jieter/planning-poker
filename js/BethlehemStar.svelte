@@ -10,7 +10,8 @@
     left: 6%;
     height: 60px;
     pointer-events: none;
-    z-index: 1040;
+    /* behind the page content, so it never covers inputs */
+    z-index: -1;
     fill: #f2c230;
     stroke: #c99a10;
     stroke-width: 1.5;

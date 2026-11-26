@@ -4,12 +4,13 @@ import { onMount } from 'svelte';
 
 import Card from './Card.svelte';
 import Debug from './Debug.svelte';
+import Fireworks from './Fireworks.svelte';
 import History from './History.svelte';
 import Participant from './Participant.svelte';
 import Settings from './Settings.svelte';
 import { castVote, connect, room, update } from './stores.svelte';
 import Summary from './Summary.svelte';
-import { jsonScriptContents, changeFavicon, pseudoRandomGenerator } from './utils';
+import { jsonScriptContents, changeFavicon, isSnowSeason, pseudoRandomGenerator } from './utils';
 
 let debugOn = $state(false);
 onMount(() => {
@@ -39,6 +40,10 @@ $effect.pre(() => {
     </div>
 {/if}
 
+{#if room.showConfetti && isSnowSeason()}
+    <Fireworks />
+{/if}
+
 <div class="participants mt-5" style="--radius: {radius}px">
     {#each room.participants as user, i (user.id)}
         <Participant
@@ -51,7 +56,7 @@ $effect.pre(() => {
     {/each}
     {#if room.isRevealed}
         <div class="controls">
-            {#if room.showConfetti}
+            {#if room.showConfetti && !isSnowSeason()}
                 <div use:confetti></div>
             {/if}
             <Summary
