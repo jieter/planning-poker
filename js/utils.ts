@@ -10,6 +10,11 @@ export function jsonScriptContents<T = string>(id: string): T | undefined {
     return undefined;
 }
 
+// Let it snow between the 10th and the 26th of December.
+export function isSnowSeason(date: Date = new Date()): boolean {
+    return date.getMonth() === 11 && date.getDate() >= 10 && date.getDate() <= 26;
+}
+
 export function csrfToken(): string {
     return Cookies.get('csrftoken') || '';
 }

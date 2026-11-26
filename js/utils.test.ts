@@ -1,7 +1,18 @@
 import { beforeEach, describe, expect, test } from 'vitest';
 
 import { stubColorScheme } from './testutils';
-import { applyTheme, countVotes, formatNumber, pseudoRandomGenerator, voteStats } from './utils';
+import { applyTheme, countVotes, formatNumber, isSnowSeason, pseudoRandomGenerator, voteStats } from './utils';
+
+describe('isSnowSeason', () => {
+    test('snows from the 10th until the 26th of December', () => {
+        expect(isSnowSeason(new Date(2026, 10, 25))).toBe(false);
+        expect(isSnowSeason(new Date(2026, 11, 9, 23, 59))).toBe(false);
+        expect(isSnowSeason(new Date(2026, 11, 10, 0, 0))).toBe(true);
+        expect(isSnowSeason(new Date(2026, 11, 26, 23, 59))).toBe(true);
+        expect(isSnowSeason(new Date(2026, 11, 27, 0, 0))).toBe(false);
+        expect(isSnowSeason(new Date(2026, 6, 15))).toBe(false);
+    });
+});
 
 describe('formatNumber', () => {
     test('less than 1000', () => {
