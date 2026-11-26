@@ -28,6 +28,10 @@ export const room = $state({
     get showConfetti() {
         return this.isRevealed && this.votes.length === 1 && this.votes[0] && this.votes[0][1] > 1;
     },
+    // Easter egg: every 10th round, coffee is served.
+    get coffeeServed() {
+        return this.isRevealed && this.revealCount > 0 && this.revealCount % 10 === 0;
+    },
     // Voting is considered complete if there is at least one active non-spectator, and all of them voted:
     get votingComplete() {
         const voters = this.participants.filter((p) => !p.is_spectator);

@@ -2,6 +2,26 @@ import { describe, expect, test } from 'vitest';
 
 import { room } from './stores.svelte';
 
+describe('room.coffeeServed', () => {
+    test('coffee is served when every 10th round is revealed', () => {
+        room.isRevealed = true;
+        for (const [revealCount, expected] of [
+            [0, false],
+            [9, false],
+            [10, true],
+            [11, false],
+            [20, true],
+        ] as const) {
+            room.revealCount = revealCount;
+            expect(room.coffeeServed).toBe(expected);
+        }
+
+        room.revealCount = 10;
+        room.isRevealed = false;
+        expect(room.coffeeServed).toBe(false);
+    });
+});
+
 describe('room.votingComplete', () => {
     test('not complete without participants or voters', () => {
         room.participants = [];

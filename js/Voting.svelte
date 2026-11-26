@@ -43,6 +43,7 @@ $effect.pre(() => {
     {#each room.participants as user, i (user.id)}
         <Participant
             isRevealed={room.isRevealed}
+            coffeeServed={room.coffeeServed}
             {user}
             {i}
             count={room.participants.length}
